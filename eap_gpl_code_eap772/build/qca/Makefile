@@ -201,7 +201,7 @@ toolchain:
 	@echo Uncompressing toolchain, please wait...
 	@mkdir -p $(TOOLCHAIN_INSTALL)
 	@[ -f $(TOOLCHAIN_PATH)/$(gcc_package).tar.bz2 ] || cat $(TOOLCHAIN_PATH)/$(gcc_package).tar.bz2_aa $(TOOLCHAIN_PATH)/$(gcc_package).tar.bz2_ab $(TOOLCHAIN_PATH)/$(gcc_package).tar.bz2_ac > $(TOOLCHAIN_PATH)/$(gcc_package).tar.bz2
-    @tar -jxf $(TOOLCHAIN_PATH)/$(gcc_package).tar.bz2 -C $(TOOLCHAIN_INSTALL)
+	@tar -jxf $(TOOLCHAIN_PATH)/$(gcc_package).tar.bz2 -C $(TOOLCHAIN_INSTALL)
 	@test -z "$(TOOLCHAIN_POSTBUILD)" || eval "$(TOOLCHAIN_POSTBUILD)"
 
 
