@@ -1,0 +1,257 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>VLAN</title>
+<!--<style type="text/css">
+	div.widget-container.pad{
+		margin-right: 300px;
+	}
+</style>-->
+</head>
+
+<body>
+<div class="func-container">
+
+	 <div id="vlan">
+		<form id="vlan_form" style="padding: 0;">
+	 		<div id="vlanGrid"></div>
+	 	</form>
+
+	 	<button type="button" id="total_save" style="margin: 0 27px;"></button>
+	 </div>
+
+</div>
+
+<script type="text/javascript">
+$(document).ready(function(e){
+	var DUT_MODE = {
+		BAND_24G: 0,
+		BAND_24G_5G: 1,
+		BAND_24G_5G1_5G2: 2,
+		BAND_24G_5G_6G: 3,
+		BAND_24G_5G1_5G2_6G: 4
+	};
+
+	function    HTMLDeCode(str)  
+  	{  
+        var    s    =    "";  
+        if    (str.length    ==    0)    return    "";  
+        s    =    str.replace(/&amp;/g,    "&");  
+        s    =    s.replace(/&lt;/g,        "<");  
+        s    =    s.replace(/&gt;/g,        ">");  
+        s    =    s.replace(/'/g,      "\'");  
+        s    =    s.replace(/&quot;/g,      "\""); 
+        s 	 = 	  s.replace(/&nbsp;/g, " "); 
+        //s    =    s.replace(/ <br>/g,      "\n"); 
+        return    s;  
+  	}
+	
+	var SSID_LIST_URL = "./data/wireless.vlan.json";
+
+	$("div.func-container").page({
+		title: $.su.CHAR.VLAN.VLAN_ID,
+		help: ""	//可能是个调用的id 也可能是个url
+	});
+
+	$("div#vlan").panel({
+		title: $.su.CHAR.VLAN.VLAN_ID,
+		collapsible: false
+	});
+
+	$('#vlan_form').form({
+		fields: [
+			{name: "ssidname", mapping: "ssidname"},
+			{name: "vlan_id", mapping: "vlan_id"},
+			{name: "vlan",	mapping: "vlan"}
+		],
+		autoLoad:true,
+		submitBtn:false
+	});
+
+	var assoc = $("div#vlanGrid").grid({
+		store:{
+			proxy: {
+			url: SSID_LIST_URL
+			},
+			fields: [
+				{name: "ssidname"},
+				{name: "band"},
+				{name: "vlan"},
+				{name: "vlan_id"},
+				{name: "ml"}
+			],
+			updateMode:"complete",
+			autoLoad: true
+		},
+		columns: [
+			{
+				text: $.su.CHAR.VLAN.ID, 
+				xtype: "rownumberer",
+				width: 60
+			},{
+				text: $.su.CHAR.VLAN.SSID_NAME,
+				dataIndex: "ssidname",
+				width: 240
+			},{
+				text: $.su.CHAR.VLAN.BAND,
+				dataIndex:"band",
+				width: 70,
+				renderer: function(val, index, row){
+					if (!row.ml) {
+						if(val==0){
+							return '<span class="band-wrap" key="'+val+'">'+$.su.CHAR.VLAN.GHZ_24+'</span>';
+						}else if(val==1){
+							var str = ($.su.dutMode === DUT_MODE.BAND_24G_5G1_5G2 || $.su.dutMode === DUT_MODE.BAND_24G_5G1_5G2_6G)?$.su.CHAR.VLAN.GHZ_5G1:$.su.CHAR.VLAN.GHZ_5;
+							return '<span class="band-wrap" key="'+val+'">'+str+'</span>';
+						}else if(val==2){
+							return '<span class="band-wrap" key="'+val+'">'+$.su.CHAR.VLAN.GHZ_5G2+'</span>';
+						}else if(val==3){
+							return '<span class="band-wrap" key="'+val+'">'+$.su.CHAR.VLAN.GHZ_6+'</span>';
+						}
+					} else {
+						var mlBitMap = row.ml.toString(2).split('')
+						var bands = []
+						$.each(mlBitMap, function (index, item) {
+							if (item == 1) {
+								var band = mlBitMap.length - 1 - index
+								if(band==0){
+									bands.unshift($.su.CHAR.VLAN.GHZ_24);
+								}else if(band==1){
+									var str = ($.su.dutMode === DUT_MODE.BAND_24G_5G1_5G2 || $.su.dutMode === DUT_MODE.BAND_24G_5G1_5G2_6G)?$.su.CHAR.VLAN.GHZ_5G1:$.su.CHAR.VLAN.GHZ_5;
+									bands.unshift(str);
+								}else if(band==2){
+									bands.unshift($.su.CHAR.VLAN.GHZ_5G2);
+								}else if(band==3){
+									bands.unshift($.su.CHAR.VLAN.GHZ_6);
+								}
+							}
+						})
+
+						return '<span class="band-wrap" key="' + val + '" ml="'+row.ml+'">'+ bands.join(',<br>') +'</span>'
+					}
+				}
+			},{
+				text: $.su.CHAR.VLAN.VLAN,
+				xtype:"actioncolumn",
+				items:[
+					{
+						xtype:"combobox",
+						name: "vlan",
+						items: [
+							{name:$.su.CHAR.VLAN.ENABLE, value:1},
+							{name:$.su.CHAR.VLAN.DISABLE, value:0}
+						],
+						change: function(e, oldValue, newValue){
+							var me = this;
+							var index = me.getAttribute('index');	
+
+							if( $(me).combobox('getValue').length == 0 || $(me).combobox('getValue')[0] ==0 ){
+								$('input#grid_edit_vlan_id_'+ index).textbox('disable');
+							}else{
+								$('input#grid_edit_vlan_id_'+ index).textbox('enable');
+							}
+								
+						}
+					}
+				],
+				dataIndex: "vlan"
+			},{
+				text: $.su.CHAR.VLAN.VLAN_ID,
+				xtype:"actioncolumn",
+				items:[
+					{
+						xtype:"textbox",
+						name:"vlan_id",
+						vtype: 'number',
+	    				validator:function(val){
+							if(val>4094){
+								return $.su.CHAR.VTYPETEXT.NUMBER_MAX.replace("%max", 4095);
+							}else if(val<1){
+								return $.su.CHAR.VTYPETEXT.NUMBER_MIN.replace("%min", 0);
+							}
+							return true;
+						}
+					}
+				],
+				dataIndex: "vlan_id"
+				// width:120
+			}
+		]
+	}).on('ev_load', function(e, data){
+		if(data.length>0){
+			for(var i=0; i<data.length; i++){
+				var vlan = 'input#grid_edit_vlan_'+ i;
+				var vlanID = 'input#grid_edit_vlan_id_'+ i;
+
+				if( $(vlan).combobox('getValue')==0 ){
+					$(vlanID).textbox('disable');
+				}
+			}
+		}
+	});
+
+	$("#total_save").button({
+		text: $.su.CHAR.SCHEDULER.SAVE,
+		cls:"submit",
+		handler:function(){
+			var para 		= {};
+			var ssid_arr 	= $("div#vlanGrid td[name=ssidname] span");
+			var band_arr 	= $("div#vlanGrid td[name=band] span.band-wrap");
+			var vlan_arr  	= $("div#vlanGrid input.actioncolumn-input[name=vlan]");
+			var vlan_id_arr = $("div#vlanGrid input.actioncolumn-input[name=vlan_id]");
+			var num			= ssid_arr.length;
+			var index 		= 0;
+			var ssidName 	= [];
+			var vlan 		= [];
+			var vlan_id  	= [];
+			var band  		= [];
+			var ml = [];
+
+			para.operation 	= "save";
+			para.ssidName 	= "";
+			para.vlan 		= "";
+			para.vlan_id    = "";
+			para.band    	= "";
+			para.ml    	= "";
+
+			for (index; index < num; index++)
+			{
+				if( $(vlan_arr[index]).combobox("getValue")[0]==1 && !$(vlan_id_arr[index]).textbox("validate") ){
+					return false;
+				}
+
+				ssidName.push(HTMLDeCode(ssid_arr[index].innerHTML));
+				vlan.push($(vlan_arr[index]).combobox("getValue"));
+				vlan_id.push($(vlan_id_arr[index]).textbox("getValue"));
+				band.push(band_arr[index].getAttribute('key'));
+				ml.push(band_arr[index].getAttribute('ml') || 0);
+			}
+
+			para.ssidName 	= ssidName.join("\n");
+			para.band 		= band.join("\n");
+			para.vlan_id 	= vlan_id.join("\n");
+			para.vlan 		= vlan.join("\n");
+			para.ml    		= ml.join("\n");
+
+			$.ajax({
+				url: SSID_LIST_URL,
+				type: 'POST',
+				data:para,
+				dataType: 'json',
+				timeout: 3000,
+				success: function(result){
+					$("div#vlanGrid").grid("getStore").loadData(result.data);
+					$("form#vlan_form").form("prompt", true, $.su.CHAR.SCHEDULER.SAVE_SUCC);
+				},
+				error:function(xhr, s, et){
+				}
+			});
+		}
+	});
+	
+});
+</script>
+</body>
+
+</html>

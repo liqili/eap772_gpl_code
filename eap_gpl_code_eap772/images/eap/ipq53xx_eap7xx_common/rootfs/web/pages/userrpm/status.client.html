@@ -1,0 +1,935 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Client</title>
+</head>
+
+<body>
+	<div class="func-container">
+
+		<div id="client">
+
+			<div id="wireless-freq" class="wireless-freq">	
+				<div id="for-wireless-mode" class="mode-change">
+					<span id="show_2g" class="first-mode mode-select"></span>
+					<span> | </span>
+					<span id="show_5g" class="second-mode"></span>
+				</div>	
+			</div>
+
+			<div id="client_user_list">
+				<div id="clientUserListGrid"></div>
+			</div>
+
+			<div id="client_guest_list" class="hidden">
+				<div id="clientGuestListGrid"></div>
+			</div>
+	
+		</div>
+
+
+		<div id="block_client">
+			<div id="blockClientListGrid"></div>
+		</div>
+					
+	</div>
+
+	<div id="rate_limit_msg">
+		<form id="rate_limit_form">
+			<input id="rate_limit" name="limit">
+			<!-- <div class="widget-tip">
+				<span class="icon" id="rate_limit_tip_icon"></span>
+				<span class="text" id="rate_limit_tip"></span>
+			</div> -->
+
+			<div class="help-item-content">
+				<div class="help-item-icon"></div>
+				<div class="help-item-container">
+					<div class="help-item-delta-container">
+						<span class="help-item-delta"></span>
+					</div>
+					<div class="help-item-text-container">
+						<p id="rate_limit_help" class="help-item-text"></p>
+					</div>
+			</div>
+			</div>
+
+			<div id="limit_down_block" class="inline-block-wrap">
+				<input id="rate_limit_download" name="limit_download"/>
+				<input id="rate_limit_download_unit" name="limit_download_unit"/>	
+				<span id="text_rate_limit_download_unit"></span>
+			</div>
+			<div id="limit_up_block">
+				<input id="rate_limit_upload" name="limit_upload"/>
+				<input id="rate_limit_upload_unit" name="limit_upload_unit"/>
+				<span id="text_rate_limit_upload_unit"></span>	
+			</div>
+			<input id="rate_limit_mac" name="MAC"/>
+
+			<button id="limit_form_submit" type="button"></button>
+		</form>
+	</div>
+	
+<script type="text/javascript">
+
+$(document).ready(function(e){
+
+	var DUT_MODE = {
+		BAND_24G: 0,
+		BAND_24G_5G: 1,
+		BAND_24G_5G1_5G2: 2,
+		BAND_24G_5G_6G: 3,
+		BAND_24G_5G1_5G2_6G: 4
+	}
+
+	$("div.func-container").page({
+		title: $.su.CHAR.STATUS_DEVICE.TITLE,
+		help: ""
+	});
+
+	$("#show_2g").html($.su.CHAR.STATUS_CLIENT.USER);
+	$("#show_5g").html($.su.CHAR.STATUS_CLIENT.GUEST);
+
+	$('#rate_limit_help').html($.su.CHAR.STATUS_CLIENT.RATE_LIMIT_TIP);
+
+	var URL_PORTALUSER_LIST   = "./data/status.client.portaluser.json";
+
+	var editingKey = 0;
+
+	$("span#show_2g").click(function(){
+		if($(this).hasClass("mode-select"))
+		{
+		}
+		else
+		{
+			$(this).addClass("mode-select");
+			$("span#show_5g").toggleClass("mode-select");
+			$('#client_guest_list').addClass('hidden');
+			$('#client_user_list').removeClass('hidden');
+		}
+	});
+
+	$("span#show_5g").click(function(){
+		if($(this).hasClass("mode-select"))
+		{
+		}
+		else
+		{
+			$(this).addClass("mode-select");
+			$("span#show_2g").toggleClass("mode-select");
+			$('#client_user_list').addClass('hidden');
+			$('#client_guest_list').removeClass('hidden');
+		}
+	});
+
+	$('div#client').panel({
+		title: $.su.CHAR.STATUS_CLIENT.CLIENT_LIST,
+		collapsible: false
+	});
+
+	function num2Str(num)
+	{
+		var str = "";
+		if(num <= 1000)
+		{
+			str += num;
+		}
+		else
+		{
+			str += Math.floor(num/1000) + "k";
+		}
+
+		return str;
+	}
+
+	var CLIENT_USER_LIST = "./data/status.client.user.json";
+	var CLIENT_GUEST_LIST = "./data/status.client.user.json";
+	var BLOCK_CLIENT_LIST = "./data/status.block.client.json";
+
+
+/*    $("#show-user").html($.su.CHAR.MODE.MODE_2G);
+    $("#show-guest").html($.su.CHAR.MODE.MODE_5G);
+
+
+    $("span#show-user").click(function(){
+        if(!($(this).hasClass("mode-select")))
+        {
+            $(this).addClass("mode-select");
+            $("span.second-mode").removeClass("mode-select");
+            $("#qos_setting_2g").show();
+            $("#qos_setting_5g").hide();
+			$("#qos_setting_2g").form("reset");
+            $("#qos_setting_2g").form("load");
+        }
+    });
+
+    $("span#show-guest").click(function(){
+        if(!($(this).hasClass("mode-select")))
+        {
+            $(this).addClass("mode-select");
+            $("span.first-mode").removeClass("mode-select");
+            $("#qos_setting_2g").hide();
+            $("#qos_setting_5g").show();
+			$("#qos_setting_5g").form("reset");
+            $("#qos_setting_5g").form("load");
+        }
+    });*/
+
+
+	var clientUserStore = new $.su.Store({
+		proxy: {
+			url: CLIENT_USER_LIST,
+			type: "GET"
+		},
+		fields: [
+            {name: "hostname"},
+            {name: "IP"},
+            {name: "MAC"},
+            {name: "Radio"},
+            {name: "ml"},
+			{name: "SSID"},
+			{name: "ActiveTime"},
+            {name: "Up"},
+            {name: "Down"},
+            {name: "RSSI"},
+			{name: "Rate"},
+			{name: "limit"},
+			{name: "limit_download"},
+			{name: "limit_download_unit"},
+			{name: "limit_upload"},
+			{name: "limit_upload_unit"}
+		],
+		autoLoad: true,
+		updateMode: "complete"
+	});
+
+	var clientGrid = $("div#clientUserListGrid").grid({
+		store: clientUserStore,
+		paging: {numPerPage: 8},
+		columns: [
+			{
+				xtype: "rownumberer",
+				width: 40
+			},
+			{
+				text: $.su.CHAR.STATUS_CLIENT.HOSTNAME,
+				width: 80,
+				dataIndex: "hostname"
+			},
+			{
+				text: $.su.CHAR.STATUS_CLIENT.IP_ADDRESS,
+				width: 100,
+				dataIndex: "IP"
+			},
+			{
+				text: $.su.CHAR.STATUS_CLIENT.MAC_ADDRESS,
+				width: 125,
+				dataIndex: "MAC"
+			},
+			{
+				text: $.su.CHAR.STATUS_CLIENT.BAND,
+				width: 50,
+				dataIndex: "Radio",
+				renderer: function(val, index, row){
+					// 非 mlo
+					if (!row.ml || row.ml.length === 0) {
+						if(val==0){
+							return $.su.CHAR.STATUS_WIRELESS.GHZ_24;
+						}else if(val==1){
+							return ($.su.dutMode === DUT_MODE.BAND_24G_5G1_5G2 || $.su.dutMode === DUT_MODE.BAND_24G_5G1_5G2_6G)?$.su.CHAR.STATUS_WIRELESS.GHZ_5G1:$.su.CHAR.STATUS_WIRELESS.GHZ_5;
+						}else if(val==2){
+							return $.su.CHAR.STATUS_WIRELESS.GHZ_5G2;
+						}else if(val==3){
+							return $.su.CHAR.STATUS_WIRELESS.GHZ_6G;
+						}
+					} else {
+						var radios = []
+						$.each(row.ml, function (index, item) {
+							if(item.Radio==0){
+								radios.push($.su.CHAR.STATUS_WIRELESS.GHZ_24);
+							}else if(item.Radio==1){
+								radios.push(($.su.dutMode === DUT_MODE.BAND_24G_5G1_5G2 || $.su.dutMode === DUT_MODE.BAND_24G_5G1_5G2_6G)?$.su.CHAR.STATUS_WIRELESS.GHZ_5G1:$.su.CHAR.STATUS_WIRELESS.GHZ_5);
+							}else if(item.Radio==2){
+								radios.push($.su.CHAR.STATUS_WIRELESS.GHZ_5G2);
+							}else if(item.Radio==3){
+								radios.push($.su.CHAR.STATUS_WIRELESS.GHZ_6G);
+							}
+						})
+
+						return radios.join(',<br>')
+					}
+				}
+			},
+			{
+				text: $.su.CHAR.STATUS_CLIENT.SSID,
+				// width: 120,
+				dataIndex: "SSID"
+			},
+			{
+				text: $.su.CHAR.STATUS_CLIENT.ACTIVE_TIME,
+				width: 100,
+				dataIndex: "ActiveTime"
+			},
+			{
+				text: $.su.CHAR.STATUS_CLIENT.UP_BYTES,
+				width: 60,
+				dataIndex: "Up",
+				renderer: function(val){
+					return num2Str(val);
+				}
+			},
+			{
+				text: $.su.CHAR.STATUS_CLIENT.DOWN_BYTES,
+				width: 60,
+				dataIndex: "Down",
+				renderer: function(val){
+					return num2Str(val);
+				}
+			},
+			{
+				text: $.su.CHAR.STATUS_CLIENT.RSSI_DBM,
+				width: 60,
+				dataIndex: "RSSI",
+				renderer: function(val, index, row){
+					// 非 mlo
+					if (!row.ml || row.ml.length === 0) {
+						return val;
+					} else {
+						var rssi = []
+						$.each(row.ml, function (index, item) {
+							rssi.push(item.RSSI)
+						})
+
+						return rssi.join(',<br>')
+					}
+				}
+			},
+			{
+				text: $.su.CHAR.STATUS_CLIENT.RATE_MBPS,
+				width: 60,
+				dataIndex: "Rate",
+				renderer: function(val, index, row){
+					// 非 mlo
+					if (!row.ml || row.ml.length === 0) {
+						return val;
+					} else {
+						var rate = []
+						$.each(row.ml, function (index, item) {
+							rate.push(item.Rate)
+						})
+
+						return rate.join(',<br>')
+					}
+				}
+			},
+			{
+				text: $.su.CHAR.STATUS_CLIENT.ACTION,
+				width: 70,
+				dataIndex: 'key',
+				renderer: function(val){
+					var key = val;
+					var inHTML = "";
+						inHTML = 		"<a href=\"javascript:void(0);\" data-key=\""+key+"\" class=\"grid-content-btn btn-speed\">";
+						inHTML +=			"<span class=\"icon\" title=\""+$.su.CHAR.STATUS_CLIENT.RATE_LIMIT+"\"> </span>";
+						inHTML += 			"<span class=\"text\">"+$.su.CHAR.STATUS_CLIENT.RATE_LIMIT+"</span>";
+						inHTML += 		"</a>";
+
+						inHTML += 		"<a href=\"javascript:void(0);\" data-key=\""+key+"\" class=\"grid-content-btn btn-block\">";
+						inHTML +=			"<span class=\"icon\" title=\""+$.su.CHAR.STATUS_CLIENT.BLOCK+"\"> </span>";
+						inHTML += 			"<span class=\"text\">"+$.su.CHAR.STATUS_CLIENT.BLOCK+"</span>";
+						inHTML += 		"</a>";
+					return inHTML;
+				}
+			}
+		],
+		operation: [
+			"refresh"
+		]
+	}).delegate("a.grid-content-btn.btn-speed", "click", function(e){
+		e.preventDefault();
+		e.stopPropagation();
+
+		var store =$(clientGrid).grid("getStore");
+		var key = $(this).attr("data-key");
+		var data = store.getData(key);
+		editingKey = key;
+		// editingMac = data.mac;
+		$("input#rate_limit_mac").textbox('setValue', data.MAC);
+
+		$("input#rate_limit").checkbox('setValue', data.limit);
+		$("input#rate_limit_download").textbox('setValue', data.limit_download);
+		$("input#rate_limit_upload").textbox('setValue', data.limit_upload);
+		$("input#rate_limit_download_unit").combobox('setValue', data.limit_download_unit);
+		$("input#rate_limit_upload_unit").combobox('setValue', data.limit_upload_unit);
+
+		var downloadUnit = $('input#rate_limit_download_unit').combobox('getValue')[0];
+		downloadUnit=='0'?$('span#text_rate_limit_download_unit').html($.su.CHAR.WIRELESS.KBPS_UNIT):$('span#text_rate_limit_download_unit').html($.su.CHAR.WIRELESS.MBPS_UNIT);		
+		var uploadUnit = $('input#rate_limit_upload_unit').combobox('getValue')[0];
+		uploadUnit=='0'?$('span#text_rate_limit_upload_unit').html($.su.CHAR.WIRELESS.KBPS_UNIT):$('span#text_rate_limit_upload_unit').html($.su.CHAR.WIRELESS.MBPS_UNIT);	
+
+		$("#rate_limit_msg").msg('show');
+
+	}).delegate('a.grid-content-btn.btn-block', 'click', function(){
+		var store =$(clientGrid).grid("getStore");
+		var key = $(this).attr("data-key");
+		var data = store.getData(key);
+		var MAC = data.MAC;
+		var hostname = data.hostname;
+		var upValue = data.Up;
+		var downValue = data.Down;
+
+		store.load({
+			operation: 'block',
+			hostname: hostname,
+			MAC: MAC,
+			up: upValue,
+			down: downValue
+		});
+		blockClientStore.load();
+	});
+
+//////////////////////////////////////////////////////
+
+	var clientGuestStore = new $.su.Store({
+		proxy: {
+			url: URL_PORTALUSER_LIST,
+			type: "GET"
+		},
+		fields: [
+            {name: "hostname"},
+            {name: "IP"},
+            {name: "MAC"},
+            {name: "Radio"},
+            {name: "ml"},
+			{name: "SSID"},
+			{name: "ActiveTime"},
+            {name: "Up"},
+            {name: "Down"},
+            {name: "RSSI"},
+			{name: "Rate"},
+			{name: "limit"},
+			{name: "limit_download"},
+			{name: "limit_download_unit"},
+			{name: "limit_upload"},
+			{name: "limit_upload_unit"}
+		],
+		autoLoad: true,
+		updateMode: "complete"
+	});
+
+	var clientGuestGrid = $("div#clientGuestListGrid").grid({
+		store: clientGuestStore,
+		paging: {numPerPage: 8},
+		columns: [
+			{
+				xtype: "rownumberer",
+				width: 40
+			},
+			{
+				text: $.su.CHAR.STATUS_CLIENT.HOSTNAME,
+				width: 80,
+				dataIndex: "hostname"
+			},
+			{
+				text: $.su.CHAR.STATUS_CLIENT.IP_ADDRESS,
+				width: 100,
+				dataIndex: "IP"
+			},
+			{
+				text: $.su.CHAR.STATUS_CLIENT.MAC_ADDRESS,
+				width: 125,
+				dataIndex: "MAC"
+			},
+			{
+				text: $.su.CHAR.STATUS_CLIENT.BAND,
+				width: 50,
+				dataIndex: "Radio",
+				renderer: function(val, index, row){
+					// 非 mlo
+					if (!row.ml || row.ml.length === 0) {
+						if(val==0){
+							return $.su.CHAR.STATUS_WIRELESS.GHZ_24;
+						}else if(val==1){
+							return ($.su.dutMode === DUT_MODE.BAND_24G_5G1_5G2 || $.su.dutMode === DUT_MODE.BAND_24G_5G1_5G2_6G)?$.su.CHAR.STATUS_WIRELESS.GHZ_5G1:$.su.CHAR.STATUS_WIRELESS.GHZ_5;
+						}else if(val==2){
+							return $.su.CHAR.STATUS_WIRELESS.GHZ_5G2;
+						}else if(val==3){
+							return $.su.CHAR.STATUS_WIRELESS.GHZ_6G;
+						}
+					} else {
+						var radios = []
+						$.each(row.ml, function (index, item) {
+							if(item.Radio==0){
+								radios.push($.su.CHAR.STATUS_WIRELESS.GHZ_24);
+							}else if(item.Radio==1){
+								radios.push(($.su.dutMode === DUT_MODE.BAND_24G_5G1_5G2 || $.su.dutMode === DUT_MODE.BAND_24G_5G1_5G2_6G)?$.su.CHAR.STATUS_WIRELESS.GHZ_5G1:$.su.CHAR.STATUS_WIRELESS.GHZ_5);
+							}else if(item.Radio==2){
+								radios.push($.su.CHAR.STATUS_WIRELESS.GHZ_5G2);
+							}else if(item.Radio==3){
+								radios.push($.su.CHAR.STATUS_WIRELESS.GHZ_6G);
+							}
+						})
+
+						return radios.join(',<br>')
+					}
+				}
+			},
+			{
+				text: $.su.CHAR.STATUS_CLIENT.SSID,
+				// width: 120,
+				dataIndex: "SSID"
+			},
+			{
+				text: $.su.CHAR.STATUS_CLIENT.ACTIVE_TIME,
+				width: 90,
+				dataIndex: "ActiveTime"
+			},
+			{
+				text: $.su.CHAR.STATUS_CLIENT.UP_BYTES,
+				width: 60,
+				dataIndex: "Up",
+				renderer: function(val){
+					return num2Str(val);
+				}
+			},
+			{
+				text: $.su.CHAR.STATUS_CLIENT.DOWN_BYTES,
+				width: 60,
+				dataIndex: "Down",
+				renderer: function(val){
+					return num2Str(val);
+				}
+			},
+			{
+				text: $.su.CHAR.STATUS_CLIENT.RSSI_DBM,
+				width: 60,
+				dataIndex: "RSSI",
+				renderer: function(val, index, row){
+					// 非 mlo
+					if (!row.ml || row.ml.length === 0) {
+						return val;
+					} else {
+						var rssi = []
+						$.each(row.ml, function (index, item) {
+							rssi.push(item.RSSI)
+						})
+
+						return rssi.join(',<br>')
+					}
+				}
+			},
+			{
+				text: $.su.CHAR.STATUS_CLIENT.RATE_MBPS,
+				width: 60,
+				dataIndex: "Rate",
+				renderer: function(val, index, row){
+					// 非 mlo
+					if (!row.ml || row.ml.length === 0) {
+						return val;
+					} else {
+						var rate = []
+						$.each(row.ml, function (index, item) {
+							rate.push(item.Rate)
+						})
+
+						return rate.join(',<br>')
+					}
+				}
+			},
+			{
+				text: $.su.CHAR.STATUS_CLIENT.ACTION,
+				width: 90,
+				dataIndex: 'key',
+				renderer: function(val){
+					var key = val;
+					var inHTML = "";
+						inHTML = 		"<a href=\"javascript:void(0);\" data-key=\""+key+"\" class=\"grid-content-btn btn-unAuth\">";
+						inHTML +=			"<span class=\"icon\" title=\""+$.su.CHAR.STATUS_CLIENT.CANCEL_AUTH+"\"> </span>";
+						inHTML += 			"<span class=\"text\">"+$.su.CHAR.STATUS_CLIENT.CANCEL_AUTH+"</span>";
+						inHTML += 		"</a>";
+
+						inHTML += 		"<a href=\"javascript:void(0);\" data-key=\""+key+"\" class=\"grid-content-btn btn-speed\">";
+						inHTML +=			"<span class=\"icon\" title=\""+$.su.CHAR.STATUS_CLIENT.RATE_LIMIT+"\"> </span>";
+						inHTML += 			"<span class=\"text\">"+$.su.CHAR.STATUS_CLIENT.RATE_LIMIT+"</span>";
+						inHTML += 		"</a>";
+
+						inHTML += 		"<a href=\"javascript:void(0);\" data-key=\""+key+"\" class=\"grid-content-btn btn-block\">";
+						inHTML +=			"<span class=\"icon\" title=\""+$.su.CHAR.STATUS_CLIENT.BLOCK+"\"> </span>";
+						inHTML += 			"<span class=\"text\">"+$.su.CHAR.STATUS_CLIENT.BLOCK+"</span>";
+						inHTML += 		"</a>";
+					return inHTML;
+				}
+			}
+		],
+		operation: [
+			"refresh"
+		]
+	}).delegate("a.grid-content-btn.btn-speed", "click", function(e){
+		e.preventDefault();
+		e.stopPropagation();
+
+		var store =$(clientGuestGrid).grid("getStore");
+		var key = $(this).attr("data-key");
+		var data = store.getData(key);
+		editingKey = key;
+		// editingMac = data.mac;
+		$("input#rate_limit_mac").textbox('setValue', data.MAC);
+
+		$("input#rate_limit").checkbox('setValue', data.limit);
+		$("input#rate_limit_download").textbox('setValue', data.limit_download);
+		$("input#rate_limit_upload").textbox('setValue', data.limit_upload);
+		$("input#rate_limit_download_unit").combobox('setValue', data.limit_download_unit);
+		$("input#rate_limit_upload_unit").combobox('setValue', data.limit_upload_unit);
+
+		var downloadUnit = $('input#rate_limit_download_unit').combobox('getValue')[0];
+		downloadUnit=='0'?$('span#text_rate_limit_download_unit').html($.su.CHAR.WIRELESS.KBPS_UNIT):$('span#text_rate_limit_download_unit').html($.su.CHAR.WIRELESS.MBPS_UNIT);		
+		var uploadUnit = $('input#rate_limit_upload_unit').combobox('getValue')[0];
+		uploadUnit=='0'?$('span#text_rate_limit_upload_unit').html($.su.CHAR.WIRELESS.KBPS_UNIT):$('span#text_rate_limit_upload_unit').html($.su.CHAR.WIRELESS.MBPS_UNIT);	
+
+		$("#rate_limit_msg").msg('show');
+
+	}).delegate('a.grid-content-btn.btn-block', 'click', function(){
+		var store =$(clientGuestGrid).grid("getStore");
+		var key = $(this).attr("data-key");
+		var data = store.getData(key);
+		var MAC = data.MAC;
+		var hostname = data.hostname;
+		var upValue = data.Up;
+		var downValue = data.Down;
+
+		store.load({
+			operation: 'block',
+			hostname: hostname,
+			MAC: MAC,
+			up: upValue,
+			down: downValue
+		});
+		blockClientStore.load();
+	}).delegate('a.grid-content-btn.btn-unAuth', 'click', function(){
+		var store =$(clientGuestGrid).grid("getStore");
+		var key = $(this).attr("data-key");
+		var data = store.getData(key);
+		var MAC = data.MAC;
+		var hostname = data.hostname;
+
+		//reference: monitor->client->portal user list -> unauth
+		store.load({
+			operation: 'unauth',
+			hostname: hostname,
+			clientMac: MAC
+		});
+	
+	});
+
+////////////////////////////////////////////////////////////////////////
+
+	$('div#block_client').panel({
+		title: $.su.CHAR.STATUS_CLIENT.BLOCK_CLIENT_LIST,
+		collapsible: false
+	});
+
+
+	var blockClientStore = new $.su.Store({
+		proxy: {
+			url: './data/status.client.blocklist.json',
+			type: "GET"
+		},
+		fields: [
+            {name: "hostname"},
+            {name: "MAC"},
+            {name: "Up"},
+            {name: "Down"}
+		],
+		autoLoad: true,
+		updateMode: "complete"
+	});
+
+	var blockClientGrid = $("div#blockClientListGrid").grid({
+		store: blockClientStore,
+		paging: {numPerPage: 8},
+		columns: [
+			{
+				xtype: "rownumberer",
+				width: 40
+			},
+			{
+				text: $.su.CHAR.STATUS_CLIENT.HOSTNAME,
+				// width: 125,
+				dataIndex: "hostname"
+			},
+			{
+				text: $.su.CHAR.STATUS_CLIENT.MAC_ADDRESS,
+				// width: 125,
+				dataIndex: "MAC"
+			},
+			{
+				text: $.su.CHAR.STATUS_CLIENT.UP_BYTES,
+				width: 100,
+				dataIndex: "Up",
+				renderer: function(val){
+					return num2Str(val);
+				}
+			},
+			{
+				text: $.su.CHAR.STATUS_CLIENT.DOWN_BYTES,
+				width: 100,
+				dataIndex: "Down",
+				renderer: function(val){
+					return num2Str(val);
+				}
+			},
+			{
+				text: $.su.CHAR.STATUS_CLIENT.ACTION,
+				width: 100,
+				dataIndex: 'key',
+				renderer: function(val){
+					var key = val;
+					var inHTML = "";
+					var  inHTML = 		"<a href=\"javascript:void(0);\" data-key=\""+key+"\" class=\"grid-content-btn grid-content-btn-delete btn-delete\">";
+						inHTML +=			"<span class=\"icon\" title=\""+$.su.CHAR.STATUS_CLIENT.UNBLOCK+"\"> </span>";
+						inHTML += 			"<span class=\"text\">"+$.su.CHAR.STATUS_CLIENT.UNBLOCK+"</span>";
+						inHTML += 		"</a>";
+					return inHTML;
+				}
+			}
+		],
+		operation: [
+			"refresh"
+		]
+	}).delegate("a.grid-content-btn.grid-content-btn-delete", "click", function(e){
+		e.preventDefault();
+		e.stopPropagation();		
+
+		var store =$(blockClientGrid).grid("getStore");
+		var key = $(this).attr("data-key");
+		var data = store.getData(key);
+		var MAC = data.MAC;
+		var hostname = data.hostname;
+		var up = data.Up;
+		var down = data.Down;
+		
+		store.load({
+			operation: 'remove',
+			hostname: hostname,
+			MAC: MAC,
+			up: up,
+			down: down
+		});
+	});
+	
+/////////////////////////////////////////////////////////////////////////////////////////////
+	$("#rate_limit_msg").msg({
+		type:"panel",
+		cls:"rate-limit-msg"
+	});
+
+	// $('#rate_limit_tip_icon').attr('title', $.su.CHAR.STATUS_CLIENT.RATE_LIMIT_TIP);
+	// $('#rate_limit_tip').html($.su.CHAR.STATUS_CLIENT.RATE_LIMIT_TIP);
+
+	$('#rate_limit_form').form({
+		proxy: {
+			url: "./data/status.client.ratelimit.json",
+			type: "POST",
+			timeout: 60000
+		},
+		fields: [
+			{name: "limit", mapping: "limit"},
+			{name: "limit_download", mapping: "limit_download"},
+			{name: "limit_download_unit", mapping: "limit_download_unit"},
+			{name: "limit_upload", mapping: "limit_upload"},
+			{name: "limit_upload_unit", mapping: "limit_upload_unit"}
+		],
+		autoLoad:false,
+		submitBtn: null
+	});
+
+	var limitNum = $("input#rate_limit_download").textbox({
+		fieldLabel:$.su.CHAR.WIRELESS.RATE_LIMIT_DOWNLOAD,
+		cls: 'inline-block',
+		inputCls: 'm',
+		allowBlank: false,
+		vtype: 'number'
+	});
+
+	var limitDown = $("input#rate_limit_download_unit").combobox({
+		fieldLabel: null,
+		cls: 'inline-block',
+		inputCls: 'm',
+		allowBlank: false,
+	    items: [
+				{value: 0, name: $.su.CHAR.WIRELESS.KBPS, selected: "selected"},
+				{value: 1, name: $.su.CHAR.WIRELESS.MBPS}
+		]
+	}).on("ev_change", function(e, oldValue, newValue){
+		if(newValue[0] == 0){
+			$('span#text_rate_limit_download_unit').html($.su.CHAR.WIRELESS.KBPS_UNIT);
+		}else{
+			$('span#text_rate_limit_download_unit').html($.su.CHAR.WIRELESS.MBPS_UNIT);
+		}
+	});
+
+	$("input#rate_limit_upload").textbox({
+		fieldLabel:$.su.CHAR.WIRELESS.RATE_LIMIT_UPLOAD,
+		cls: 'inline-block',
+		inputCls: 'm',
+		allowBlank: false,
+		vtype: 'number'
+	});
+
+	$("input#rate_limit_mac").textbox({
+		fieldLabel:$.su.CHAR.WIRELESS.RATE_LIMIT_UPLOAD,
+		cls: 'hidden'
+	});
+
+	var limitUp = $("input#rate_limit_upload_unit").combobox({
+		fieldLabel: null,
+		cls: 'inline-block',
+		inputCls: 'm',
+		allowBlank: false,
+	    items: [
+			{value: 0, name: $.su.CHAR.WIRELESS.KBPS, selected: "selected"},
+			{value: 1, name: $.su.CHAR.WIRELESS.MBPS}
+		]
+	}).on("ev_change", function(e, oldValue, newValue){
+		if(newValue[0] == 0){
+			$('span#text_rate_limit_upload_unit').html($.su.CHAR.WIRELESS.KBPS_UNIT);
+		}else{
+			$('span#text_rate_limit_upload_unit').html($.su.CHAR.WIRELESS.MBPS_UNIT);
+		}
+	});
+
+	$("input#rate_limit").checkbox({
+		fieldLabel:$.su.CHAR.WIRELESS.RATE_LIMIT,
+		cls: 'inline-block',
+		items: [
+			{boxlabel: $.su.CHAR.WIRELESS.ENABLE, uncheckedValue:"0", inputValue: "1", id:"item_limit", checked:true}
+		]
+	}).on("ev_change", function(e, oldValue, newValue){
+		if( newValue.length==0 || newValue[0] ==0){
+			$("input#rate_limit_download").textbox('disable');
+			$('div#limit_down_block').hide();
+			$("input#rate_limit_upload").textbox('disable');
+			$('div#limit_up_block').hide();
+		}else{
+			$("input#rate_limit_download").textbox('enable');
+			$('div#limit_down_block').show();
+			$("input#rate_limit_upload").textbox('enable');
+			$('div#limit_up_block').show();
+		}
+	});
+
+	$("input#rate_limit_download").textbox('disable');
+	$('div#limit_down_block').hide();
+	$("input#rate_limit_upload").textbox('disable');
+	$('div#limit_up_block').hide();
+
+	$("#limit_form_submit").button({
+		text: $.su.CHAR.OPERATION.OK,
+		cls:"submit",
+		handler:function(){
+			if( $('#rate_limit_form').form('validate') == true ){
+
+				var ifChecked = $("input#rate_limit").checkbox('getValue');
+
+				if(ifChecked.length>0 && ifChecked[0] !=false){
+					var downloadNum = parseInt( $('#rate_limit_download').textbox('getValue') );
+
+					if(downloadNum<1){
+						$('#rate_limit_download').textbox('setError', $.su.CHAR.VTYPETEXT.NUMBER_MIN.replace("%min", 0) );
+						return false;
+					}
+
+					if( $('#rate_limit_download_unit').combobox('getValue')[0] == '0' ){
+						if(downloadNum>10240000){
+							$('#rate_limit_download').textbox('setError', $.su.CHAR.VTYPETEXT.NUMBER_MAX.replace("%max", 10240000) );
+							return false;
+						}
+					}else{
+						if(downloadNum>10240){
+							$('#rate_limit_download').textbox('setError', $.su.CHAR.VTYPETEXT.NUMBER_MAX.replace("%max", 10240) );
+							return false;
+						}
+					}
+
+					var uploadNum = parseInt( $('#rate_limit_upload').textbox('getValue') );
+					
+					if(uploadNum<1){
+						$('#rate_limit_upload').textbox('setError', $.su.CHAR.VTYPETEXT.NUMBER_MIN.replace("%min", 0) );
+						return false;
+					}
+
+					if( $('#rate_limit_upload_unit').combobox('getValue')[0] == '0' ){
+						if(uploadNum>10240000){
+							$('#rate_limit_upload').textbox('setError', $.su.CHAR.VTYPETEXT.NUMBER_MAX.replace("%max", 10240000) );
+							return false;
+						}
+					}else{
+						if(uploadNum>10240){
+							$('#rate_limit_upload').textbox('setError', $.su.CHAR.VTYPETEXT.NUMBER_MAX.replace("%max", 10240) );
+							return false;
+						}
+					}
+				}
+				
+				$('#rate_limit_form').form('submit', {}, function(){
+					if($('#client_user_list').hasClass('hidden')){
+						var data = $(clientGuestGrid).grid("getStore").getData(editingKey);
+						if($("input#rate_limit").checkbox('getValue').length>0 
+							&& $("input#rate_limit").checkbox('getValue')[0] !=false){
+							data.limit = 1;
+						}else{
+							data.limit = 0;
+						}
+						data.limit_download = $('#rate_limit_download').textbox('getValue');
+						data.limit_download_unit = $('input#rate_limit_download_unit').combobox('getValue')[0];
+						data.limit_upload = $('#rate_limit_upload').textbox('getValue');
+						data.limit_upload_unit = $('input#rate_limit_upload_unit').combobox('getValue')[0];
+						$(clientGuestGrid).grid("getStore").updateData(data);
+
+						/*$(clientGuestGrid).grid("getStore").load({
+							operation: 'load'
+						});*/
+					}else{
+						var data = $(clientGrid).grid("getStore").getData(editingKey);
+						if($("input#rate_limit").checkbox('getValue').length>0 
+							&& $("input#rate_limit").checkbox('getValue')[0] !=false){
+							data.limit = 1;
+						}else{
+							data.limit = 0;
+						}
+						data.limit_download = $('#rate_limit_download').textbox('getValue');
+						data.limit_download_unit = $('input#rate_limit_download_unit').combobox('getValue')[0];
+						data.limit_upload = $('#rate_limit_upload').textbox('getValue');
+						data.limit_upload_unit = $('input#rate_limit_upload_unit').combobox('getValue')[0];
+						$(clientGrid).grid("getStore").updateData(data);
+
+						/*$(clientGrid).grid("getStore").load({
+							operation: 'load'
+						});*/
+					}
+					
+					$("#rate_limit_msg").msg('close');
+				});				
+			}				
+		}
+	});
+
+	$("#limit_form_submit_cancel").button({
+		text: $.su.CHAR.OPERATION.CANCEL,
+		cls:"submit",
+		handler:function(){
+			$("#rate_limit_msg").msg('close');
+		}
+	});
+
+	if ($.su.managedByController || $.su.isFestaAp) {
+		clientGrid.grid("hideColumn", ['key'])
+		clientGuestGrid.grid("hideColumn", ['key'])
+		blockClientGrid.grid("hideColumn", ['key'])
+	}
+
+});
+</script>
+</body>
+</html>

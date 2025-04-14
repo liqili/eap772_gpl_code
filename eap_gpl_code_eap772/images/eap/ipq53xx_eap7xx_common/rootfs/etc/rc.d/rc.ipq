@@ -1,0 +1,166 @@
+#!/bin/sh
+
+mount -t ramfs -n none /data
+mount -t debugfs none /sys/kernel/debug
+sysctl -w net.netfilter.nf_conntrack_acct=1
+
+#echo 1 > /proc/sys/net/bridge/bridge-nf-filter-vlan-tagged
+#echo 1 > /sys/kernel/debug/ecm/ecm_nss_ipv4/vlan_passthrough_set
+
+echo 0 > /proc/sys/net/ipv4/tcp_ecn
+echo 30 > /proc/sys/net/ipv4/tcp_fin_timeout
+echo 120 > /proc/sys/net/ipv4/tcp_keepalive_time
+
+echo 1800 > /proc/sys/net/netfilter/nf_conntrack_tcp_timeout_established
+echo 60 > /proc/sys/net/netfilter/nf_conntrack_udp_timeout
+echo 30 > /proc/sys/net/netfilter/nf_conntrack_tcp_timeout_syn_sent
+echo 30 > /proc/sys/net/netfilter/nf_conntrack_tcp_timeout_syn_recv
+echo 30 > /proc/sys/net/netfilter/nf_conntrack_tcp_timeout_fin_wait
+echo 30 > /proc/sys/net/netfilter/nf_conntrack_tcp_timeout_close_wait
+echo 30 > /proc/sys/net/netfilter/nf_conntrack_tcp_timeout_time_wait
+echo 1 > /proc/sys/net/netfilter/nf_conntrack_tcp_timeout_close
+echo 40000 > /proc/sys/net/netfilter/nf_conntrack_max
+
+echo 1 > /proc/sys/dev/nss/general/redirect
+
+mkdir -p /data/vendor/wifi/
+
+echo -n "/ini" > /sys/module/firmware_class/parameters/path
+
+#get board_name
+cfg_path=`cat /tmp/cfgFilePath`
+if [ -e ${cfg_path} ]; then
+	board_name=${cfg_path##*/}
+	board_name=${board_name%${cc_suffix}}
+else
+	echo "****WARNING: no cfg file <${cfg_path}> ****"
+fi
+
+echo "**** board_name = ${board_name} ****"
+
+fw_path=/lib/firmware/${board_name}/
+qcn9224_path=${fw_path}/qcn9224/
+ipq5332_path=${fw_path}/IPQ5332/
+
+case "${board_name}" in
+EAP772*)
+	echo "**** in EAP772 init path ****"
+
+	#read caldata from nvrammanager
+	mkdir -p /tmp/qcn9224
+	mkdir -p /tmp/IPQ5332
+	nvrammanager -p radio -r /tmp/virtual_art.bin
+	dd if=/tmp/virtual_art.bin of=/tmp/IPQ5332/caldata.bin bs=1 count=63488 skip=4096
+	dd if=/tmp/virtual_art.bin of=/tmp/qcn9224/caldata_1.bin bs=1 count=184320 skip=157696
+	dd if=/tmp/virtual_art.bin of=/tmp/qcn9224/caldata_2.bin bs=1 count=184320 skip=362496
+
+	#select correct BDF
+	cc=`cat /tp_data/manu_data/region`
+	cc=${cc:-"EU276"}
+	cc_suffix=_${cc:0:2}
+	bdf_path=${qcn9224_path}/bdwlan${cc_suffix}
+	bdf1_path=${ipq5332_path}/bdwlan${cc_suffix}
+
+	[ -e ${bdf_path}.b1006 ] || echo "****WARNING: ${bdf_path}.b1006 not found****" 
+	cp ${bdf_path}.b1006 /tmp/qcn9224/bdwlan.b1006
+
+	[ -e ${bdf1_path}.b12 ] || echo "****WARNING: :${bdf1_path}.b12 not found****" 
+	cp ${bdf1_path}.b12 /tmp/IPQ5332/bdwlan.b12
+
+;;
+EAP723*)
+	echo "**** in EAP723 init path ****"
+
+	#read caldata from nvrammanager
+	mkdir -p /tmp/qcn9224
+	mkdir -p /tmp/IPQ5332
+	nvrammanager -p radio -r /tmp/virtual_art.bin
+	dd if=/tmp/virtual_art.bin of=/tmp/IPQ5332/caldata.bin bs=1 count=63488 skip=4096
+	dd if=/tmp/virtual_art.bin of=/tmp/qcn9224/caldata_1.bin bs=1 count=184320 skip=157696
+	dd if=/tmp/virtual_art.bin of=/tmp/qcn9224/caldata_2.bin bs=1 count=184320 skip=362496
+
+	#select correct BDF
+	cc=`cat /tp_data/manu_data/region`
+	cc=${cc:-"EU276"}
+	cc_suffix=_${cc:0:2}
+	bdf_path=${qcn9224_path}/bdwlan${cc_suffix}
+	bdf1_path=${ipq5332_path}/bdwlan${cc_suffix}
+
+	[ -e ${bdf_path}.b1006 ] || echo "****WARNING: ${bdf_path}.b1006 not found****" 
+	cp ${bdf_path}.b1006 /tmp/qcn9224/bdwlan.b1006
+
+	[ -e ${bdf1_path}.b12 ] || echo "****WARNING: :${bdf1_path}.b12 not found****" 
+	cp ${bdf1_path}.b12 /tmp/IPQ5332/bdwlan.b12
+
+;;
+Festa_F76*)
+	echo "**** in Festa F76 init path ****"
+	#read caldata from nvrammanager
+	mkdir -p /tmp/qcn9224
+	mkdir -p /tmp/IPQ5332
+	nvrammanager -p radio -r /tmp/virtual_art.bin
+	dd if=/tmp/virtual_art.bin of=/tmp/IPQ5332/caldata.bin bs=1 count=63488 skip=4096
+	dd if=/tmp/virtual_art.bin of=/tmp/qcn9224/caldata_1.bin bs=1 count=184320 skip=157696
+	dd if=/tmp/virtual_art.bin of=/tmp/qcn9224/caldata_2.bin bs=1 count=184320 skip=362496
+
+	#select correct BDF
+	cc=`cat /tp_data/manu_data/region`
+	cc=${cc:-"EU276"}
+	cc_suffix=_${cc:0:2}
+	bdf_path=${qcn9224_path}/bdwlan${cc_suffix}
+	bdf1_path=${ipq5332_path}/bdwlan${cc_suffix}
+
+	[ -e ${bdf_path}.b1006 ] || echo "****WARNING: ${bdf_path}.b1006 not found****" 
+	cp ${bdf_path}.b1006 /tmp/qcn9224/bdwlan.b1006
+
+	[ -e ${bdf1_path}.b12 ] || echo "****WARNING: :${bdf1_path}.b12 not found****" 
+	cp ${bdf1_path}.b12 /tmp/IPQ5332/bdwlan.b12
+;;
+
+*)
+	echo "****WARNING: no support board:<${board_name}>****"
+;;
+esac
+
+#  Enable NSS RPS
+rps_enabled=1
+enable_rps() {
+		i=1
+		irq_rps=`grep edma_rxdesc /proc/interrupts | cut -d ':' -f 1`
+		for entry in $irq_rps
+		do
+			echo $i > /proc/irq/$entry/smp_affinity
+			let i=i*2
+			if [ $i -gt 8 ];then
+				i=1
+			fi
+		done
+
+		i=1
+		irq_rps=`grep edma_txcmpl /proc/interrupts | cut -d ':' -f 1`
+		for entry in $irq_rps
+		do
+			echo $i > /proc/irq/$entry/smp_affinity
+			let i=i*2
+			if [ $i -gt 8 ];then
+				i=1
+			fi
+		done
+
+		#Enable RPS to use 4 cores by default
+		echo 4 > /proc/sys/net/edma/rps_num_cores
+}
+
+if [ "$rps_enabled" -eq 1 ]; then
+	enable_rps
+fi
+
+#disable UNIPHY1_CLK50/UNIPHY2_CLK50 output
+devmem 0x7A00610 32 0x31C
+devmem 0x7A10610 32 0x31C
+
+is_dump_enable_tp=`fw_printenv | grep dump_enable_tp | cut -d"=" -f2`
+if [ "$is_dump_enable_tp" == "1" ] ; then
+echo "disable_dump"
+fw_setenv dump_enable_tp
+fi

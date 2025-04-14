@@ -1,0 +1,352 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Statistics</title>
+<style type="text/css">
+
+	div#monitor_client div#clientListGrid span.block_content{
+		/*color: rgb(31, 187, 166);*/
+		color: #4acbd6;
+		cursor: pointer;
+	}
+	
+	div#monitor_client div#portal_user_list span.unauth_content{
+		/*color: rgb(31, 187, 166);*/
+		color: #4acbd6;
+		cursor: pointer;
+	}
+
+</style>
+</head>
+
+<body>
+<div class="func-container">
+
+	<div id="monitor_client">
+		<div id="client_list">
+			<div id="clientListGrid">
+			</div>
+		</div>
+		
+		<div id="portal_user_list">
+			<div id="portalUserListGrid">
+			</div>
+		</div>
+	</div>
+
+</div>
+<script type="text/javascript">
+//<![CDATA[
+$(document).ready(function(e){
+
+	var URL_CLIENT_LIST       = "./data/monitor.client.client.json";
+	var URL_CLIENT_BLOCK      = "./data/monitor.client.block.json";
+	var URL_PORTALUSER_LIST   = "./data/monitor.client.portaluser.json";
+	var URL_PORTALUSER_UNAUTH = "./data/monitor.client.unauth.json";
+
+	function num2Str(num)
+	{
+		var str = "";
+		if(num <= 1000)
+		{
+			str += num;
+		}
+		else
+		{
+			str += Math.floor(num/1000) + "k";
+		}
+
+		return str;
+	}
+
+	$("div.func-container").page({
+		title: $.su.CHAR.MONITOR_CLIENT.TITLE,
+		help: ""
+	});
+
+	$("div#client_list").panel({
+		title: $.su.CHAR.MONITOR_CLIENT.CLIENT_TITLE,
+		collapsible: false
+	});
+
+	var clientListStore = new $.su.Store({
+		proxy: {
+			url: URL_CLIENT_LIST,
+			type: "GET"
+		},
+		fields: [
+            {name: "MAC"},
+            {name: "Radio"},
+            {name: "AccessPoint"},
+			{name: "SSID"},
+            {name: "SNR"},
+            {name: "CCQ"},
+			{name: "Rate"},
+            {name: "Down"},
+            {name: "Up"},
+			{name: "ActiveTime"}
+		],
+		autoLoad: true,
+		updateMode: "complete"
+	});
+
+	$("div#clientListGrid").grid({
+		store: clientListStore,
+		paging: {numPerPage: 8},
+		columns: [
+			{
+				xtype: "rownumberer",
+				width: 40
+			},
+			{
+				text: $.su.CHAR.MONITOR_CLIENT.CLIENTMAC,
+				width: 125,
+				dataIndex: "MAC"
+			},
+			{
+				text: $.su.CHAR.MAC_FILTERING.BAND,
+				width: 50,
+				dataIndex: "Radio"
+			},
+			{
+				text: $.su.CHAR.MONITOR_CLIENT.CLIENTAP,
+				width: 120,
+				dataIndex: "AccessPoint"
+			},
+			{
+				text: $.su.CHAR.MONITOR_CLIENT.CLENTSSID,
+				width: 120,
+				dataIndex: "SSID"
+			},
+			{
+				text: $.su.CHAR.MONITOR_CLIENT.CLIENTSNR,
+				width: 60,
+				dataIndex: "SNR",
+				renderer: function(val){
+					return val;
+				}
+			},
+			{
+				text: $.su.CHAR.MONITOR_CLIENT.CLIENTCCQ,
+				width: 50,
+				dataIndex: "CCQ",
+			},
+			{
+				text: $.su.CHAR.MONITOR_CLIENT.CLIENTRATE,
+				width: 60,
+				dataIndex: "Rate",
+				renderer: function(val){
+					return val;
+				}
+			},
+			{
+				text: $.su.CHAR.MONITOR_CLIENT.CLIENTDOWN,
+				width: 80,
+				dataIndex: "Down",
+				renderer: function(val){
+					return num2Str(val);
+				}
+			},
+			{
+				text: $.su.CHAR.MONITOR_CLIENT.CLIENTUP,
+				width: 80,
+				dataIndex: "Up",
+				renderer: function(val){
+					return num2Str(val);
+				}
+			},
+			{
+				text: $.su.CHAR.MONITOR_CLIENT.CLIENTATTIME,
+				/*width: 85,*/
+				dataIndex: "ActiveTime"
+			}/*,
+			{
+				text: $.su.CHAR.MONITOR_CLIENT.CLIENTBLOCK,
+				//width: 45,
+				dataIndex: "MAC",
+				renderer: function(val){
+					var blockStr = "";
+					blockStr += "<span class=\"block_content\" op=\"block\" clientMac=\""+ val + "\">";
+					blockStr += $.su.CHAR.MONITOR_CLIENT.CLIENTBLOCKCMD;
+					blockStr += "</span>";
+					return blockStr;
+				}
+			}*/
+		],
+		operation: [
+			"refresh"
+		]
+	});
+
+	$("div#clientListGrid").delegate(".block_content", "click", function(){
+		var data = {};
+		data = $.extend({
+			"operation": $(this).attr("op"),
+			"clientMac": $(this).attr("clientMac")
+		}, data);
+
+		$.ajax({
+            type: "GET",
+            url: URL_CLIENT_BLOCK,
+            timeout: 5000,
+            dataType: "json",
+            cache: false,
+            data: data,
+            traditional: true,
+			success: function(data){
+				if(data.success){
+					$("div#clientListGrid").grid("getStore").load();
+				}
+			},
+			error: function(e, status){
+				//console.log("error", e, status);
+			}
+		});
+	});
+	
+	$("div#portal_user_list").panel({
+		title: $.su.CHAR.MONITOR_CLIENT.PORTALUSERTITLE,
+		collapsible: false
+	});
+	
+	var portalUserStore = new $.su.Store({
+		proxy: {
+			url: URL_PORTALUSER_LIST,
+			type: "GET"
+		},
+		fields: [
+            {name: "MAC"},
+            {name: "Radio"},
+            {name: "AccessPoint"},
+			{name: "SSID"},
+            {name: "SNR"},
+            {name: "CCQ"},
+			{name: "Rate"},
+            {name: "Down"},
+            {name: "Up"},
+			{name: "ActiveTime"}
+		],
+		autoLoad: true,
+		updateMode: "complete"
+	});
+	
+	$("div#portalUserListGrid").grid({
+		store: portalUserStore,
+		paging: {numPerPage: 8},
+		columns: [
+			{
+				xtype: "rownumberer",
+				width: 40
+			},
+			{
+				text: $.su.CHAR.MONITOR_CLIENT.PORTALUSERMAC,
+				width: 125,
+				dataIndex: "MAC"
+			},
+			{
+				text: $.su.CHAR.MAC_FILTERING.BAND,
+				width: 50,
+				dataIndex: "Radio"
+			},
+			{
+				text: $.su.CHAR.MONITOR_CLIENT.PORTALUSERAP,
+				width: 120,
+				dataIndex: "AccessPoint"
+			},
+			{
+				text: $.su.CHAR.MONITOR_CLIENT.PORTALUSERSSID,
+				width: 120,
+				dataIndex: "SSID"
+			},
+			{
+				text: $.su.CHAR.MONITOR_CLIENT.PORTALUSERSNR,
+				width: 45,
+				dataIndex: "SNR",
+				renderer: function(val){
+					return val;
+				}
+			},
+			{
+				text: $.su.CHAR.MONITOR_CLIENT.PORTALUSERCCQ,
+				width: 45,
+				dataIndex: "CCQ",
+			},
+			{
+				text: $.su.CHAR.MONITOR_CLIENT.PORTALUSERRATE,
+				width: 56,
+				dataIndex: "Rate",
+				renderer: function(val){
+					return val;
+				}
+			},
+			{
+				text: $.su.CHAR.MONITOR_CLIENT.PORTALUSERDOWN,
+				width: 80,
+				dataIndex: "Down",
+				renderer: function(val){
+					return num2Str(val);
+				}
+			},
+			{
+				text: $.su.CHAR.MONITOR_CLIENT.PORTALUSERUP,
+				width: 80,
+				dataIndex: "Up",
+				renderer: function(val){
+					return num2Str(val);
+				}
+			},
+			{
+				text: $.su.CHAR.MONITOR_CLIENT.PORTALUSERATTIME,
+				width: 88,
+				dataIndex: "ActiveTime"
+			},
+			{
+				text: $.su.CHAR.MONITOR_CLIENT.PORTALUSERUNAUTH,
+				/*width: 80,*/
+				dataIndex: "MAC",
+				renderer: function(val){
+					var unauthStr = "";
+					unauthStr += "<span class=\"unauth_content\" op=\"unauth\" clientMac=\""+ val + "\">";
+					unauthStr += $.su.CHAR.MONITOR_CLIENT.PORTALUSERUNAUTHCMD;
+					unauthStr += "</span>";
+					return unauthStr;
+				}
+			}
+		],
+		operation: [
+			"refresh"
+		]
+	});
+	
+	$("div#portalUserListGrid").delegate(".unauth_content", "click", function(){
+		var data = {};
+		data = $.extend({
+			"operation": $(this).attr("op"),
+			"clientMac": $(this).attr("clientMac")
+		}, data);
+		
+		$.ajax({
+            type: "GET",
+            url: URL_PORTALUSER_UNAUTH,
+            timeout: 5000,
+            dataType: "json",
+            cache: false,
+            data: data,
+            traditional: true,
+			success: function(data){
+				if(data.success){
+					$("div#portalUserListGrid").grid("getStore").load();
+				}
+			},
+			error: function(e, status){
+				//console.log("error", e, status);
+			}
+		});
+	});
+
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,35 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link type="text/css" href="../../themes/dark/css/widget.css" rel="stylesheet" />
+<link type="text/css" href="../../themes/dark/css/style.css" rel="stylesheet" />
+
+<title>welcome</title>
+</head>
+
+<body>
+<div id="portal_welcome">
+	<p>Portal Login Success!</p>
+</div>
+
+<script type="text/javascript">
+
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]); return null;
+    }
+
+	setTimeout(function(){
+		var origUrl = getQueryString("origUrl");
+		
+		if(("" != origUrl) && (null != origUrl))
+		{
+			top.location.href = origUrl;
+		}
+
+	}, 2000);
+	
+</script>
+</body>
+</html>

@@ -1,0 +1,161 @@
+liblldpd_la-frame.lo: frame.c \
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/stdc-predef.h \
+ lldpd.h ../../config.h \
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/stdlib.h \
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/features.h \
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/sys/glibc-types.h \
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/sys/cdefs.h \
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/bits/alltypes.h \
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/alloca.h \
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/stddef.h \
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/string.h \
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/strings.h \
+ ../../include/sys/queue.h \
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/sys/types.h \
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/endian.h \
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/stdint.h \
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/bits/stdint.h \
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/sys/select.h \
+ ../../include/netinet/if_ether.h \
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/netinet/in.h \
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/inttypes.h \
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/sys/socket.h \
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/bits/socket.h \
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/sys/un.h \
+ lldp-tlv.h protocols/cdp.h protocols/sonmp.h protocols/edp.h \
+ ../compat/compat.h \
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/stdio.h \
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/stdarg.h \
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/unistd.h \
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/bits/posix.h \
+ ../marshal.h ../log.h ../ctl.h ../marshal.h ../lldpd-structs.h \
+ ../../include/linux/if.h ../../include/linux/types.h \
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/asm/types.h \
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/asm-generic/types.h \
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/asm-generic/int-ll64.h \
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/asm/bitsperlong.h \
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/asm-generic/bitsperlong.h \
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/linux/posix_types.h \
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/linux/stddef.h \
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/asm/posix_types.h \
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/asm-generic/posix_types.h \
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/linux/socket.h \
+ ../../include/linux/hdlc/ioctl.h ../compat/compat.h ../lldp-const.h \
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/../smb_priv/apps/uclite/modules/op_info/opLldp_info.h \
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/../smb_priv/apps/common/type_pub.h \
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/../smb_priv/apps/uclite/modules/op_info/op_info.h \
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/../smb_priv/apps/utility_lib/include/dev_config.h
+
+/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/stdc-predef.h:
+
+lldpd.h:
+
+../../config.h:
+
+/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/stdlib.h:
+
+/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/features.h:
+
+/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/sys/glibc-types.h:
+
+/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/sys/cdefs.h:
+
+/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/bits/alltypes.h:
+
+/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/alloca.h:
+
+/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/stddef.h:
+
+/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/string.h:
+
+/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/strings.h:
+
+../../include/sys/queue.h:
+
+/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/sys/types.h:
+
+/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/endian.h:
+
+/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/stdint.h:
+
+/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/bits/stdint.h:
+
+/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/sys/select.h:
+
+../../include/netinet/if_ether.h:
+
+/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/netinet/in.h:
+
+/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/inttypes.h:
+
+/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/sys/socket.h:
+
+/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/bits/socket.h:
+
+/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/sys/un.h:
+
+lldp-tlv.h:
+
+protocols/cdp.h:
+
+protocols/sonmp.h:
+
+protocols/edp.h:
+
+../compat/compat.h:
+
+/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/stdio.h:
+
+/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/stdarg.h:
+
+/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/unistd.h:
+
+/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/bits/posix.h:
+
+../marshal.h:
+
+../log.h:
+
+../ctl.h:
+
+../marshal.h:
+
+../lldpd-structs.h:
+
+../../include/linux/if.h:
+
+../../include/linux/types.h:
+
+/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/asm/types.h:
+
+/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/asm-generic/types.h:
+
+/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/asm-generic/int-ll64.h:
+
+/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/asm/bitsperlong.h:
+
+/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/asm-generic/bitsperlong.h:
+
+/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/linux/posix_types.h:
+
+/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/linux/stddef.h:
+
+/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/asm/posix_types.h:
+
+/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/asm-generic/posix_types.h:
+
+/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/linux/socket.h:
+
+../../include/linux/hdlc/ioctl.h:
+
+../compat/compat.h:
+
+../lldp-const.h:
+
+/home/tplink/share/EAP772_gpl/PLATFORM/build/../smb_priv/apps/uclite/modules/op_info/opLldp_info.h:
+
+/home/tplink/share/EAP772_gpl/PLATFORM/build/../smb_priv/apps/common/type_pub.h:
+
+/home/tplink/share/EAP772_gpl/PLATFORM/build/../smb_priv/apps/uclite/modules/op_info/op_info.h:
+
+/home/tplink/share/EAP772_gpl/PLATFORM/build/../smb_priv/apps/utility_lib/include/dev_config.h:

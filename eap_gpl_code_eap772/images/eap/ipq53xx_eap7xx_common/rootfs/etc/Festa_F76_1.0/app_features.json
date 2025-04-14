@@ -1,0 +1,18 @@
+{
+    "features": [
+        {"name": "quickSetup", "version": 3},
+        {"name": "account", "version": 1},
+        {"name": "radio", "version": 4},
+        {"name": "ssid", "version": 2},
+        {"name": "client", "version": 3}, 
+        {"name": "blacklist", "version": 1},
+        {"name": "deviceInformation", "version": 1},
+        {"name": "ledControl", "version": 1},
+        {"name": "system", "version": 1},
+        {"name": "discoverUtil", "version": 1},
+        {"name": "hostName", "version": 1},
+        {"name": "quickSetupCloud", "version": 1},
+        {"name": "termsAndPolicy", "version": 1},
+		{"name": "mlo", "version": 1}
+    ]
+}

@@ -1,0 +1,142 @@
+
+# Copyright (c) 2013 Qualcomm Atheros, Inc.
+#
+# Permission to use, copy, modify, and/or distribute this software for any
+# purpose with or without fee is hereby granted, provided that the above
+# copyright notice and this permission notice appear in all copies.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+# ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+# WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+# ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+# OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+#
+export WEB_UI_BRANCH=sdn7-dev-772
+
+export SDK_PACKAGE=SPF_12.2_CSU2_Release
+export QCA_SDK_ROOT_PATH=$(TOPDIR)/sdk/build_dir/$(SDK_PACKAGE)
+export SDK_INSTALL=$(QCA_SDK_ROOT_PATH)/install
+export SDK_FTM_INSTALL=$(SDK_INSTALL)/ftm
+export QCA_SDK_ETH_PATH=$(QCA_SDK_ROOT_PATH)/ethernet_driver
+
+# Set the toolchain path
+export TOOLCHAIN_PACKAGE=toolchain-aarch64_cortex-a73_gcc-7.5.0_musl
+export TOOLPREFIX=aarch64-openwrt-linux-
+export TOOLARCH=./usr
+export GCC_USE_VERSION_7=y
+
+export SOC=ipq53xx
+export SSDK_CHIP_TYPE=MPPE
+export KERNEL=linux-5.4
+export KERNELVER=5.4.213
+export KERNELTARGET=Image dtbs
+export COMPRESSKERNEL=y
+export KERNELARCH=arm64
+export DTB_NAME=ipq5332-EAP7XX-COMMON
+export DTBPREFIX=ipq5332-mi01.6 ipq5332-EAP772_2_0_0 ipq5332-EAP723_1_0_0 ipq5332-Festa_F76_1_0_0
+export KERNEL_LOAD_ADDR=0x40080000
+export KERNEL_ENTRY_ADDR=0x40080000
+export USE_PLATFORM_FRAMEWORK=1
+export USER_SPACE_64BITS=y
+export NEED_COMPILE_SDK=y
+
+export NM_PTN_TABLE_BASE=0x300000
+
+export BUSYBOX=busybox-1.20.2
+
+##by fcs: for TP support
+export CONFIG_SYS_LED_CONTROL_SUPPORT=1
+export CONFIG_KICK_LOW_RSSI_STA_SUPPORT=1
+export ATH_BANDSTEERING_TP=1
+
+#wlan build
+export WLAN_PATHNAME=qca-wifi-12
+export WLAN_TOPDIR=$(TOPDIR)/wireless/$(WLAN_PATHNAME)
+
+export ARCH=aarch64
+export BUILD_VARIANT=unified-ipq53xx
+export TARGET_CFLAGS=-Os -pipe -march=armv8-a -mcpu=cortex-a53+crypto -fno-caller-saves -fno-plt -Wa,--noexecstack -fhonour-copts -Wno-error=unused-but-set-variable -Wno-error=unused-result -Wformat -Werror=format-security -fstack-protector-strong -D_FORTIFY_SOURCE=2 -Wl,-z,now -Wl,-z,relro
+
+export TARGET_LDFLAGS=-znow -zrelro -lpthread -ldl -L$(QSDK_INSTALL)/usr/lib
+
+export FW_INCLUDE_PATH=$(WLAN_TOPDIR)/ext_header/include
+export FW_COMMON_INCLUDE_PATH=$(WLAN_TOPDIR)/ext_header/wlan/fwcommon/include
+export FW_INTERFACE_TOOLS_PATH=$(WLAN_TOPDIR)/ext_header/wlan/fwcommon/fw_interface/tools
+export HALPHY_TOOLS_PATH=$(WLAN_TOPDIR)/ext_header/wlan/halphy_tools
+export FW_HDR_INCLUDE_PATH=$(WLAN_TOPDIR)/cmn_dev/fw_hdr
+export LINUX_VERSION="$(KERNELVER)"
+export LINUX_DIR="$(LINUX_KERNEL_PATH)" 
+
+export ENABLE_QCA5332_HEADER:=1
+export QCA_PPE_VP_ENABLED:=1
+export QCA_PPE_DS_ENABLED:=1
+export AHB_FW_SIM=0
+export PCIE_FW_SIM=1
+export QCA_GCC_7_SUPPORT=1
+export QCA_WIFI_KERNEL_VERSION_5_4=1
+
+export CONFIG_CNSS2_MODULE=y
+export CONFIG_WIFI_TARGET_WIFI_2_0=
+export CONFIG_WIFI_TARGET_WIFI_3_0=y
+export LINUX_SRC_DIR=
+export TARGET_CROSS=aarch64-openwrt-linux-musl-
+export QCA_PLATFORM=aarch64_cortex-a53_neon-vfpv4
+export BIG_ENDIAN_HOST=
+export CONFIG_WIFI_MEM_DEBUG=
+export CONFIG_WLAN_REF_ID_TRACE=
+export CONFIG_WIFI_CE_TASKLET_DEBUG=
+export CONFIG_WIFI_LOG_UTILS=y
+export CONFIG_WIFI_VDEV_PEER_PROT_COUNT=
+export CONFIG_WIFI_VDEV_PEER_PROT_TESTING=
+export CONFIG_WIFI_EMULATION_WIFI_3_0=
+export CONFIG_WIFI_IPQ_MEM_PROFILE=0
+export CONFIG_TARGET_ipq_ipq807x_64_QSDK_Enterprise=
+export CONFIG_TARGET_ipq_ipq807x_QSDK_Enterprise=
+export CONFIG_TARGET_ipq_ipq806x=
+export CONFIG_TARGET_ipq_ipq40xx=
+export CONFIG_TARGET_ipq807x=
+export CONFIG_TARGET_ipq95xx=
+export CONFIG_TARGET_ipq53xx=y
+export CONFIG_TARGET_ipq60xx=
+export CONFIG_64BIT=y
+export CONFIG_KERNEL_KASAN=
+export CONFIG_KERNEL_SKB_DEBUG=
+export CONFIG_KERNEL_SLUB_DEBUG=
+export CONFIG_WLAN_IOT_SIM_SUPPORT=
+export CONFIG_LOWMEM_FLASH=
+export CONFIG_DEBUG=
+export CONFIG_WIFI_MONITOR_SUPPORT=y
+export CONFIG_WIFI_11BE_D3_0_SUPPORT=
+
+export HTTP_THREAD_STACK_SIZE=512
+
+#SDK EXTRA MAKE OPT
+#SPF12_2 qca-nss-ppe EXTRA MAKE OPT
+export QCA_NSS_PPE_EXTRA_OPT=bridge-mgr=y vlan-mgr=y pppoe-mgr=y lag-mgr=y
+#SPF12_2 qca-nss-dp EXTRA MAKE OPT
+export QCA_NSS_DP_EXTRA_OPT=dp-net-standby=y dp-ppe-ds=y
+#SPF12.2 qca-nss-ppe-rule EXTRA MAKE OPT
+export QCA_NSS_PPE_RULE_EXTRA_OPT=PPE_ACL_ENABLED=y PPE_POLICER_ENABLED=y PPE_MIRROR_ENABLED=y PPE_RULE_IPQ53XX=y
+
+#Support factory backup partition
+export CONFIG_SUPPORT_FACTORY_BACKUP=1
+export FW_CONF_DIR=fw_data
+export USER_CONF_DIR=user_data
+export MANU_CONF_DIR=manu_data
+export MANU_BACKUP_DIR=backup_data
+export USER_DATA=user_data
+export PRODUCT_NAME=EAP7XX_COMMON
+
+export CONFIG_NAND_MULTI_BOARD=y
+export CONFIG_MULTI_BOARD_LIST=EAP772_2_0 EAP723_1_0 F76_1_0_0
+
+export SDKAPPS=ssdk_shell aq_fw_dl
+ifndef GPL_BUILD
+export APPS_ADDITIONAL += mtd fw_setenv
+else
+export APPS_ADDITIONAL += mtd
+endif
+export CONFIG_APPS_ADDITIONAL += ubi-mtd-utils 
+export MODS_ADDITIONAL+= bonding libcrc32c slhc ppp

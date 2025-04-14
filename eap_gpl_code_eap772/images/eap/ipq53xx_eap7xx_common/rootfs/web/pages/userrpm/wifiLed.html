@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Wi-Fi Control</title>
+</head>
+
+<style type="text/css">
+
+	p.note-warn-label{
+	color: #c11c66;
+	margin-bottom: 14px;
+	margin-top: 28px;
+	font-size: 14px;
+}	
+	
+</style>
+
+<body>
+<div class="func-container">
+
+	<div id="wifi_led"> 
+		<form id="wifi_led_form">
+			<p class="content" id="wifi_tip"></p>
+			<br>
+			<input id="wifiLed_status" name="enable" type="text"/>
+			<!-- <input id="mac-filtering-access" name="access" type="text"/>
+			<p class="no-label-l" id="router-des"></p> -->
+			<div>
+		    	<p id="wifi_warn" class="note-warn-label" />
+		    	<p id="wifi_note" />
+		    </div>
+		</form>		
+	</div>
+
+	<!-- <div id="test">额外部分的grid</div> -->
+
+</div>
+
+<script type="text/javascript">
+
+$(document).ready(function(e){
+
+
+	var led_url = "./data/wifiLed.json";
+
+	$('div.func-container').page({
+		title: $.su.CHAR.WIFI_LED_ON_OFF.TITLE,
+		help: ""	//可能是个调用的id 也可能是个url
+	});
+	
+	$('div#wifi_led').panel({
+		title: $.su.CHAR.WIFI_LED_ON_OFF.LED_CTRL,
+		collapsible: false
+	});
+
+	$('input#wifiLed_status').checkbox({
+            fieldLabel: $.su.CHAR.WIFI_LED_ON_OFF.LED_ENABLE_LABEL ,
+			labelCls:"s",
+            items: [
+                {boxlabel: $.su.CHAR.WIFI_LED_ON_OFF.ENABLE, uncheckedValue: "off", inputValue: "on"}
+            ]
+    });			
+	var led_proxy = new $.su.Proxy({
+		url: led_url
+	});
+	
+	$('#wifi_led_form').form({
+		proxy: led_proxy,
+		fields: [
+			{name: "enable", mapping: "enable"}
+		],
+	//	type: 'GET',
+		autoLoad: true,
+		submitBtn: "default"
+	});	
+	
+	$("#wifi_tip").html($.su.CHAR.WIFI_LED_ON_OFF.WIFI_TIP);
+	$("p#wifi_warn").html($.su.CHAR.WIFI_LED_ON_OFF.NOTE);
+	$("p#wifi_note").html($.su.CHAR.WIFI_LED_ON_OFF.WIFI_NOTE);  
+	//led_proxy.read();
+	
+});
+</script>
+</body>
+
+</html>

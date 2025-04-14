@@ -1,0 +1,1 @@
+/home/tplink/share/EAP772_gpl/PLATFORM/images/eap/ipq53xx_eap7xx_common/rootfs/bin/rtty

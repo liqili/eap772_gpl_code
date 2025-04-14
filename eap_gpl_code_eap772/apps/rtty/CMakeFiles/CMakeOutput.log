@@ -1,0 +1,594 @@
+The system is: Linux - 5.15.0-113-generic - x86_64
+Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+Compiler: /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/aarch64-openwrt-linux-gcc 
+Build flags: 
+Id flags:  
+
+The output was:
+0
+
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "a.out"
+
+The C compiler identification is GNU, found in "/home/tplink/share/EAP772_gpl/PLATFORM/apps/rtty/CMakeFiles/3.16.3/CompilerIdC/a.out"
+
+Determining if the C compiler works passed with the following output:
+Change Dir: /home/tplink/share/EAP772_gpl/PLATFORM/apps/rtty/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_301aa/fast && make[2]: Entering directory '/home/tplink/share/EAP772_gpl/PLATFORM/apps/rtty/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_301aa.dir/build.make CMakeFiles/cmTC_301aa.dir/build
+make[3]: Entering directory '/home/tplink/share/EAP772_gpl/PLATFORM/apps/rtty/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_301aa.dir/testCCompiler.c.o
+/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/aarch64-openwrt-linux-gcc    -o CMakeFiles/cmTC_301aa.dir/testCCompiler.c.o   -c /home/tplink/share/EAP772_gpl/PLATFORM/apps/rtty/CMakeFiles/CMakeTmp/testCCompiler.c
+Linking C executable cmTC_301aa
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_301aa.dir/link.txt --verbose=1
+/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/aarch64-openwrt-linux-gcc      -rdynamic CMakeFiles/cmTC_301aa.dir/testCCompiler.c.o  -o cmTC_301aa 
+make[3]: Leaving directory '/home/tplink/share/EAP772_gpl/PLATFORM/apps/rtty/CMakeFiles/CMakeTmp'
+make[2]: Leaving directory '/home/tplink/share/EAP772_gpl/PLATFORM/apps/rtty/CMakeFiles/CMakeTmp'
+
+
+
+Detecting C compiler ABI info compiled with the following output:
+Change Dir: /home/tplink/share/EAP772_gpl/PLATFORM/apps/rtty/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_2a600/fast && make[2]: Entering directory '/home/tplink/share/EAP772_gpl/PLATFORM/apps/rtty/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_2a600.dir/build.make CMakeFiles/cmTC_2a600.dir/build
+make[3]: Entering directory '/home/tplink/share/EAP772_gpl/PLATFORM/apps/rtty/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_2a600.dir/CMakeCCompilerABI.c.o
+/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/aarch64-openwrt-linux-gcc   -v -o CMakeFiles/cmTC_2a600.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake-3.16/Modules/CMakeCCompilerABI.c
+Reading specs from /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/specs
+COLLECT_GCC=/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/aarch64-openwrt-linux-gcc
+Target: aarch64-openwrt-linux-musl
+Configured with: /opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/build_dir/toolchain-aarch64/gcc-7.5.0/configure --with-bugurl=http://bugs.openwrt.org/ --with-pkgversion='OpenWrt GCC 7.5.0 r0+12639-06c3e84' --prefix=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/toolchain-aarch64 --build=x86_64-pc-linux-gnu --host=x86_64-pc-linux-gnu --target=aarch64-openwrt-linux-musl --with-gnu-ld --enable-target-optspace --disable-libgomp --disable-libmudflap --disable-multilib --disable-libmpx --disable-nls --without-isl --without-cloog --with-host-libstdcxx=-lstdc++ --with-gmp=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/host --with-mpfr=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/host --with-mpc=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/host --disable-decimal-float --with-diagnostics-color=auto-if-env --disable-libssp --enable-__cxa_atexit --with-arch=armv8-a --with-headers=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/toolchain-aarch64/include --disable-libsanitizer --enable-languages=c,c++ --enable-shared --enable-threads --with-slibdir=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/toolchain-aarch64/lib --enable-lto --with-libelf=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/host
+Thread model: posix
+gcc version 7.5.0 (OpenWrt GCC 7.5.0 r0+12639-06c3e84) 
+COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_2a600.dir/CMakeCCompilerABI.c.o' '-c' '-march=armv8-a' '-mlittle-endian' '-mabi=lp64'
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/aarch64-openwrt-linux-musl/7.5.0/cc1 -quiet -v -iprefix /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/ -idirafter /home/tplink/share/EAP772_gpl/PLATFORM/build/../build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/./usr/../../usr/include /usr/share/cmake-3.16/Modules/CMakeCCompilerABI.c -quiet -dumpbase CMakeCCompilerABI.c -march=armv8-a -mlittle-endian -mabi=lp64 -auxbase-strip CMakeFiles/cmTC_2a600.dir/CMakeCCompilerABI.c.o -version -o /tmp/cccfmBZq.s
+GNU C11 (OpenWrt GCC 7.5.0 r0+12639-06c3e84) version 7.5.0 (aarch64-openwrt-linux-musl)
+	compiled by GNU C version 5.4.0 20160609, GMP version 6.1.2, MPFR version 4.0.2, MPC version 1.1.0, isl version none
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+ignoring duplicate directory "/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/../../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/sys-include"
+ignoring duplicate directory "/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/../../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/include"
+ignoring duplicate directory "/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/../../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/include"
+ignoring nonexistent directory "/home/tplink/share/EAP772_gpl/PLATFORM/build/../build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/./usr/../../usr/include"
+#include "..." search starts here:
+#include <...> search starts here:
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/sys-include
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/include
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/include
+End of search list.
+GNU C11 (OpenWrt GCC 7.5.0 r0+12639-06c3e84) version 7.5.0 (aarch64-openwrt-linux-musl)
+	compiled by GNU C version 5.4.0 20160609, GMP version 6.1.2, MPFR version 4.0.2, MPC version 1.1.0, isl version none
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+Compiler executable checksum: 728c2768ad4b1929bddfa18cb972e120
+COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_2a600.dir/CMakeCCompilerABI.c.o' '-c' '-march=armv8-a' '-mlittle-endian' '-mabi=lp64'
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/bin/as -v -EL -march=armv8-a -mabi=lp64 -o CMakeFiles/cmTC_2a600.dir/CMakeCCompilerABI.c.o /tmp/cccfmBZq.s
+GNU assembler version 2.31.1 (aarch64-openwrt-linux-musl) using BFD version (GNU Binutils) 2.31.1
+COMPILER_PATH=/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/aarch64-openwrt-linux-musl/7.5.0/:/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/:/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/bin/
+LIBRARY_PATH=/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/:/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/:/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib/
+COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_2a600.dir/CMakeCCompilerABI.c.o' '-c' '-march=armv8-a' '-mlittle-endian' '-mabi=lp64'
+Linking C executable cmTC_2a600
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_2a600.dir/link.txt --verbose=1
+/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/aarch64-openwrt-linux-gcc     -v -rdynamic CMakeFiles/cmTC_2a600.dir/CMakeCCompilerABI.c.o  -o cmTC_2a600 
+Reading specs from /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/specs
+COLLECT_GCC=/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/aarch64-openwrt-linux-gcc
+COLLECT_LTO_WRAPPER=/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/aarch64-openwrt-linux-musl/7.5.0/lto-wrapper
+Target: aarch64-openwrt-linux-musl
+Configured with: /opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/build_dir/toolchain-aarch64/gcc-7.5.0/configure --with-bugurl=http://bugs.openwrt.org/ --with-pkgversion='OpenWrt GCC 7.5.0 r0+12639-06c3e84' --prefix=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/toolchain-aarch64 --build=x86_64-pc-linux-gnu --host=x86_64-pc-linux-gnu --target=aarch64-openwrt-linux-musl --with-gnu-ld --enable-target-optspace --disable-libgomp --disable-libmudflap --disable-multilib --disable-libmpx --disable-nls --without-isl --without-cloog --with-host-libstdcxx=-lstdc++ --with-gmp=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/host --with-mpfr=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/host --with-mpc=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/host --disable-decimal-float --with-diagnostics-color=auto-if-env --disable-libssp --enable-__cxa_atexit --with-arch=armv8-a --with-headers=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/toolchain-aarch64/include --disable-libsanitizer --enable-languages=c,c++ --enable-shared --enable-threads --with-slibdir=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/toolchain-aarch64/lib --enable-lto --with-libelf=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/host
+Thread model: posix
+gcc version 7.5.0 (OpenWrt GCC 7.5.0 r0+12639-06c3e84) 
+COMPILER_PATH=/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/aarch64-openwrt-linux-musl/7.5.0/:/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/:/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/bin/
+LIBRARY_PATH=/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/:/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/:/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib/
+COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_2a600' '-march=armv8-a' '-mlittle-endian' '-mabi=lp64'
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/aarch64-openwrt-linux-musl/7.5.0/collect2 -plugin /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/aarch64-openwrt-linux-musl/7.5.0/liblto_plugin.so -plugin-opt=/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/aarch64-openwrt-linux-musl/7.5.0/lto-wrapper -plugin-opt=-fresolution=/tmp/ccRsuBDP.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s --eh-frame-hdr -export-dynamic -dynamic-linker /lib/ld-musl-aarch64.so.1 -X -EL -maarch64linux -o cmTC_2a600 /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib/crt1.o /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib/crti.o /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/crtbegin.o -L /home/tplink/share/EAP772_gpl/PLATFORM/build/../build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/./usr/../../usr/lib -rpath-link /home/tplink/share/EAP772_gpl/PLATFORM/build/../build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/./usr/../../usr/lib -L/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0 -L/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc -L/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib CMakeFiles/cmTC_2a600.dir/CMakeCCompilerABI.c.o -lssp_nonshared -lgcc_s -lc -lgcc_s /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/crtend.o /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib/crtn.o
+COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_2a600' '-march=armv8-a' '-mlittle-endian' '-mabi=lp64'
+make[3]: Leaving directory '/home/tplink/share/EAP772_gpl/PLATFORM/apps/rtty/CMakeFiles/CMakeTmp'
+make[2]: Leaving directory '/home/tplink/share/EAP772_gpl/PLATFORM/apps/rtty/CMakeFiles/CMakeTmp'
+
+
+
+Parsed C implicit include dir info from above output: rv=done
+  found start of include info
+  found start of implicit include info
+    add: [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/sys-include]
+    add: [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/include]
+    add: [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/include]
+  end of search list found
+  collapse include dir [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/sys-include] ==> [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/aarch64-openwrt-linux-musl/sys-include]
+  collapse include dir [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/include] ==> [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/aarch64-openwrt-linux-musl/include]
+  collapse include dir [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/include] ==> [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/lib/gcc/aarch64-openwrt-linux-musl/7.5.0/include]
+  implicit include dirs: [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/aarch64-openwrt-linux-musl/sys-include;/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/aarch64-openwrt-linux-musl/include;/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/lib/gcc/aarch64-openwrt-linux-musl/7.5.0/include]
+
+
+Parsed C implicit link information from above output:
+  link line regex: [^( *|.*[/\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
+  ignore line: [Change Dir: /home/tplink/share/EAP772_gpl/PLATFORM/apps/rtty/CMakeFiles/CMakeTmp]
+  ignore line: []
+  ignore line: [Run Build Command(s):/usr/bin/make cmTC_2a600/fast && make[2]: Entering directory '/home/tplink/share/EAP772_gpl/PLATFORM/apps/rtty/CMakeFiles/CMakeTmp']
+  ignore line: [/usr/bin/make -f CMakeFiles/cmTC_2a600.dir/build.make CMakeFiles/cmTC_2a600.dir/build]
+  ignore line: [make[3]: Entering directory '/home/tplink/share/EAP772_gpl/PLATFORM/apps/rtty/CMakeFiles/CMakeTmp']
+  ignore line: [Building C object CMakeFiles/cmTC_2a600.dir/CMakeCCompilerABI.c.o]
+  ignore line: [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/aarch64-openwrt-linux-gcc   -v -o CMakeFiles/cmTC_2a600.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake-3.16/Modules/CMakeCCompilerABI.c]
+  ignore line: [Reading specs from /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/specs]
+  ignore line: [COLLECT_GCC=/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/aarch64-openwrt-linux-gcc]
+  ignore line: [Target: aarch64-openwrt-linux-musl]
+  ignore line: [Configured with: /opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/build_dir/toolchain-aarch64/gcc-7.5.0/configure --with-bugurl=http://bugs.openwrt.org/ --with-pkgversion='OpenWrt GCC 7.5.0 r0+12639-06c3e84' --prefix=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/toolchain-aarch64 --build=x86_64-pc-linux-gnu --host=x86_64-pc-linux-gnu --target=aarch64-openwrt-linux-musl --with-gnu-ld --enable-target-optspace --disable-libgomp --disable-libmudflap --disable-multilib --disable-libmpx --disable-nls --without-isl --without-cloog --with-host-libstdcxx=-lstdc++ --with-gmp=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/host --with-mpfr=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/host --with-mpc=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/host --disable-decimal-float --with-diagnostics-color=auto-if-env --disable-libssp --enable-__cxa_atexit --with-arch=armv8-a --with-headers=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/toolchain-aarch64/include --disable-libsanitizer --enable-languages=c,c++ --enable-shared --enable-threads --with-slibdir=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/toolchain-aarch64/lib --enable-lto --with-libelf=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/host]
+  ignore line: [Thread model: posix]
+  ignore line: [gcc version 7.5.0 (OpenWrt GCC 7.5.0 r0+12639-06c3e84) ]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_2a600.dir/CMakeCCompilerABI.c.o' '-c' '-march=armv8-a' '-mlittle-endian' '-mabi=lp64']
+  ignore line: [ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/aarch64-openwrt-linux-musl/7.5.0/cc1 -quiet -v -iprefix /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/ -idirafter /home/tplink/share/EAP772_gpl/PLATFORM/build/../build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/./usr/../../usr/include /usr/share/cmake-3.16/Modules/CMakeCCompilerABI.c -quiet -dumpbase CMakeCCompilerABI.c -march=armv8-a -mlittle-endian -mabi=lp64 -auxbase-strip CMakeFiles/cmTC_2a600.dir/CMakeCCompilerABI.c.o -version -o /tmp/cccfmBZq.s]
+  ignore line: [GNU C11 (OpenWrt GCC 7.5.0 r0+12639-06c3e84) version 7.5.0 (aarch64-openwrt-linux-musl)]
+  ignore line: [	compiled by GNU C version 5.4.0 20160609  GMP version 6.1.2  MPFR version 4.0.2  MPC version 1.1.0  isl version none]
+  ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+  ignore line: [ignoring duplicate directory "/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/../../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/sys-include"]
+  ignore line: [ignoring duplicate directory "/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/../../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/include"]
+  ignore line: [ignoring duplicate directory "/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/../../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/include"]
+  ignore line: [ignoring nonexistent directory "/home/tplink/share/EAP772_gpl/PLATFORM/build/../build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/./usr/../../usr/include"]
+  ignore line: [#include "..." search starts here:]
+  ignore line: [#include <...> search starts here:]
+  ignore line: [ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/sys-include]
+  ignore line: [ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/include]
+  ignore line: [ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/include]
+  ignore line: [End of search list.]
+  ignore line: [GNU C11 (OpenWrt GCC 7.5.0 r0+12639-06c3e84) version 7.5.0 (aarch64-openwrt-linux-musl)]
+  ignore line: [	compiled by GNU C version 5.4.0 20160609  GMP version 6.1.2  MPFR version 4.0.2  MPC version 1.1.0  isl version none]
+  ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+  ignore line: [Compiler executable checksum: 728c2768ad4b1929bddfa18cb972e120]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_2a600.dir/CMakeCCompilerABI.c.o' '-c' '-march=armv8-a' '-mlittle-endian' '-mabi=lp64']
+  ignore line: [ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/bin/as -v -EL -march=armv8-a -mabi=lp64 -o CMakeFiles/cmTC_2a600.dir/CMakeCCompilerABI.c.o /tmp/cccfmBZq.s]
+  ignore line: [GNU assembler version 2.31.1 (aarch64-openwrt-linux-musl) using BFD version (GNU Binutils) 2.31.1]
+  ignore line: [COMPILER_PATH=/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/aarch64-openwrt-linux-musl/7.5.0/:/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/:/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/bin/]
+  ignore line: [LIBRARY_PATH=/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/:/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/:/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib/]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_2a600.dir/CMakeCCompilerABI.c.o' '-c' '-march=armv8-a' '-mlittle-endian' '-mabi=lp64']
+  ignore line: [Linking C executable cmTC_2a600]
+  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_2a600.dir/link.txt --verbose=1]
+  ignore line: [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/aarch64-openwrt-linux-gcc     -v -rdynamic CMakeFiles/cmTC_2a600.dir/CMakeCCompilerABI.c.o  -o cmTC_2a600 ]
+  ignore line: [Reading specs from /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/specs]
+  ignore line: [COLLECT_GCC=/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/aarch64-openwrt-linux-gcc]
+  ignore line: [COLLECT_LTO_WRAPPER=/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/aarch64-openwrt-linux-musl/7.5.0/lto-wrapper]
+  ignore line: [Target: aarch64-openwrt-linux-musl]
+  ignore line: [Configured with: /opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/build_dir/toolchain-aarch64/gcc-7.5.0/configure --with-bugurl=http://bugs.openwrt.org/ --with-pkgversion='OpenWrt GCC 7.5.0 r0+12639-06c3e84' --prefix=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/toolchain-aarch64 --build=x86_64-pc-linux-gnu --host=x86_64-pc-linux-gnu --target=aarch64-openwrt-linux-musl --with-gnu-ld --enable-target-optspace --disable-libgomp --disable-libmudflap --disable-multilib --disable-libmpx --disable-nls --without-isl --without-cloog --with-host-libstdcxx=-lstdc++ --with-gmp=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/host --with-mpfr=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/host --with-mpc=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/host --disable-decimal-float --with-diagnostics-color=auto-if-env --disable-libssp --enable-__cxa_atexit --with-arch=armv8-a --with-headers=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/toolchain-aarch64/include --disable-libsanitizer --enable-languages=c,c++ --enable-shared --enable-threads --with-slibdir=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/toolchain-aarch64/lib --enable-lto --with-libelf=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/host]
+  ignore line: [Thread model: posix]
+  ignore line: [gcc version 7.5.0 (OpenWrt GCC 7.5.0 r0+12639-06c3e84) ]
+  ignore line: [COMPILER_PATH=/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/aarch64-openwrt-linux-musl/7.5.0/:/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/:/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/bin/]
+  ignore line: [LIBRARY_PATH=/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/:/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/:/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib/]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_2a600' '-march=armv8-a' '-mlittle-endian' '-mabi=lp64']
+  link line: [ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/aarch64-openwrt-linux-musl/7.5.0/collect2 -plugin /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/aarch64-openwrt-linux-musl/7.5.0/liblto_plugin.so -plugin-opt=/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/aarch64-openwrt-linux-musl/7.5.0/lto-wrapper -plugin-opt=-fresolution=/tmp/ccRsuBDP.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s --eh-frame-hdr -export-dynamic -dynamic-linker /lib/ld-musl-aarch64.so.1 -X -EL -maarch64linux -o cmTC_2a600 /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib/crt1.o /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib/crti.o /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/crtbegin.o -L /home/tplink/share/EAP772_gpl/PLATFORM/build/../build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/./usr/../../usr/lib -rpath-link /home/tplink/share/EAP772_gpl/PLATFORM/build/../build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/./usr/../../usr/lib -L/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0 -L/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc -L/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib CMakeFiles/cmTC_2a600.dir/CMakeCCompilerABI.c.o -lssp_nonshared -lgcc_s -lc -lgcc_s /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/crtend.o /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib/crtn.o]
+    arg [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/aarch64-openwrt-linux-musl/7.5.0/collect2] ==> ignore
+    arg [-plugin] ==> ignore
+    arg [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/aarch64-openwrt-linux-musl/7.5.0/liblto_plugin.so] ==> ignore
+    arg [-plugin-opt=/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/aarch64-openwrt-linux-musl/7.5.0/lto-wrapper] ==> ignore
+    arg [-plugin-opt=-fresolution=/tmp/ccRsuBDP.res] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+    arg [-plugin-opt=-pass-through=-lc] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+    arg [--eh-frame-hdr] ==> ignore
+    arg [-export-dynamic] ==> ignore
+    arg [-dynamic-linker] ==> ignore
+    arg [/lib/ld-musl-aarch64.so.1] ==> ignore
+    arg [-X] ==> ignore
+    arg [-EL] ==> ignore
+    arg [-maarch64linux] ==> ignore
+    arg [-o] ==> ignore
+    arg [cmTC_2a600] ==> ignore
+    arg [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib/crt1.o] ==> ignore
+    arg [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib/crti.o] ==> ignore
+    arg [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/crtbegin.o] ==> ignore
+    arg [-L/home/tplink/share/EAP772_gpl/PLATFORM/build/../build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/./usr/../../usr/lib] ==> dir [/home/tplink/share/EAP772_gpl/PLATFORM/build/../build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/./usr/../../usr/lib]
+    arg [-rpath-link] ==> ignore
+    arg [/home/tplink/share/EAP772_gpl/PLATFORM/build/../build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/./usr/../../usr/lib] ==> ignore
+    arg [-L/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0] ==> dir [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0]
+    arg [-L/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc] ==> dir [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc]
+    arg [-L/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib] ==> dir [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib]
+    arg [CMakeFiles/cmTC_2a600.dir/CMakeCCompilerABI.c.o] ==> ignore
+    arg [-lssp_nonshared] ==> lib [ssp_nonshared]
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [-lc] ==> lib [c]
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/crtend.o] ==> ignore
+    arg [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib/crtn.o] ==> ignore
+  collapse library dir [/home/tplink/share/EAP772_gpl/PLATFORM/build/../build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/./usr/../../usr/lib] ==> [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/usr/lib]
+  collapse library dir [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0] ==> [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/lib/gcc/aarch64-openwrt-linux-musl/7.5.0]
+  collapse library dir [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc] ==> [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/lib/gcc]
+  collapse library dir [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib] ==> [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/aarch64-openwrt-linux-musl/lib]
+  implicit libs: [ssp_nonshared;gcc_s;c;gcc_s]
+  implicit dirs: [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/usr/lib;/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/lib/gcc/aarch64-openwrt-linux-musl/7.5.0;/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/lib/gcc;/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/aarch64-openwrt-linux-musl/lib]
+  implicit fwks: []
+
+
+The system is: Linux - 5.15.0-113-generic - x86_64
+Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+Compiler: /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/aarch64-openwrt-linux-gcc 
+Build flags: 
+Id flags:  
+
+The output was:
+0
+
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "a.out"
+
+The C compiler identification is GNU, found in "/home/tplink/share/EAP772_gpl/PLATFORM/apps/rtty/CMakeFiles/3.16.3/CompilerIdC/a.out"
+
+Determining if the C compiler works passed with the following output:
+Change Dir: /home/tplink/share/EAP772_gpl/PLATFORM/apps/rtty/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_00466/fast && make[2]: Entering directory '/home/tplink/share/EAP772_gpl/PLATFORM/apps/rtty/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_00466.dir/build.make CMakeFiles/cmTC_00466.dir/build
+make[3]: Entering directory '/home/tplink/share/EAP772_gpl/PLATFORM/apps/rtty/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_00466.dir/testCCompiler.c.o
+/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/aarch64-openwrt-linux-gcc    -o CMakeFiles/cmTC_00466.dir/testCCompiler.c.o   -c /home/tplink/share/EAP772_gpl/PLATFORM/apps/rtty/CMakeFiles/CMakeTmp/testCCompiler.c
+Linking C executable cmTC_00466
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_00466.dir/link.txt --verbose=1
+/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/aarch64-openwrt-linux-gcc      -rdynamic CMakeFiles/cmTC_00466.dir/testCCompiler.c.o  -o cmTC_00466 
+make[3]: Leaving directory '/home/tplink/share/EAP772_gpl/PLATFORM/apps/rtty/CMakeFiles/CMakeTmp'
+make[2]: Leaving directory '/home/tplink/share/EAP772_gpl/PLATFORM/apps/rtty/CMakeFiles/CMakeTmp'
+
+
+
+Detecting C compiler ABI info compiled with the following output:
+Change Dir: /home/tplink/share/EAP772_gpl/PLATFORM/apps/rtty/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_f70a7/fast && make[2]: Entering directory '/home/tplink/share/EAP772_gpl/PLATFORM/apps/rtty/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_f70a7.dir/build.make CMakeFiles/cmTC_f70a7.dir/build
+make[3]: Entering directory '/home/tplink/share/EAP772_gpl/PLATFORM/apps/rtty/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_f70a7.dir/CMakeCCompilerABI.c.o
+/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/aarch64-openwrt-linux-gcc   -v -o CMakeFiles/cmTC_f70a7.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake-3.16/Modules/CMakeCCompilerABI.c
+Reading specs from /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/specs
+COLLECT_GCC=/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/aarch64-openwrt-linux-gcc
+Target: aarch64-openwrt-linux-musl
+Configured with: /opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/build_dir/toolchain-aarch64/gcc-7.5.0/configure --with-bugurl=http://bugs.openwrt.org/ --with-pkgversion='OpenWrt GCC 7.5.0 r0+12639-06c3e84' --prefix=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/toolchain-aarch64 --build=x86_64-pc-linux-gnu --host=x86_64-pc-linux-gnu --target=aarch64-openwrt-linux-musl --with-gnu-ld --enable-target-optspace --disable-libgomp --disable-libmudflap --disable-multilib --disable-libmpx --disable-nls --without-isl --without-cloog --with-host-libstdcxx=-lstdc++ --with-gmp=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/host --with-mpfr=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/host --with-mpc=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/host --disable-decimal-float --with-diagnostics-color=auto-if-env --disable-libssp --enable-__cxa_atexit --with-arch=armv8-a --with-headers=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/toolchain-aarch64/include --disable-libsanitizer --enable-languages=c,c++ --enable-shared --enable-threads --with-slibdir=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/toolchain-aarch64/lib --enable-lto --with-libelf=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/host
+Thread model: posix
+gcc version 7.5.0 (OpenWrt GCC 7.5.0 r0+12639-06c3e84) 
+COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_f70a7.dir/CMakeCCompilerABI.c.o' '-c' '-march=armv8-a' '-mlittle-endian' '-mabi=lp64'
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/aarch64-openwrt-linux-musl/7.5.0/cc1 -quiet -v -iprefix /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/ -idirafter /home/tplink/share/EAP772_gpl/PLATFORM/build/../build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/./usr/../../usr/include /usr/share/cmake-3.16/Modules/CMakeCCompilerABI.c -quiet -dumpbase CMakeCCompilerABI.c -march=armv8-a -mlittle-endian -mabi=lp64 -auxbase-strip CMakeFiles/cmTC_f70a7.dir/CMakeCCompilerABI.c.o -version -o /tmp/cc199nrK.s
+GNU C11 (OpenWrt GCC 7.5.0 r0+12639-06c3e84) version 7.5.0 (aarch64-openwrt-linux-musl)
+	compiled by GNU C version 5.4.0 20160609, GMP version 6.1.2, MPFR version 4.0.2, MPC version 1.1.0, isl version none
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+ignoring duplicate directory "/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/../../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/sys-include"
+ignoring duplicate directory "/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/../../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/include"
+ignoring duplicate directory "/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/../../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/include"
+ignoring nonexistent directory "/home/tplink/share/EAP772_gpl/PLATFORM/build/../build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/./usr/../../usr/include"
+#include "..." search starts here:
+#include <...> search starts here:
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/sys-include
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/include
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/include
+End of search list.
+GNU C11 (OpenWrt GCC 7.5.0 r0+12639-06c3e84) version 7.5.0 (aarch64-openwrt-linux-musl)
+	compiled by GNU C version 5.4.0 20160609, GMP version 6.1.2, MPFR version 4.0.2, MPC version 1.1.0, isl version none
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+Compiler executable checksum: 728c2768ad4b1929bddfa18cb972e120
+COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_f70a7.dir/CMakeCCompilerABI.c.o' '-c' '-march=armv8-a' '-mlittle-endian' '-mabi=lp64'
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/bin/as -v -EL -march=armv8-a -mabi=lp64 -o CMakeFiles/cmTC_f70a7.dir/CMakeCCompilerABI.c.o /tmp/cc199nrK.s
+GNU assembler version 2.31.1 (aarch64-openwrt-linux-musl) using BFD version (GNU Binutils) 2.31.1
+COMPILER_PATH=/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/aarch64-openwrt-linux-musl/7.5.0/:/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/:/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/bin/
+LIBRARY_PATH=/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/:/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/:/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib/
+COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_f70a7.dir/CMakeCCompilerABI.c.o' '-c' '-march=armv8-a' '-mlittle-endian' '-mabi=lp64'
+Linking C executable cmTC_f70a7
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_f70a7.dir/link.txt --verbose=1
+/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/aarch64-openwrt-linux-gcc     -v -rdynamic CMakeFiles/cmTC_f70a7.dir/CMakeCCompilerABI.c.o  -o cmTC_f70a7 
+Reading specs from /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/specs
+COLLECT_GCC=/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/aarch64-openwrt-linux-gcc
+COLLECT_LTO_WRAPPER=/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/aarch64-openwrt-linux-musl/7.5.0/lto-wrapper
+Target: aarch64-openwrt-linux-musl
+Configured with: /opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/build_dir/toolchain-aarch64/gcc-7.5.0/configure --with-bugurl=http://bugs.openwrt.org/ --with-pkgversion='OpenWrt GCC 7.5.0 r0+12639-06c3e84' --prefix=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/toolchain-aarch64 --build=x86_64-pc-linux-gnu --host=x86_64-pc-linux-gnu --target=aarch64-openwrt-linux-musl --with-gnu-ld --enable-target-optspace --disable-libgomp --disable-libmudflap --disable-multilib --disable-libmpx --disable-nls --without-isl --without-cloog --with-host-libstdcxx=-lstdc++ --with-gmp=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/host --with-mpfr=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/host --with-mpc=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/host --disable-decimal-float --with-diagnostics-color=auto-if-env --disable-libssp --enable-__cxa_atexit --with-arch=armv8-a --with-headers=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/toolchain-aarch64/include --disable-libsanitizer --enable-languages=c,c++ --enable-shared --enable-threads --with-slibdir=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/toolchain-aarch64/lib --enable-lto --with-libelf=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/host
+Thread model: posix
+gcc version 7.5.0 (OpenWrt GCC 7.5.0 r0+12639-06c3e84) 
+COMPILER_PATH=/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/aarch64-openwrt-linux-musl/7.5.0/:/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/:/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/bin/
+LIBRARY_PATH=/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/:/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/:/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib/
+COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_f70a7' '-march=armv8-a' '-mlittle-endian' '-mabi=lp64'
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/aarch64-openwrt-linux-musl/7.5.0/collect2 -plugin /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/aarch64-openwrt-linux-musl/7.5.0/liblto_plugin.so -plugin-opt=/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/aarch64-openwrt-linux-musl/7.5.0/lto-wrapper -plugin-opt=-fresolution=/tmp/ccgcx5T8.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s --eh-frame-hdr -export-dynamic -dynamic-linker /lib/ld-musl-aarch64.so.1 -X -EL -maarch64linux -o cmTC_f70a7 /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib/crt1.o /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib/crti.o /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/crtbegin.o -L /home/tplink/share/EAP772_gpl/PLATFORM/build/../build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/./usr/../../usr/lib -rpath-link /home/tplink/share/EAP772_gpl/PLATFORM/build/../build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/./usr/../../usr/lib -L/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0 -L/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc -L/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib CMakeFiles/cmTC_f70a7.dir/CMakeCCompilerABI.c.o -lssp_nonshared -lgcc_s -lc -lgcc_s /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/crtend.o /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib/crtn.o
+COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_f70a7' '-march=armv8-a' '-mlittle-endian' '-mabi=lp64'
+make[3]: Leaving directory '/home/tplink/share/EAP772_gpl/PLATFORM/apps/rtty/CMakeFiles/CMakeTmp'
+make[2]: Leaving directory '/home/tplink/share/EAP772_gpl/PLATFORM/apps/rtty/CMakeFiles/CMakeTmp'
+
+
+
+Parsed C implicit include dir info from above output: rv=done
+  found start of include info
+  found start of implicit include info
+    add: [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/sys-include]
+    add: [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/include]
+    add: [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/include]
+  end of search list found
+  collapse include dir [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/sys-include] ==> [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/aarch64-openwrt-linux-musl/sys-include]
+  collapse include dir [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/include] ==> [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/aarch64-openwrt-linux-musl/include]
+  collapse include dir [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/include] ==> [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/lib/gcc/aarch64-openwrt-linux-musl/7.5.0/include]
+  implicit include dirs: [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/aarch64-openwrt-linux-musl/sys-include;/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/aarch64-openwrt-linux-musl/include;/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/lib/gcc/aarch64-openwrt-linux-musl/7.5.0/include]
+
+
+Parsed C implicit link information from above output:
+  link line regex: [^( *|.*[/\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
+  ignore line: [Change Dir: /home/tplink/share/EAP772_gpl/PLATFORM/apps/rtty/CMakeFiles/CMakeTmp]
+  ignore line: []
+  ignore line: [Run Build Command(s):/usr/bin/make cmTC_f70a7/fast && make[2]: Entering directory '/home/tplink/share/EAP772_gpl/PLATFORM/apps/rtty/CMakeFiles/CMakeTmp']
+  ignore line: [/usr/bin/make -f CMakeFiles/cmTC_f70a7.dir/build.make CMakeFiles/cmTC_f70a7.dir/build]
+  ignore line: [make[3]: Entering directory '/home/tplink/share/EAP772_gpl/PLATFORM/apps/rtty/CMakeFiles/CMakeTmp']
+  ignore line: [Building C object CMakeFiles/cmTC_f70a7.dir/CMakeCCompilerABI.c.o]
+  ignore line: [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/aarch64-openwrt-linux-gcc   -v -o CMakeFiles/cmTC_f70a7.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake-3.16/Modules/CMakeCCompilerABI.c]
+  ignore line: [Reading specs from /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/specs]
+  ignore line: [COLLECT_GCC=/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/aarch64-openwrt-linux-gcc]
+  ignore line: [Target: aarch64-openwrt-linux-musl]
+  ignore line: [Configured with: /opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/build_dir/toolchain-aarch64/gcc-7.5.0/configure --with-bugurl=http://bugs.openwrt.org/ --with-pkgversion='OpenWrt GCC 7.5.0 r0+12639-06c3e84' --prefix=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/toolchain-aarch64 --build=x86_64-pc-linux-gnu --host=x86_64-pc-linux-gnu --target=aarch64-openwrt-linux-musl --with-gnu-ld --enable-target-optspace --disable-libgomp --disable-libmudflap --disable-multilib --disable-libmpx --disable-nls --without-isl --without-cloog --with-host-libstdcxx=-lstdc++ --with-gmp=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/host --with-mpfr=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/host --with-mpc=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/host --disable-decimal-float --with-diagnostics-color=auto-if-env --disable-libssp --enable-__cxa_atexit --with-arch=armv8-a --with-headers=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/toolchain-aarch64/include --disable-libsanitizer --enable-languages=c,c++ --enable-shared --enable-threads --with-slibdir=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/toolchain-aarch64/lib --enable-lto --with-libelf=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/host]
+  ignore line: [Thread model: posix]
+  ignore line: [gcc version 7.5.0 (OpenWrt GCC 7.5.0 r0+12639-06c3e84) ]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_f70a7.dir/CMakeCCompilerABI.c.o' '-c' '-march=armv8-a' '-mlittle-endian' '-mabi=lp64']
+  ignore line: [ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/aarch64-openwrt-linux-musl/7.5.0/cc1 -quiet -v -iprefix /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/ -idirafter /home/tplink/share/EAP772_gpl/PLATFORM/build/../build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/./usr/../../usr/include /usr/share/cmake-3.16/Modules/CMakeCCompilerABI.c -quiet -dumpbase CMakeCCompilerABI.c -march=armv8-a -mlittle-endian -mabi=lp64 -auxbase-strip CMakeFiles/cmTC_f70a7.dir/CMakeCCompilerABI.c.o -version -o /tmp/cc199nrK.s]
+  ignore line: [GNU C11 (OpenWrt GCC 7.5.0 r0+12639-06c3e84) version 7.5.0 (aarch64-openwrt-linux-musl)]
+  ignore line: [	compiled by GNU C version 5.4.0 20160609  GMP version 6.1.2  MPFR version 4.0.2  MPC version 1.1.0  isl version none]
+  ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+  ignore line: [ignoring duplicate directory "/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/../../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/sys-include"]
+  ignore line: [ignoring duplicate directory "/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/../../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/include"]
+  ignore line: [ignoring duplicate directory "/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/../../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/include"]
+  ignore line: [ignoring nonexistent directory "/home/tplink/share/EAP772_gpl/PLATFORM/build/../build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/./usr/../../usr/include"]
+  ignore line: [#include "..." search starts here:]
+  ignore line: [#include <...> search starts here:]
+  ignore line: [ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/sys-include]
+  ignore line: [ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/include]
+  ignore line: [ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/include]
+  ignore line: [End of search list.]
+  ignore line: [GNU C11 (OpenWrt GCC 7.5.0 r0+12639-06c3e84) version 7.5.0 (aarch64-openwrt-linux-musl)]
+  ignore line: [	compiled by GNU C version 5.4.0 20160609  GMP version 6.1.2  MPFR version 4.0.2  MPC version 1.1.0  isl version none]
+  ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+  ignore line: [Compiler executable checksum: 728c2768ad4b1929bddfa18cb972e120]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_f70a7.dir/CMakeCCompilerABI.c.o' '-c' '-march=armv8-a' '-mlittle-endian' '-mabi=lp64']
+  ignore line: [ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/bin/as -v -EL -march=armv8-a -mabi=lp64 -o CMakeFiles/cmTC_f70a7.dir/CMakeCCompilerABI.c.o /tmp/cc199nrK.s]
+  ignore line: [GNU assembler version 2.31.1 (aarch64-openwrt-linux-musl) using BFD version (GNU Binutils) 2.31.1]
+  ignore line: [COMPILER_PATH=/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/aarch64-openwrt-linux-musl/7.5.0/:/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/:/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/bin/]
+  ignore line: [LIBRARY_PATH=/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/:/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/:/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib/]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_f70a7.dir/CMakeCCompilerABI.c.o' '-c' '-march=armv8-a' '-mlittle-endian' '-mabi=lp64']
+  ignore line: [Linking C executable cmTC_f70a7]
+  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_f70a7.dir/link.txt --verbose=1]
+  ignore line: [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/aarch64-openwrt-linux-gcc     -v -rdynamic CMakeFiles/cmTC_f70a7.dir/CMakeCCompilerABI.c.o  -o cmTC_f70a7 ]
+  ignore line: [Reading specs from /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/specs]
+  ignore line: [COLLECT_GCC=/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/aarch64-openwrt-linux-gcc]
+  ignore line: [COLLECT_LTO_WRAPPER=/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/aarch64-openwrt-linux-musl/7.5.0/lto-wrapper]
+  ignore line: [Target: aarch64-openwrt-linux-musl]
+  ignore line: [Configured with: /opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/build_dir/toolchain-aarch64/gcc-7.5.0/configure --with-bugurl=http://bugs.openwrt.org/ --with-pkgversion='OpenWrt GCC 7.5.0 r0+12639-06c3e84' --prefix=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/toolchain-aarch64 --build=x86_64-pc-linux-gnu --host=x86_64-pc-linux-gnu --target=aarch64-openwrt-linux-musl --with-gnu-ld --enable-target-optspace --disable-libgomp --disable-libmudflap --disable-multilib --disable-libmpx --disable-nls --without-isl --without-cloog --with-host-libstdcxx=-lstdc++ --with-gmp=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/host --with-mpfr=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/host --with-mpc=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/host --disable-decimal-float --with-diagnostics-color=auto-if-env --disable-libssp --enable-__cxa_atexit --with-arch=armv8-a --with-headers=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/toolchain-aarch64/include --disable-libsanitizer --enable-languages=c,c++ --enable-shared --enable-threads --with-slibdir=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/toolchain-aarch64/lib --enable-lto --with-libelf=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/host]
+  ignore line: [Thread model: posix]
+  ignore line: [gcc version 7.5.0 (OpenWrt GCC 7.5.0 r0+12639-06c3e84) ]
+  ignore line: [COMPILER_PATH=/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/aarch64-openwrt-linux-musl/7.5.0/:/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/:/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/bin/]
+  ignore line: [LIBRARY_PATH=/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/:/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/:/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib/]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_f70a7' '-march=armv8-a' '-mlittle-endian' '-mabi=lp64']
+  link line: [ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/aarch64-openwrt-linux-musl/7.5.0/collect2 -plugin /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/aarch64-openwrt-linux-musl/7.5.0/liblto_plugin.so -plugin-opt=/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/aarch64-openwrt-linux-musl/7.5.0/lto-wrapper -plugin-opt=-fresolution=/tmp/ccgcx5T8.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s --eh-frame-hdr -export-dynamic -dynamic-linker /lib/ld-musl-aarch64.so.1 -X -EL -maarch64linux -o cmTC_f70a7 /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib/crt1.o /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib/crti.o /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/crtbegin.o -L /home/tplink/share/EAP772_gpl/PLATFORM/build/../build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/./usr/../../usr/lib -rpath-link /home/tplink/share/EAP772_gpl/PLATFORM/build/../build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/./usr/../../usr/lib -L/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0 -L/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc -L/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib CMakeFiles/cmTC_f70a7.dir/CMakeCCompilerABI.c.o -lssp_nonshared -lgcc_s -lc -lgcc_s /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/crtend.o /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib/crtn.o]
+    arg [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/aarch64-openwrt-linux-musl/7.5.0/collect2] ==> ignore
+    arg [-plugin] ==> ignore
+    arg [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/aarch64-openwrt-linux-musl/7.5.0/liblto_plugin.so] ==> ignore
+    arg [-plugin-opt=/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/aarch64-openwrt-linux-musl/7.5.0/lto-wrapper] ==> ignore
+    arg [-plugin-opt=-fresolution=/tmp/ccgcx5T8.res] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+    arg [-plugin-opt=-pass-through=-lc] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+    arg [--eh-frame-hdr] ==> ignore
+    arg [-export-dynamic] ==> ignore
+    arg [-dynamic-linker] ==> ignore
+    arg [/lib/ld-musl-aarch64.so.1] ==> ignore
+    arg [-X] ==> ignore
+    arg [-EL] ==> ignore
+    arg [-maarch64linux] ==> ignore
+    arg [-o] ==> ignore
+    arg [cmTC_f70a7] ==> ignore
+    arg [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib/crt1.o] ==> ignore
+    arg [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib/crti.o] ==> ignore
+    arg [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/crtbegin.o] ==> ignore
+    arg [-L/home/tplink/share/EAP772_gpl/PLATFORM/build/../build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/./usr/../../usr/lib] ==> dir [/home/tplink/share/EAP772_gpl/PLATFORM/build/../build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/./usr/../../usr/lib]
+    arg [-rpath-link] ==> ignore
+    arg [/home/tplink/share/EAP772_gpl/PLATFORM/build/../build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/./usr/../../usr/lib] ==> ignore
+    arg [-L/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0] ==> dir [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0]
+    arg [-L/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc] ==> dir [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc]
+    arg [-L/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib] ==> dir [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib]
+    arg [CMakeFiles/cmTC_f70a7.dir/CMakeCCompilerABI.c.o] ==> ignore
+    arg [-lssp_nonshared] ==> lib [ssp_nonshared]
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [-lc] ==> lib [c]
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/crtend.o] ==> ignore
+    arg [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib/crtn.o] ==> ignore
+  collapse library dir [/home/tplink/share/EAP772_gpl/PLATFORM/build/../build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/./usr/../../usr/lib] ==> [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/usr/lib]
+  collapse library dir [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0] ==> [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/lib/gcc/aarch64-openwrt-linux-musl/7.5.0]
+  collapse library dir [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc] ==> [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/lib/gcc]
+  collapse library dir [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib] ==> [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/aarch64-openwrt-linux-musl/lib]
+  implicit libs: [ssp_nonshared;gcc_s;c;gcc_s]
+  implicit dirs: [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/usr/lib;/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/lib/gcc/aarch64-openwrt-linux-musl/7.5.0;/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/lib/gcc;/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/aarch64-openwrt-linux-musl/lib]
+  implicit fwks: []
+
+
+The system is: Linux - 5.15.0-113-generic - x86_64
+Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+Compiler: /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/aarch64-openwrt-linux-gcc 
+Build flags: 
+Id flags:  
+
+The output was:
+0
+
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "a.out"
+
+The C compiler identification is GNU, found in "/home/tplink/share/EAP772_gpl/PLATFORM/apps/rtty/CMakeFiles/3.16.3/CompilerIdC/a.out"
+
+Determining if the C compiler works passed with the following output:
+Change Dir: /home/tplink/share/EAP772_gpl/PLATFORM/apps/rtty/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_a3e1e/fast && make[2]: Entering directory '/home/tplink/share/EAP772_gpl/PLATFORM/apps/rtty/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_a3e1e.dir/build.make CMakeFiles/cmTC_a3e1e.dir/build
+make[3]: Entering directory '/home/tplink/share/EAP772_gpl/PLATFORM/apps/rtty/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_a3e1e.dir/testCCompiler.c.o
+/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/aarch64-openwrt-linux-gcc    -o CMakeFiles/cmTC_a3e1e.dir/testCCompiler.c.o   -c /home/tplink/share/EAP772_gpl/PLATFORM/apps/rtty/CMakeFiles/CMakeTmp/testCCompiler.c
+Linking C executable cmTC_a3e1e
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_a3e1e.dir/link.txt --verbose=1
+/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/aarch64-openwrt-linux-gcc      -rdynamic CMakeFiles/cmTC_a3e1e.dir/testCCompiler.c.o  -o cmTC_a3e1e 
+make[3]: Leaving directory '/home/tplink/share/EAP772_gpl/PLATFORM/apps/rtty/CMakeFiles/CMakeTmp'
+make[2]: Leaving directory '/home/tplink/share/EAP772_gpl/PLATFORM/apps/rtty/CMakeFiles/CMakeTmp'
+
+
+
+Detecting C compiler ABI info compiled with the following output:
+Change Dir: /home/tplink/share/EAP772_gpl/PLATFORM/apps/rtty/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_fc0d4/fast && make[2]: Entering directory '/home/tplink/share/EAP772_gpl/PLATFORM/apps/rtty/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_fc0d4.dir/build.make CMakeFiles/cmTC_fc0d4.dir/build
+make[3]: Entering directory '/home/tplink/share/EAP772_gpl/PLATFORM/apps/rtty/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_fc0d4.dir/CMakeCCompilerABI.c.o
+/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/aarch64-openwrt-linux-gcc   -v -o CMakeFiles/cmTC_fc0d4.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake-3.16/Modules/CMakeCCompilerABI.c
+Reading specs from /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/specs
+COLLECT_GCC=/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/aarch64-openwrt-linux-gcc
+Target: aarch64-openwrt-linux-musl
+Configured with: /opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/build_dir/toolchain-aarch64/gcc-7.5.0/configure --with-bugurl=http://bugs.openwrt.org/ --with-pkgversion='OpenWrt GCC 7.5.0 r0+12639-06c3e84' --prefix=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/toolchain-aarch64 --build=x86_64-pc-linux-gnu --host=x86_64-pc-linux-gnu --target=aarch64-openwrt-linux-musl --with-gnu-ld --enable-target-optspace --disable-libgomp --disable-libmudflap --disable-multilib --disable-libmpx --disable-nls --without-isl --without-cloog --with-host-libstdcxx=-lstdc++ --with-gmp=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/host --with-mpfr=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/host --with-mpc=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/host --disable-decimal-float --with-diagnostics-color=auto-if-env --disable-libssp --enable-__cxa_atexit --with-arch=armv8-a --with-headers=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/toolchain-aarch64/include --disable-libsanitizer --enable-languages=c,c++ --enable-shared --enable-threads --with-slibdir=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/toolchain-aarch64/lib --enable-lto --with-libelf=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/host
+Thread model: posix
+gcc version 7.5.0 (OpenWrt GCC 7.5.0 r0+12639-06c3e84) 
+COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_fc0d4.dir/CMakeCCompilerABI.c.o' '-c' '-march=armv8-a' '-mlittle-endian' '-mabi=lp64'
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/aarch64-openwrt-linux-musl/7.5.0/cc1 -quiet -v -iprefix /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/ -idirafter /home/tplink/share/EAP772_gpl/PLATFORM/build/../build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/./usr/../../usr/include /usr/share/cmake-3.16/Modules/CMakeCCompilerABI.c -quiet -dumpbase CMakeCCompilerABI.c -march=armv8-a -mlittle-endian -mabi=lp64 -auxbase-strip CMakeFiles/cmTC_fc0d4.dir/CMakeCCompilerABI.c.o -version -o /tmp/ccfQJjuZ.s
+GNU C11 (OpenWrt GCC 7.5.0 r0+12639-06c3e84) version 7.5.0 (aarch64-openwrt-linux-musl)
+	compiled by GNU C version 5.4.0 20160609, GMP version 6.1.2, MPFR version 4.0.2, MPC version 1.1.0, isl version none
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+ignoring duplicate directory "/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/../../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/sys-include"
+ignoring duplicate directory "/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/../../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/include"
+ignoring duplicate directory "/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/../../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/include"
+ignoring nonexistent directory "/home/tplink/share/EAP772_gpl/PLATFORM/build/../build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/./usr/../../usr/include"
+#include "..." search starts here:
+#include <...> search starts here:
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/sys-include
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/include
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/include
+End of search list.
+GNU C11 (OpenWrt GCC 7.5.0 r0+12639-06c3e84) version 7.5.0 (aarch64-openwrt-linux-musl)
+	compiled by GNU C version 5.4.0 20160609, GMP version 6.1.2, MPFR version 4.0.2, MPC version 1.1.0, isl version none
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+Compiler executable checksum: 728c2768ad4b1929bddfa18cb972e120
+COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_fc0d4.dir/CMakeCCompilerABI.c.o' '-c' '-march=armv8-a' '-mlittle-endian' '-mabi=lp64'
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/bin/as -v -EL -march=armv8-a -mabi=lp64 -o CMakeFiles/cmTC_fc0d4.dir/CMakeCCompilerABI.c.o /tmp/ccfQJjuZ.s
+GNU assembler version 2.31.1 (aarch64-openwrt-linux-musl) using BFD version (GNU Binutils) 2.31.1
+COMPILER_PATH=/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/aarch64-openwrt-linux-musl/7.5.0/:/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/:/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/bin/
+LIBRARY_PATH=/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/:/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/:/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib/
+COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_fc0d4.dir/CMakeCCompilerABI.c.o' '-c' '-march=armv8-a' '-mlittle-endian' '-mabi=lp64'
+Linking C executable cmTC_fc0d4
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_fc0d4.dir/link.txt --verbose=1
+/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/aarch64-openwrt-linux-gcc     -v -rdynamic CMakeFiles/cmTC_fc0d4.dir/CMakeCCompilerABI.c.o  -o cmTC_fc0d4 
+Reading specs from /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/specs
+COLLECT_GCC=/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/aarch64-openwrt-linux-gcc
+COLLECT_LTO_WRAPPER=/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/aarch64-openwrt-linux-musl/7.5.0/lto-wrapper
+Target: aarch64-openwrt-linux-musl
+Configured with: /opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/build_dir/toolchain-aarch64/gcc-7.5.0/configure --with-bugurl=http://bugs.openwrt.org/ --with-pkgversion='OpenWrt GCC 7.5.0 r0+12639-06c3e84' --prefix=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/toolchain-aarch64 --build=x86_64-pc-linux-gnu --host=x86_64-pc-linux-gnu --target=aarch64-openwrt-linux-musl --with-gnu-ld --enable-target-optspace --disable-libgomp --disable-libmudflap --disable-multilib --disable-libmpx --disable-nls --without-isl --without-cloog --with-host-libstdcxx=-lstdc++ --with-gmp=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/host --with-mpfr=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/host --with-mpc=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/host --disable-decimal-float --with-diagnostics-color=auto-if-env --disable-libssp --enable-__cxa_atexit --with-arch=armv8-a --with-headers=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/toolchain-aarch64/include --disable-libsanitizer --enable-languages=c,c++ --enable-shared --enable-threads --with-slibdir=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/toolchain-aarch64/lib --enable-lto --with-libelf=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/host
+Thread model: posix
+gcc version 7.5.0 (OpenWrt GCC 7.5.0 r0+12639-06c3e84) 
+COMPILER_PATH=/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/aarch64-openwrt-linux-musl/7.5.0/:/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/:/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/bin/
+LIBRARY_PATH=/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/:/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/:/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib/
+COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_fc0d4' '-march=armv8-a' '-mlittle-endian' '-mabi=lp64'
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/aarch64-openwrt-linux-musl/7.5.0/collect2 -plugin /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/aarch64-openwrt-linux-musl/7.5.0/liblto_plugin.so -plugin-opt=/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/aarch64-openwrt-linux-musl/7.5.0/lto-wrapper -plugin-opt=-fresolution=/tmp/ccSMW4dm.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s --eh-frame-hdr -export-dynamic -dynamic-linker /lib/ld-musl-aarch64.so.1 -X -EL -maarch64linux -o cmTC_fc0d4 /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib/crt1.o /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib/crti.o /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/crtbegin.o -L /home/tplink/share/EAP772_gpl/PLATFORM/build/../build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/./usr/../../usr/lib -rpath-link /home/tplink/share/EAP772_gpl/PLATFORM/build/../build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/./usr/../../usr/lib -L/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0 -L/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc -L/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib CMakeFiles/cmTC_fc0d4.dir/CMakeCCompilerABI.c.o -lssp_nonshared -lgcc_s -lc -lgcc_s /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/crtend.o /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib/crtn.o
+COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_fc0d4' '-march=armv8-a' '-mlittle-endian' '-mabi=lp64'
+make[3]: Leaving directory '/home/tplink/share/EAP772_gpl/PLATFORM/apps/rtty/CMakeFiles/CMakeTmp'
+make[2]: Leaving directory '/home/tplink/share/EAP772_gpl/PLATFORM/apps/rtty/CMakeFiles/CMakeTmp'
+
+
+
+Parsed C implicit include dir info from above output: rv=done
+  found start of include info
+  found start of implicit include info
+    add: [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/sys-include]
+    add: [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/include]
+    add: [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/include]
+  end of search list found
+  collapse include dir [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/sys-include] ==> [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/aarch64-openwrt-linux-musl/sys-include]
+  collapse include dir [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/include] ==> [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/aarch64-openwrt-linux-musl/include]
+  collapse include dir [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/include] ==> [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/lib/gcc/aarch64-openwrt-linux-musl/7.5.0/include]
+  implicit include dirs: [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/aarch64-openwrt-linux-musl/sys-include;/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/aarch64-openwrt-linux-musl/include;/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/lib/gcc/aarch64-openwrt-linux-musl/7.5.0/include]
+
+
+Parsed C implicit link information from above output:
+  link line regex: [^( *|.*[/\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
+  ignore line: [Change Dir: /home/tplink/share/EAP772_gpl/PLATFORM/apps/rtty/CMakeFiles/CMakeTmp]
+  ignore line: []
+  ignore line: [Run Build Command(s):/usr/bin/make cmTC_fc0d4/fast && make[2]: Entering directory '/home/tplink/share/EAP772_gpl/PLATFORM/apps/rtty/CMakeFiles/CMakeTmp']
+  ignore line: [/usr/bin/make -f CMakeFiles/cmTC_fc0d4.dir/build.make CMakeFiles/cmTC_fc0d4.dir/build]
+  ignore line: [make[3]: Entering directory '/home/tplink/share/EAP772_gpl/PLATFORM/apps/rtty/CMakeFiles/CMakeTmp']
+  ignore line: [Building C object CMakeFiles/cmTC_fc0d4.dir/CMakeCCompilerABI.c.o]
+  ignore line: [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/aarch64-openwrt-linux-gcc   -v -o CMakeFiles/cmTC_fc0d4.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake-3.16/Modules/CMakeCCompilerABI.c]
+  ignore line: [Reading specs from /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/specs]
+  ignore line: [COLLECT_GCC=/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/aarch64-openwrt-linux-gcc]
+  ignore line: [Target: aarch64-openwrt-linux-musl]
+  ignore line: [Configured with: /opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/build_dir/toolchain-aarch64/gcc-7.5.0/configure --with-bugurl=http://bugs.openwrt.org/ --with-pkgversion='OpenWrt GCC 7.5.0 r0+12639-06c3e84' --prefix=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/toolchain-aarch64 --build=x86_64-pc-linux-gnu --host=x86_64-pc-linux-gnu --target=aarch64-openwrt-linux-musl --with-gnu-ld --enable-target-optspace --disable-libgomp --disable-libmudflap --disable-multilib --disable-libmpx --disable-nls --without-isl --without-cloog --with-host-libstdcxx=-lstdc++ --with-gmp=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/host --with-mpfr=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/host --with-mpc=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/host --disable-decimal-float --with-diagnostics-color=auto-if-env --disable-libssp --enable-__cxa_atexit --with-arch=armv8-a --with-headers=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/toolchain-aarch64/include --disable-libsanitizer --enable-languages=c,c++ --enable-shared --enable-threads --with-slibdir=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/toolchain-aarch64/lib --enable-lto --with-libelf=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/host]
+  ignore line: [Thread model: posix]
+  ignore line: [gcc version 7.5.0 (OpenWrt GCC 7.5.0 r0+12639-06c3e84) ]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_fc0d4.dir/CMakeCCompilerABI.c.o' '-c' '-march=armv8-a' '-mlittle-endian' '-mabi=lp64']
+  ignore line: [ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/aarch64-openwrt-linux-musl/7.5.0/cc1 -quiet -v -iprefix /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/ -idirafter /home/tplink/share/EAP772_gpl/PLATFORM/build/../build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/./usr/../../usr/include /usr/share/cmake-3.16/Modules/CMakeCCompilerABI.c -quiet -dumpbase CMakeCCompilerABI.c -march=armv8-a -mlittle-endian -mabi=lp64 -auxbase-strip CMakeFiles/cmTC_fc0d4.dir/CMakeCCompilerABI.c.o -version -o /tmp/ccfQJjuZ.s]
+  ignore line: [GNU C11 (OpenWrt GCC 7.5.0 r0+12639-06c3e84) version 7.5.0 (aarch64-openwrt-linux-musl)]
+  ignore line: [	compiled by GNU C version 5.4.0 20160609  GMP version 6.1.2  MPFR version 4.0.2  MPC version 1.1.0  isl version none]
+  ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+  ignore line: [ignoring duplicate directory "/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/../../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/sys-include"]
+  ignore line: [ignoring duplicate directory "/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/../../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/include"]
+  ignore line: [ignoring duplicate directory "/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/../../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/include"]
+  ignore line: [ignoring nonexistent directory "/home/tplink/share/EAP772_gpl/PLATFORM/build/../build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/./usr/../../usr/include"]
+  ignore line: [#include "..." search starts here:]
+  ignore line: [#include <...> search starts here:]
+  ignore line: [ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/sys-include]
+  ignore line: [ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/include]
+  ignore line: [ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/include]
+  ignore line: [End of search list.]
+  ignore line: [GNU C11 (OpenWrt GCC 7.5.0 r0+12639-06c3e84) version 7.5.0 (aarch64-openwrt-linux-musl)]
+  ignore line: [	compiled by GNU C version 5.4.0 20160609  GMP version 6.1.2  MPFR version 4.0.2  MPC version 1.1.0  isl version none]
+  ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+  ignore line: [Compiler executable checksum: 728c2768ad4b1929bddfa18cb972e120]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_fc0d4.dir/CMakeCCompilerABI.c.o' '-c' '-march=armv8-a' '-mlittle-endian' '-mabi=lp64']
+  ignore line: [ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/bin/as -v -EL -march=armv8-a -mabi=lp64 -o CMakeFiles/cmTC_fc0d4.dir/CMakeCCompilerABI.c.o /tmp/ccfQJjuZ.s]
+  ignore line: [GNU assembler version 2.31.1 (aarch64-openwrt-linux-musl) using BFD version (GNU Binutils) 2.31.1]
+  ignore line: [COMPILER_PATH=/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/aarch64-openwrt-linux-musl/7.5.0/:/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/:/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/bin/]
+  ignore line: [LIBRARY_PATH=/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/:/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/:/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib/]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_fc0d4.dir/CMakeCCompilerABI.c.o' '-c' '-march=armv8-a' '-mlittle-endian' '-mabi=lp64']
+  ignore line: [Linking C executable cmTC_fc0d4]
+  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_fc0d4.dir/link.txt --verbose=1]
+  ignore line: [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/aarch64-openwrt-linux-gcc     -v -rdynamic CMakeFiles/cmTC_fc0d4.dir/CMakeCCompilerABI.c.o  -o cmTC_fc0d4 ]
+  ignore line: [Reading specs from /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/specs]
+  ignore line: [COLLECT_GCC=/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/aarch64-openwrt-linux-gcc]
+  ignore line: [COLLECT_LTO_WRAPPER=/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/aarch64-openwrt-linux-musl/7.5.0/lto-wrapper]
+  ignore line: [Target: aarch64-openwrt-linux-musl]
+  ignore line: [Configured with: /opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/build_dir/toolchain-aarch64/gcc-7.5.0/configure --with-bugurl=http://bugs.openwrt.org/ --with-pkgversion='OpenWrt GCC 7.5.0 r0+12639-06c3e84' --prefix=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/toolchain-aarch64 --build=x86_64-pc-linux-gnu --host=x86_64-pc-linux-gnu --target=aarch64-openwrt-linux-musl --with-gnu-ld --enable-target-optspace --disable-libgomp --disable-libmudflap --disable-multilib --disable-libmpx --disable-nls --without-isl --without-cloog --with-host-libstdcxx=-lstdc++ --with-gmp=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/host --with-mpfr=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/host --with-mpc=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/host --disable-decimal-float --with-diagnostics-color=auto-if-env --disable-libssp --enable-__cxa_atexit --with-arch=armv8-a --with-headers=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/toolchain-aarch64/include --disable-libsanitizer --enable-languages=c,c++ --enable-shared --enable-threads --with-slibdir=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/toolchain-aarch64/lib --enable-lto --with-libelf=/opt/devl1/sdk/qsdk_spf12.1_ED1/SPF_12.1_ED1/qsdk/staging_dir/host]
+  ignore line: [Thread model: posix]
+  ignore line: [gcc version 7.5.0 (OpenWrt GCC 7.5.0 r0+12639-06c3e84) ]
+  ignore line: [COMPILER_PATH=/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/aarch64-openwrt-linux-musl/7.5.0/:/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/:/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/bin/]
+  ignore line: [LIBRARY_PATH=/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/:/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/:/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib/]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_fc0d4' '-march=armv8-a' '-mlittle-endian' '-mabi=lp64']
+  link line: [ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/aarch64-openwrt-linux-musl/7.5.0/collect2 -plugin /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/aarch64-openwrt-linux-musl/7.5.0/liblto_plugin.so -plugin-opt=/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/aarch64-openwrt-linux-musl/7.5.0/lto-wrapper -plugin-opt=-fresolution=/tmp/ccSMW4dm.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s --eh-frame-hdr -export-dynamic -dynamic-linker /lib/ld-musl-aarch64.so.1 -X -EL -maarch64linux -o cmTC_fc0d4 /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib/crt1.o /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib/crti.o /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/crtbegin.o -L /home/tplink/share/EAP772_gpl/PLATFORM/build/../build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/./usr/../../usr/lib -rpath-link /home/tplink/share/EAP772_gpl/PLATFORM/build/../build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/./usr/../../usr/lib -L/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0 -L/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc -L/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib CMakeFiles/cmTC_fc0d4.dir/CMakeCCompilerABI.c.o -lssp_nonshared -lgcc_s -lc -lgcc_s /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/crtend.o /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib/crtn.o]
+    arg [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/aarch64-openwrt-linux-musl/7.5.0/collect2] ==> ignore
+    arg [-plugin] ==> ignore
+    arg [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/aarch64-openwrt-linux-musl/7.5.0/liblto_plugin.so] ==> ignore
+    arg [-plugin-opt=/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../libexec/gcc/aarch64-openwrt-linux-musl/7.5.0/lto-wrapper] ==> ignore
+    arg [-plugin-opt=-fresolution=/tmp/ccSMW4dm.res] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+    arg [-plugin-opt=-pass-through=-lc] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+    arg [--eh-frame-hdr] ==> ignore
+    arg [-export-dynamic] ==> ignore
+    arg [-dynamic-linker] ==> ignore
+    arg [/lib/ld-musl-aarch64.so.1] ==> ignore
+    arg [-X] ==> ignore
+    arg [-EL] ==> ignore
+    arg [-maarch64linux] ==> ignore
+    arg [-o] ==> ignore
+    arg [cmTC_fc0d4] ==> ignore
+    arg [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib/crt1.o] ==> ignore
+    arg [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib/crti.o] ==> ignore
+    arg [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/crtbegin.o] ==> ignore
+    arg [-L/home/tplink/share/EAP772_gpl/PLATFORM/build/../build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/./usr/../../usr/lib] ==> dir [/home/tplink/share/EAP772_gpl/PLATFORM/build/../build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/./usr/../../usr/lib]
+    arg [-rpath-link] ==> ignore
+    arg [/home/tplink/share/EAP772_gpl/PLATFORM/build/../build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/./usr/../../usr/lib] ==> ignore
+    arg [-L/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0] ==> dir [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0]
+    arg [-L/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc] ==> dir [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc]
+    arg [-L/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib] ==> dir [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib]
+    arg [CMakeFiles/cmTC_fc0d4.dir/CMakeCCompilerABI.c.o] ==> ignore
+    arg [-lssp_nonshared] ==> lib [ssp_nonshared]
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [-lc] ==> lib [c]
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/crtend.o] ==> ignore
+    arg [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib/crtn.o] ==> ignore
+  collapse library dir [/home/tplink/share/EAP772_gpl/PLATFORM/build/../build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/./usr/../../usr/lib] ==> [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/usr/lib]
+  collapse library dir [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0] ==> [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/lib/gcc/aarch64-openwrt-linux-musl/7.5.0]
+  collapse library dir [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc] ==> [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/lib/gcc]
+  collapse library dir [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/bin/../lib/gcc/aarch64-openwrt-linux-musl/7.5.0/../../../../aarch64-openwrt-linux-musl/lib] ==> [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/aarch64-openwrt-linux-musl/lib]
+  implicit libs: [ssp_nonshared;gcc_s;c;gcc_s]
+  implicit dirs: [/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/usr/lib;/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/lib/gcc/aarch64-openwrt-linux-musl/7.5.0;/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/lib/gcc;/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/aarch64-openwrt-linux-musl/lib]
+  implicit fwks: []
+
+

@@ -1,0 +1,234 @@
+#!/bin/sh
+
+FDATA_MTD_NAME=factory_data
+BACKUP_MTD_NAME=backup_data
+FDATA_MNT_PATH=/tp_data/manu_data
+BACKUP_MNT_PATH=/tp_data/backup_data
+FDATA_UBI_NAME=ubi_factory_data
+BACKUP_UBI_NAME=ubi_backup_data
+RTDATA_MTD_NAME=runtime_data
+RTDATA_UBI_NAME=ubi_runtime_data
+RTDATA_BACK_MTD_NAME=runtime_back
+RTDATA_BACK_UBI_NAME=ubi_runtime_data
+format_flag=1
+fdata_mnt_ok=0
+backup_mnt_ok=0
+
+get_manu_data() {
+    cp -rf /fw_data/manu_data/* $1
+    sync
+    echo "get manu data for first boot" > /dev/console
+}
+
+get_manu_conf() {
+    cp -rf /fw_data/user_data/* /tp_data/user_data/
+    sync
+    echo "get manu conf for manu up" > /dev/console
+}
+
+find_mtd_index() {
+        local PART="$(grep "\"$1\"" /proc/mtd | awk -F: '{print $1}')"
+        local INDEX="${PART##mtd}"
+
+        echo ${INDEX}
+}
+
+__mt_echo() {
+        echo "(mount_tpdata): $*" > /dev/console
+}
+recover_runtime_data() {
+    local BACK_FILE="$1"
+    local RTDATA_UBI_VOL
+    local RTDATA_MTD_INDEX=$(find_mtd_index ${RTDATA_MTD_NAME})
+
+    mtd erase ${RTDATA_MTD_NAME}
+    mtd write ${BACK_FILE} ${RTDATA_MTD_NAME}
+
+    ubidetach -d 3
+    ubiattach -m $RTDATA_MTD_INDEX -d 3
+
+	RTDATA_UBI_VOL=$(ubinfo -d 3 -a | grep -o ${RTDATA_UBI_NAME})
+    if [ -n "$RTDATA_UBI_VOL" ];then
+        __mt_echo "${RTDATA_UBI_NAME} found, attach $RTDATA_MTD_INDEX success, mounting..."
+        mount -t ubifs ubi3:${RTDATA_UBI_VOL} /tp_data/user_data -o sync
+        #check flag, if no flag, need to format
+        if [ -e /tp_data/user_data/user-config ];then
+            format_flag=0
+            return 0
+        else
+            __mt_echo "user-config not found, mount ubi3:${RTDATA_UBI_VOL} failed"
+        fi
+    else
+        __mt_echo "${RTDATA_UBI_NAME} not found, attach $RTDATA_MTD_INDEX failed..."
+    fi
+
+    return 1
+}
+
+switch_to_runtime_back() {
+    local RTDATA_BACK_UBI_VOL
+    local RTDATA_BACK_MTD_INDEX=$(find_mtd_index ${RTDATA_BACK_MTD_NAME})
+
+    ubidetach -d 3
+    ubiattach -m $RTDATA_BACK_MTD_INDEX -d 3
+
+    RTDATA_BACK_UBI_VOL=$(ubinfo -d 3 -a | grep -o ${RTDATA_BACK_UBI_NAME})
+    if [ -n "$RTDATA_BACK_UBI_VOL" ];then
+        __mt_echo "${RTDATA_BACK_UBI_NAME} found, attach $RTDATA_BACK_MTD_INDEX success, mounting..."
+        mount -t ubifs ubi3:${RTDATA_BACK_UBI_VOL} /tp_data/user_data -o sync
+        #check flag, if no flag, need to format
+        if [ -e /tp_data/user_data/user-config ];then
+            format_flag=0
+            return 0
+        else
+            __mt_echo "user-config not found, mount ubi3:${RTDATA_BACK_UBI_VOL} failed"
+        fi
+    else
+        __mt_echo "${RTDATA_UBI_NAME} not found, attach $RTDATA_BACK_MTD_INDEX failed..."
+    fi
+
+    return 1
+}
+
+
+# Find / Create and Mount factory data partition
+FDATA_MTD_INDEX=$(find_mtd_index ${FDATA_MTD_NAME})
+ubiattach -m $FDATA_MTD_INDEX -d 1
+FDATA_UBI_VOL=$(ubinfo -d 1 -a | grep -o ${FDATA_UBI_NAME})
+
+if [ -n "$FDATA_UBI_VOL" ];then
+    echo "${FDATA_UBI_NAME} found, mounting..." > /dev/console
+    mount -t ubifs ubi1:${FDATA_UBI_VOL} ${FDATA_MNT_PATH} -o sync
+	fdata_mnt_ok=1
+fi
+
+# Find / Create and Mount backup factory data partition
+BACKUP_MTD_INDEX=$(find_mtd_index ${BACKUP_MTD_NAME})
+ubiattach -m $BACKUP_MTD_INDEX -d 2
+BACKUP_UBI_VOL=$(ubinfo -d 2 -a | grep -o ${BACKUP_UBI_NAME})
+
+if [ -n "$BACKUP_UBI_VOL" ];then
+    echo "${BACKUP_UBI_NAME} found, mounting..." > /dev/console
+    mount -t ubifs ubi2:${BACKUP_UBI_VOL} ${BACKUP_MNT_PATH} -o sync
+	backup_mnt_ok=1
+fi
+
+if [ $fdata_mnt_ok -eq 1 -a $backup_mnt_ok -eq 1 ]; then
+	echo "both fdata mount ok" > /dev/console
+elif [ $fdata_mnt_ok -eq 1 -a $backup_mnt_ok -eq 0 ]; then
+	echo "fdata mount ok, but backup mount fail" > /dev/console
+	if [ -s ${FDATA_MNT_PATH}/default-mac -a -s ${FDATA_MNT_PATH}/radio ]; then
+	
+		echo "format ${BACKUP_UBI_NAME} first, then copy data from ${FDATA_UBI_NAME}" > /dev/console
+		ubidetach -d 2
+		ubiformat /dev/mtd${BACKUP_MTD_INDEX} -y
+		ubiattach -m $BACKUP_MTD_INDEX -d 2
+		ubimkvol /dev/ubi2 -m -N ${BACKUP_UBI_NAME}
+		BACKUP_UBI_VOL=$(ubinfo -d 2 -a | grep -o ${BACKUP_UBI_NAME})
+		if [ -n "$BACKUP_UBI_VOL" ];then
+			echo "ubimkvol ${BACKUP_UBI_NAME} success." > /dev/console
+		else
+			if [ -f /fw_data/backup_data.ubi ];then
+				echo "ubimkvol ${BACKUP_UBI_NAME} failed, then recover from /fw_data/backup_data.ubi." > /dev/console
+				mtd erase ${BACKUP_MTD_NAME}
+				mtd write /fw_data/backup_data.ubi ${BACKUP_MTD_NAME}
+
+				ubidetach -d 2
+				ubiattach -m $BACKUP_MTD_INDEX -d 2
+			fi
+		fi
+		mount -t ubifs ubi2:${BACKUP_UBI_NAME} ${BACKUP_MNT_PATH} -o sync
+		get_manu_data ${BACKUP_MNT_PATH}/
+
+		cp -fr ${FDATA_MNT_PATH}/* ${BACKUP_MNT_PATH}/
+else
+		echo "there is invalid data in ${FDATA_MNT_PATH}" > /dev/console
+	fi
+elif [ $fdata_mnt_ok -eq 0 -a $backup_mnt_ok -eq 1 ]; then
+	echo "backup mount ok, but fdata mount fail" > /dev/console
+	
+	if [ -s ${BACKUP_MNT_PATH}/default-mac -a -s ${BACKUP_MNT_PATH}/radio ]; then
+
+		echo "format ${FDATA_UBI_NAME} first, then copy data from ${BACKUP_UBI_NAME}" > /dev/console
+    ubidetach -d 1
+    ubiformat /dev/mtd${FDATA_MTD_INDEX} -y
+    ubiattach -m $FDATA_MTD_INDEX -d 1
+    ubimkvol /dev/ubi1 -m -N ${FDATA_UBI_NAME}
+		FDATA_UBI_VOL=$(ubinfo -d 1 -a | grep -o ${FDATA_UBI_NAME})
+		if [ -n "$FDATA_UBI_VOL" ];then
+			echo "ubimkvol ${FDATA_UBI_NAME} success." > /dev/console
+		else
+			if [ -f /fw_data/factory_data.ubi ];then
+				echo "ubimkvol ${FDATA_UBI_NAME} failed, then recover from /fw_data/factory_data.ubi." > /dev/console
+				mtd erase ${FDATA_MTD_NAME}
+				mtd write /fw_data/factory_data.ubi ${FDATA_MTD_NAME}
+
+				ubidetach -d 1
+				ubiattach -m $FDATA_MTD_INDEX -d 1
+			fi
+		fi
+		mount -t ubifs ubi1:${FDATA_UBI_NAME} ${FDATA_MNT_PATH} -o sync
+		get_manu_data ${FDATA_MNT_PATH}/
+
+		cp -fr ${BACKUP_MNT_PATH}/* ${FDATA_MNT_PATH}/
+	else
+		echo "there is invalid data in ${BACKUP_MNT_PATH}" > /dev/console
+	fi
+else
+	echo "fdata and backup mount fail" > /dev/console
+fi
+
+# Find / Create and Mount runtime data partition
+RTDATA_MTD_INDEX=$(find_mtd_index ${RTDATA_MTD_NAME})
+ubiattach -m $RTDATA_MTD_INDEX -d 3
+RTDATA_UBI_VOL=$(ubinfo -d 3 -a | grep -o ${RTDATA_UBI_NAME})
+if [ -n "$RTDATA_UBI_VOL" ];then
+    echo "${RTDATA_UBI_NAME} found, attach $RTDATA_MTD_INDEX success, mounting..." > /dev/console
+    mount -t ubifs ubi3:${RTDATA_UBI_VOL} /tp_data/user_data -o sync
+    #check flag, if no flag, need to format
+    if [ -e /tp_data/user_data/user-config ];then
+        format_flag=0
+    fi
+fi
+
+if [ $format_flag -eq 1 ];then
+    __mt_echo "${RTDATA_UBI_NAME} not found, attach $RTDATA_MTD_INDEX failed, or mount failed, ${RTDATA_UBI_VOL}!!! copy runtime_back ..."
+
+    ret=1
+    if [ -f /fw_data/runtime_back.ubi ];then
+        __mt_echo "recover runtime_data used /fw_data/runtime_back.ubi..."
+        recover_runtime_data /fw_data/runtime_back.ubi
+        ret=$?
+    fi
+
+    if [ $ret -ne 0 ]; then
+        __mt_echo "recover runtime_data used /tmp/${RTDATA_BACK_MTD_NAME}..."
+		mtdnum="$( find_mtd_index ${RTDATA_BACK_MTD_NAME} )"
+		if [ ! "$mtdnum" ]; then
+			__mt_echo "cannot find ubi mtd partition ${RTDATA_BACK_MTD_NAME}, return"
+			return
+		fi
+        mtd dump ${RTDATA_BACK_MTD_NAME} > /tmp/${RTDATA_BACK_MTD_NAME}
+        recover_runtime_data /tmp/${RTDATA_BACK_MTD_NAME}
+
+        if [ $? -ne 0 ]; then
+            __mt_echo "recover failed, now switch to runtime_back partition..."
+            switch_to_runtime_back
+            if [ $? -ne 0 ]; then
+                __mt_echo "${RTDATA_BACK_MTD_NAME} also attach failed, fatel error!!!"
+            fi
+        fi
+		return
+    fi
+fi
+
+
+if [ $format_flag -eq 1 ];then
+    echo "${RTDATA_UBI_NAME} not found, creating..." > /dev/console
+    ubidetach -d 3
+    ubiformat /dev/mtd${RTDATA_MTD_INDEX} -y
+    ubiattach -m $RTDATA_MTD_INDEX -d 3
+    ubimkvol /dev/ubi3 -m -N ${RTDATA_UBI_NAME}
+    mount -t ubifs ubi3:${RTDATA_UBI_NAME} /tp_data/user_data -o sync
+    get_manu_conf
+fi

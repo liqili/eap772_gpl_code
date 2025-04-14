@@ -1,0 +1,211 @@
+#!/bin/sh
+
+# This script runs when init it run during the boot process.
+# Mounts everything in the fstab
+
+mount -a
+#mount -o remount +w /
+
+#
+# Mount the RAM filesystem to /tmp
+#
+
+mount -t ramfs -n none /tmp
+mount -t ramfs -n none /var
+mount -t sysfs sysfs /sys
+if [ -f "/etc/rc.d/mount-fs.sh" ];then
+	/etc/rc.d/mount-fs.sh
+fi
+
+export PATH=$PATH:/etc/ath
+mkdir -p /var/run/srv
+chmod 777 /var/run/srv
+mkdir -p /var/run/client
+chmod 777 /var/run/client
+mkdir -p /tmp/log/error
+mkdir -p /tmp/log/rec
+mkdir -p /tmp/log/coredump
+mkdir -p /tmp/logdump
+chmod 777 /tmp/logdump
+
+#used by fw_setenv
+mkdir -p /var/lock
+chmod 777 /var/lock
+
+mkdir -p /var/run/lldpd
+chmod 777 /var/run/lldpd
+
+#ready for caldata/factory data, should be early
+if [ -f "/sbin/mount_tpdata" ];then
+/sbin/mount_tpdata
+fi
+
+nvrammanager -C
+
+#mknod
+if [ -f /etc/rc.d/mknod.sh ];then
+/etc/rc.d/mknod.sh
+fi
+ulimit -c unlimited
+echo "/tmp/log/coredump/core-%e-%p-%s-%t" > /proc/sys/kernel/core_pattern
+#dd if=/dev/mtdblock6 of=/tmp/wifi0.caldata bs=32 count=377 skip=128
+#dd if=/dev/mtdblock6 of=/tmp/wifi1.caldata bs=32 count=377 skip=640
+
+if [ -f "/sbin/hotplug2" ];then
+killall -q hotplug2
+[ -x /sbin/hotplug2 ] && /sbin/hotplug2 --override --persistent \
+                        --set-rules-file /etc/hotplug2.rules \
+                        --set-coldplug-cmd /sbin/udevtrigger \
+                        --max-children 1 >/dev/null 2>&1 &
+fi
+
+#
+# Set lo up
+#
+ifconfig lo 127.0.0.1 up
+
+#
+# insert netfilter/iptables modules
+#
+if [ -f "/etc/nrd.conf" ];then
+cp /etc/nrd.conf /tmp/nrd.conf
+fi
+
+if [ -f "/lib/firmware/AR900B/hw.2/boarddata_eu.bin" ];then
+cp /lib/firmware/AR900B/hw.2/boarddata_eu.bin /tmp/boarddata_0.bin
+cp /lib/firmware/AR900B/hw.2/boarddata_eu.bin /tmp/boarddata_1.bin
+fi
+
+/etc/rc.d/rc.modules
+
+if [ -f /etc/rc.d/rc.ext ];then
+/etc/rc.d/rc.ext
+fi
+
+#restore nvram setting, should call after wlcsm module init
+if [ -f /etc/rc.d/hndnvram.sh ];then
+/etc/rc.d/hndnvram.sh start
+fi
+
+if [ -f "/etc/rc.d/rc.ipq" ];then
+/etc/rc.d/rc.ipq
+fi
+
+if [ -f "/usr/bin/load_phy_fw" ];then
+/usr/bin/load_phy_fw &
+fi
+
+#
+# Start Our AP Program
+#
+/usr/bin/gpiod
+/usr/bin/ntpd &
+/sbin/udhcpc -p /tmp/udhcpc.pid -s /etc/udhcpc.script -a &
+# ipv6 dial
+if [ -f "/usr/bin/dhcp6c" ];then
+/usr/bin/dhcp6c -fd br0 &
+else
+echo "dhcp6c is not supported"
+fi
+/usr/bin/detect &
+/usr/bin/msg-center &
+/usr/bin/tpsyslogd &
+/usr/bin/radius &
+/usr/bin/auth-time &
+/usr/bin/rssift &
+/usr/bin/rogueap &
+/usr/bin/wscheduler &
+/usr/bin/client-state &
+if [ -f "/usr/bin/tp_bndstrg" ];then
+/usr/bin/tp_bndstrg
+fi
+/usr/bin/cliserverd &
+
+if [ -f "/usr/bin/tp_gre" ];then
+/usr/bin/tp_gre &
+fi
+
+if [ -f "/usr/bin/eap-mesh" ];then
+/usr/bin/eap-mesh &
+else
+echo "mesh is not supported"
+fi
+
+if [ -f "/usr/bin/smartantenna" ];then
+/usr/bin/smartantenna &
+else
+echo "smartantenna is not supported"
+fi
+
+if [ -f "/usr/bin/energysave" ];then
+/usr/bin/energysave &
+else
+echo "energysave is not supported"
+fi
+
+if [ -f "/usr/bin/wids_wips" ];then
+/usr/bin/wids_wips &
+else
+echo "wids_wips is not supported"
+fi
+
+/usr/bin/uclited &
+
+if [ -f "/sbin/wlanmonitor" ];then
+/sbin/wlanmonitor &
+else
+echo "wlanmonitor is not supported."
+fi
+
+echo 524288 > /proc/sys/net/ipv4/ipfrag_high_thresh
+
+/etc/rc.d/rc.eapcs &
+
+if [ -f "/usr/sbin/ap_watchdog" ];then
+/usr/sbin/ap_watchdog &
+else
+echo "ap_watchdog is not supported."
+fi
+
+if [ -f "/usr/bin/channeldeploy" ];then
+/usr/bin/channeldeploy &
+else
+echo "channeldeploy is not supported"
+fi
+
+if [ -f "/usr/bin/rfscan" ];then
+/usr/bin/rfscan &
+else
+echo "rfscan is not supported"
+fi
+
+if [ -f "/usr/bin/netcheck" ];then
+nvrammanager -r /tmp/cc -p region
+if [ x`cat /tmp/cc|grep JP` != x ]; then
+/usr/bin/netcheck &
+else
+echo "Japan disaster mode is not enabled for region not match"
+fi
+else
+echo "Japan disaster mode is not supported"
+fi
+
+if [ -f "/usr/bin/troubleshooting" ];then
+/usr/bin/troubleshooting &
+else
+echo "troubleshooting is not supported"
+fi
+
+if [ -f "/usr/bin/dot1xAuth" ];then
+/usr/bin/dot1xAuth &
+else
+echo "dot1xAuth is not supported"
+fi
+
+if [ -f "/usr/bin/beacon_war_detect.sh" ]; then
+      /usr/bin/beacon_war_detect.sh &
+fi
+
+if [ -f "/usr/bin/lan_war_detect.sh" ]; then
+	/usr/bin/lan_war_detect.sh &
+fi

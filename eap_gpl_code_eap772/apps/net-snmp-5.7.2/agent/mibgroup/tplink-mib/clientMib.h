@@ -1,0 +1,1 @@
+config_require(tplink-mib/clientMib);config_add_mib(EAP-CLIENT-MIB)

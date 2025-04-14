@@ -1,0 +1,48 @@
+total=35,flash=128M
+0=               SBL1,0x00000000,0x000C0000, 0, 0, 0, 1, xbl_nand.elf
+1=              MIBIB,0x000C0000,0x00080000, 0, 0, 0, 1, nand-system-partition-ipq5332.bin
+2=         BOOTCONFIG,0x00140000,0x00100000, 0, 0, 0, 1, bootconfig.bin
+3=        BOOTCONFIG1,0x00240000,0x00100000, 0, 0, 0, 1, bootconfig.bin
+4=               QSEE,0x00340000,0x00200000, 0, 0, 0, 1, tz.mbn
+5=             DEVCFG,0x00540000,0x00040000, 0, 0, 0, 1, devcfg.mbn
+6=                TME,0x00580000,0x00040000, 0, 0, 0, 1, tmel-ipq53xx-patch.elf
+7=                CDT,0x005C0000,0x00040000, 0, 0, 0, 1, cdt.bin
+8=          APPSBLENV,0x00600000,0x00280000, 0, 0, 0, 0, #
+9=             APPSBL,0x00880000,0x00300000, 0, 0, 0, 1, openwrt-ipq5332-u-boot.mbn
+10=          APPSBL_1,0x00B80000,0x00300000, 0, 0, 0, 1, openwrt-ipq5332-u-boot.mbn
+11=     secure-binary,0x00E80000,0x00080000, 0, 0, 0, 1, secure-binary.bin
+12=              oops,0x00F00000,0x00100000, 0, 0, 0, 0, #
+13=     file-system@0,0x01000000,0x02400000, 0, 0, 2, 1, root.ubi
+14=     file-system@1,0x03400000,0x02400000, 0, 0, 1, 1, root.ubi
+15=      factory_data,0x05800000,0x00800000, 0, 0, 0, 1, factory_data.ubi
+16=      runtime_data,0x06000000,0x00c00000, 0, 0, 0, 1, runtime_data.ubi
+17=       backup_data,0x06c00000,0x00800000, 0, 0, 0, 1, backup_data.ubi
+18=      runtime_back,0x07400000,0x00600000, 0, 0, 0, 1, runtime_back.ubi
+19=   partition-table,0x00000000,0x00000000, 1, 0, 0, 0, #
+20=      support-list,0x00000000,0x00000000, 1, 0, 0, 6, supportlist.bin
+21=      product-info,0x00000000,0x00000000, 1, 0, 0, 0, productinfo.bin
+22=      soft-version,0x00000000,0x00000000, 1, 0, 0, 6, soft-version.bin
+23=            region,0x00000000,0x00000000, 2, 2, 0, 0, #
+24=       default-mac,0x00000000,0x00000000, 2, 2, 0, 0, #
+25=             radio,0x00000000,0x00000000, 2, 2, 0, 0, #
+26=            radio1,0x00000000,0x00000000, 2, 2, 0, 0, #
+27=         device-id,0x00000000,0x00000000, 2, 2, 0, 0, #
+28=       add-hardver,0x00000000,0x00000000, 2, 0, 0, 0, #
+29=       user-config,0x00000000,0x00000000, 3, 2, 0, 0, #
+30=         mutil-log,0x00000000,0x00100000, 3, 2, 0, 0, #
+31=    ble_sw_version,0x00000000,0x00000000, 1, 0, 0, 6, ble_software_version.ini
+32=  ble_ccfg_version,0x00000000,0x00000000, 1, 0, 0, 6, ble_ccfg_version.ini
+33= 	 ble_software,0x00000000,0x00000000, 1, 0, 0, 6, ble_software.hex
+34= 	 	 ble_ccfg,0x00000000,0x00000000, 1, 0, 0, 6, ble_ccfg.hex
+
+[分区参数注释]
+注释=#total 分区数目  #flash flash大小，2M/4M/8M/16M/32M/128M
+#第一列 分区序号
+#第二列 分区名称
+#第三列 分区BASE
+#第四列 分区SIZE
+#第五列 分区内容来源，0-MTD_DATA(编程器烧录)/1-FW_DATA(在rootfs中)/2-MANU_DATA(产品信息)/3-USER_DATA(运行时数据)
+#第六列 运行时是否可写,0-只读/1-可读可擦/2-可读可写
+#第七列 是否rootfs, 0-否/1-主镜像/2-备份镜像
+#第八列 指示UP和FLASH文件生成方式，0-NONE;1-FLASH;2-UP;3-FLASH & UP;4-MANU;5-FLASH and MANU;6-UP and MANU;7-ALL
+#第九列 文件名称, #表示空,其他表示文件名称

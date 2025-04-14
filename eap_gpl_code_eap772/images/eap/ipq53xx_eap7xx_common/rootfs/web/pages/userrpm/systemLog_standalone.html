@@ -1,0 +1,653 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>system log</title>
+<style type="text/css">
+	div.widget-container.pad{
+		margin-right: 300px;
+	}
+	input#smtpSvrPort{
+		width: 20px;
+	}
+</style>
+</head>
+
+<body>
+<div class="func-container">
+
+	 <div id="folder">
+	 	<div id="folderGrid">  		
+		</div>
+	 </div>
+
+	 <!--<div id="btn_cnt">
+	 	<button id="log_setting"></button>
+	 </div>-->
+
+	 <div id="log">
+	 	<form id="log_setting">
+
+        <input type="text"  id="mailEnable" name="mailEnable" value="" />
+        <div id="auto_mail_cnt">
+
+	    	   <input type="text"  id="mailFrom" name="mailFrom" value="" />
+	    	   <input type="text"  id="mailTo" name="mailTo" value="" />
+	    	   <input type="text"  id="smtpSvr" name="smtpSvr" value="" />
+
+	    	   <input type="text"  id="sslEnable" name="sslEnable" value="" />
+	    	   <input type="text"  id="smtpPort" name="smtpPort" value="" />
+           
+	    	   <input type="text"  id="mailAuth" name="mailAuth" value="" />
+			     
+			     <div id="auth_cnt">
+		        	<input type="text"  id="mailUsername"  name="mailUsername" value="" />
+			     	  <input type="password"  id="mailPassword" name="mailPassword" value="" />
+			     	  <input type="password"  id="mailPassConf" name="mailPassConf" value="" />
+			     	  <input id="pwdStatus"  value="" />
+			     </div>
+
+           <input id="mailTime" name="mailTime" type="radio"/>
+
+			     <div id="range">
+              <input type="text"  id="time_range" name="every_day_time" value="" />
+			     </div>
+			     
+			     <div id="hourminute">
+		          <input type="text"  id="hour" name="mailHourHour" value="" />
+			     </div>
+
+		    </div>
+
+	    	<input type="text"  id="serverEnable" name="serverEnable" value="" />
+			  <div id="server_cnt">
+		     	 <input type="text"  id="serverIp"  name="serverIp" value="" />
+			  	 <input type="text"  id="serverPort" name="serverPort" value="" />
+        		<input type="text"  id="clientEnable" name="serverClientLog" value="" />
+			  </div>
+
+        <!-- <input type="text"  id="nvramEnable" name="nvramEnable" value="" /> -->
+
+	    	<!-- <input id="timepicker" /> -->
+	    	<!-- <button type="button" id="log_sche" name="log_sche"> </button> -->
+	    </form>
+	 </div>
+
+
+</div>
+
+<script type="text/javascript">
+$(document).ready(function(e){
+	var LOG_LIST_URL = "./data/syslogShow.json";
+	var LOG_DATA_URL = "./data/log.json";
+
+  function setMailCntEn(isEn)
+  {
+  	 if(isEn)
+  	 {
+  	 	  $("input#mailEnable").checkbox("enable");
+  	 		$("input#mailFrom").textbox("enable");
+				$("input#mailTo").textbox("enable");
+				$("input#smtpSvr").textbox("enable");
+				$("input#smtpSvrPort").textbox("enable");
+				$("input#sslEnable").textbox("enable");
+				$("input#smtpPort").textbox("enable");
+				$("input#mailAuth").textbox("enable");
+
+        var authEn = $("input#mailAuth").checkbox("getValue");
+        if((authEn == "mailAuth") || (authEn == "true"))
+        {
+  	 		    $("input#mailUsername").textbox("enable");
+    				$("input#mailPassword").password("enable");
+		    		$("input#mailPassConf").password("enable");
+				    //$("input#pwdStatus").textbox("enable");
+        }
+        else
+        {
+        		$("input#mailUsername").textbox("disable");
+    				$("input#mailPassword").password("disable");
+		    		$("input#mailPassConf").password("disable");
+		    		//$("input#pwdStatus").textbox("disable");
+        }
+
+				$("input#mailTime").radio("enable");
+				var timeMode = $("input#mailTime").radio("getValue");
+				if(timeMode == 1)
+				{
+					  $("input#time_range").textbox("enable");
+					  $("input#hour").textbox("disable");
+				}
+				else
+				{
+						$("input#hour").textbox("enable");
+						$("input#time_range").textbox("disable");
+				}			
+		 }
+		 else
+		 {
+  	 	  $("input#mailEnable").checkbox("disable");
+  	 		$("input#mailFrom").textbox("disable");
+				$("input#mailTo").textbox("disable");
+				$("input#smtpSvr").textbox("disable");
+				$("input#smtpSvrPort").textbox("disable");
+				$("input#sslEnable").textbox("disable");
+				$("input#smtpPort").textbox("disable");
+				$("input#mailAuth").textbox("disable");
+
+  	 		$("input#mailUsername").textbox("disable");
+    		$("input#mailPassword").password("disable");
+		    $("input#mailPassConf").password("disable");
+				//$("input#pwdStatus").textbox("disable");
+
+				$("input#mailTime").radio("disable");
+			  $("input#time_range").textbox("disable");
+				$("input#hour").textbox("disable");
+		 }
+  }
+
+  function setServerCntEn(isEn)
+  {
+  	 if(isEn)
+  	 {
+  	 		$("input#serverIp").textbox("enable");
+			$("input#serverPort").textbox("enable");				
+			$("input#clientEnable").textbox("enable");
+		 }
+		 else
+		 {
+  	 		$("input#serverIp").textbox("disable");
+			$("input#serverPort").textbox("disable");
+			$("input#clientEnable").textbox("disable");
+		 }
+  }
+  
+
+	$("div.func-container").page({
+		title: $.su.CHAR.SYSLOG.TITLE,
+		help: ""	//可能是个调用的id 也可能是个url
+	});
+
+	$("div#folder").panel({
+		title: $.su.CHAR.SYSLOG.TITLE,
+		collapsible: false
+	});
+
+	var storeLog = new $.su.Store({
+		proxy: {
+			url: LOG_LIST_URL
+		},
+		fields: [
+			// {name: "index"},
+			{name: "time"},
+			{name: "name"},
+			{name: "mac"},
+			{name: "type"},
+			{name: "level"},
+			{name: "msg"}
+		],
+		autoLoad: true
+	});
+
+	$("div#folderGrid").grid({
+		store:storeLog,
+		minLines:0,
+		paging: {numPerPage: 10},
+		columns: [
+			{
+				text: $.su.CHAR.SYSLOG.INDEX, 
+				width:60,
+				renderer:function(val, index){
+					var len = $("div#folderGrid").grid("getStore").data.length;
+					return (len-index);
+				}
+				// dataIndex: "log_index"
+			},
+
+			{
+				text: $.su.CHAR.SYSLOG.TIME, 
+				width:150,
+				dataIndex: "time"
+			},
+			{
+				text: $.su.CHAR.SYSLOG.TYPE_COL, 
+				width:150,
+				dataIndex: "type"
+			},
+			{
+				text: $.su.CHAR.SYSLOG.LEVEL2, 
+				width:150,
+				dataIndex: "level"
+			},
+			{
+				text: $.su.CHAR.SYSLOG.CONTENT, 
+				//width:150,
+				dataIndex: "msg"
+			}
+		],
+
+    operation: ["refresh"
+               /*{
+       	           xtype: "button",
+       	           text: $.su.CHAR.SYSLOG.CLEAR_ALL,
+       	           	handler:function(){
+       	           		
+			               storeLog.proxy.write( {"operation":"clear_all"}, function() { $("div#folderGrid").grid("getStore").load(); } );       	           
+       	           
+       	           	}
+       	       }*/]
+
+	});
+
+	/*$("#log_setting").button({
+		fieldLabel: null,
+		text: $.su.CHAR.SYSLOG.LOG_SET,
+		handler: function(e){
+			$("#log").toggle();
+				
+		  if("1" == $("input#mailTime").radio("getValue"))
+		  {
+		  	 $('div#range').show();
+         $("input#time_range").textbox("enable");      
+         $('div#hourminute').hide();
+         $("input#hour").textbox("disable");
+		  }
+		  else
+		  {
+         $('div#hourminute').show();
+         $("input#hour").textbox("enable");
+         $('div#range').hide();
+         $("input#time_range").textbox("disable");
+		  }			
+			
+		}
+	});*/
+
+	$("div#log").panel({
+		title: $.su.CHAR.SYSLOG.LOG_TITLE,
+		collapsible: false
+	});
+
+	$("input#mailEnable").checkbox({
+		fieldLabel: $.su.CHAR.SYSLOG.ENABLE_AUTO_MAIL,
+		items: [
+			{boxlabel: $.su.CHAR.SYSLOG.ENABLE, uncheckedValue:"false", inputValue: "true"}
+		]
+	}).on("ev_change", function(e, oldValue, newValue){
+		var val = (newValue[0]=="mailEnable"||newValue[0]=="on") ? "true" : "false";
+		switch(val)
+		{
+			case 'true':
+				$("#auto_mail_cnt").fieldset("show");
+				setMailCntEn(true);
+				break;
+			case 'false':
+				$("#auto_mail_cnt").fieldset("hide");
+				setMailCntEn(false);
+				break;
+		}
+	});
+
+		$("#auto_mail_cnt").fieldset({
+		fields: [
+			{name: "mailEnable"},
+			{name: "mailFrom"},
+			{name: "mailTo"},
+			{name: "smtpSvr"},
+			{name: "sslEnable"},
+			{name: "smtpPort"},
+			{name: "mailAuth"},
+			{name: "mailUsername"},
+			{name: "mailPassword"},
+			{name: "mailPassConf"},
+			{name: "mailTime"},
+			{name: "every_day_time"},
+			{name: "mailHourHour"}
+		]
+	}).hide();	
+
+
+	$("input#mailFrom").textbox({
+		fieldLabel: $.su.CHAR.SYSLOG.FROM,
+		vtype:"email",
+		maxLength: 63,
+		allowBlank: false
+	});
+
+	$("input#mailTo").textbox({
+		fieldLabel: $.su.CHAR.SYSLOG.TO,
+		vtype:"email",
+		maxLength: 63,
+		allowBlank: false
+	});
+
+	$("input#smtpSvr").textbox({
+		fieldLabel: $.su.CHAR.SYSLOG.SMTP,
+		vtype:"ip_domain",
+		minLength: 1,
+		maxLength: 63,
+		cls: 'inline-block',
+		allowBlank: false
+	});
+
+	$("input#sslEnable").checkbox({
+		fieldLabel: $.su.CHAR.SYSLOG.SSL_ENABLE,
+		items: [
+			{boxlabel: $.su.CHAR.SYSLOG.ENABLE, uncheckedValue:"false", inputValue:"true"}
+		]
+	});
+
+	$("input#smtpPort").textbox({
+		fieldLabel: $.su.CHAR.SYSLOG.SMTP_PORT,
+		vtype: "number",
+		min: 1,
+		max: 65535,
+    	allowBlank: false,
+    	tips: $.su.CHAR.SYSLOG.SMTP_PORT_TIP,
+    	validator: function(val){
+			if(val>65535){
+				return $.su.CHAR.VTYPETEXT.NUMBER_MAX.replace("%max", 65535);
+			}else if(val<1){
+				return $.su.CHAR.VTYPETEXT.NUMBER_MIN.replace("%min", 0);
+			}
+			return true;
+		}
+	});
+
+	/*$("span#text_port").html($.su.CHAR.SYSLOG.PORT);
+
+	$("input#smtpSvrPort").textbox({
+		fieldLabel: null,
+		cls: 'inline-block',
+		vtype:"number"
+	});*/
+	
+	/*$("input#ssl").checkbox({
+		fieldLabel: $.su.CHAR.SYSLOG.SSL,
+		items: [
+			{boxlabel: $.su.CHAR.SYSLOG.ENABLE, uncheckedValue:"false", inputValue: "true"}
+		]
+	})*/
+
+	$("input#mailAuth").checkbox({
+		fieldLabel: $.su.CHAR.SYSLOG.AUTH,
+		items: [
+			{boxlabel: $.su.CHAR.SYSLOG.ENABLE, uncheckedValue:"false", inputValue: "true"}
+		]
+	}).on("ev_change", function(e, oldValue, newValue){
+		var val = (newValue[0]=="mailAuth"|| newValue[0]=="on") ? "true" : "false";
+		switch(val)
+		{
+			case 'true':
+	  	 		$("input#mailUsername").textbox("enable");
+	    		$("input#mailPassword").password("enable");
+			    $("input#mailPassConf").password("enable");
+			    $("#auth_cnt").fieldset('show');
+				break;
+
+			case 'false':
+	  	 		$("input#mailUsername").textbox("disable");
+	    		$("input#mailPassword").password("disable");
+			    $("input#mailPassConf").password("disable");
+			    $("#auth_cnt").fieldset('hide');
+				break;
+		}
+	});
+
+
+	$("#auth_cnt").fieldset({
+		fields: [
+			{name: "mailUsername"},
+			{name: "mailPassword"},
+			{name: "mailPassConf"}
+		]
+	});
+	
+	$("#mailUsername").textbox({
+		fieldLabel: $.su.CHAR.SYSLOG.USERNAME,
+		vtype:"wanusr",
+		maxLength: 32,
+    minLength: 0
+	});
+
+	$("#mailPassword").password({
+		fieldLabel: $.su.CHAR.SYSLOG.PWD,
+		//cls:"inline",
+		showLevel:false,
+		vtype:"wanpwd",
+		maxLength: 32,
+    minLength: 0
+	});
+
+	$("#mailPassConf").password({
+		fieldLabel: $.su.CHAR.SYSLOG.CONFIRM,
+		showLevel:false,
+		cls:"inline",
+		vtype:"wanpwd",
+		maxLength: 32,
+    minLength: 0,		
+	  validator:function(val){
+			var new_pwd = $("input#mailPassword").password("getValue");
+			if(val == new_pwd)
+			{
+				$("#pwdStatus").status("setSuccess");
+				return true;
+			}
+			else
+			{
+				$("#pwdStatus").status("setFailed");
+				return false;
+			}
+		}
+		
+	});
+
+	$("#pwdStatus").status({
+		cls:"inline"
+	});
+
+
+	$("input#mailTime").radio({
+		fieldLabel: $.su.CHAR.SYSLOG.TIME,
+		columns:2,
+		items:[
+			{boxlabel: $.su.CHAR.SYSLOG.FIXED_MODE, inputValue: '1'},
+		  {boxlabel: $.su.CHAR.SYSLOG.PERIOD_MODE, inputValue: '2'}
+		], 
+		
+	}).on('ev_change', function(e, oldValue, newValue){
+		if(newValue == '1'){
+       $('div#range').show();
+       $("input#time_range").textbox("enable");      
+       $('div#hourminute').hide();
+       $("input#hour").textbox("disable");
+		}
+		else{
+       $('div#hourminute').show();
+       $("input#hour").textbox("enable");
+       $('div#range').hide();
+       $("input#time_range").textbox("disable");
+		}
+		
+	});
+
+
+	$("#time_range").time({
+		fieldLabel: $.su.CHAR.SYSLOG.FIXED_TIME,
+		tips: $.su.CHAR.SYSLOG.TIME_TIP,
+		// labelCls: 'l',
+		//cls: 'inline',
+		format: 'h:m'
+	});
+
+	$("#hour").textbox({
+		fieldLabel: $.su.CHAR.SYSLOG.PERIOD_TIME,
+		tips: $.su.CHAR.SYSLOG.HOURS,
+		inputCls:"xs",
+		// labelCls: 'l',
+		vtype:"number",
+		maxLength: 2,
+    	minLength: 0,
+		validator:function(val){
+			if((val >= 1) && (val <= 24))
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		},
+		//cls: 'inline'
+	});
+
+	$("input#serverEnable").checkbox({
+		fieldLabel: $.su.CHAR.SYSLOG.ENABLE_SERVER,
+		items: [
+			{boxlabel: $.su.CHAR.SYSLOG.ENABLE, uncheckedValue:"false", inputValue: "true"}
+		]
+	}).on("ev_change", function(e, oldValue, newValue){
+		var val = (newValue[0]=="serverEnable"|| newValue[0]=="on") ? "true" : "false";
+		switch(val)
+		{
+			case 'true':
+				$("#server_cnt").fieldset("show");
+				setServerCntEn(true);
+				break;
+			case 'false':
+				$("#server_cnt").fieldset("hide");
+				setServerCntEn(false);
+				break;
+		}
+	});
+
+	$("#server_cnt").fieldset({
+		fields: [
+			{name: "serverIp"},
+			{name: "serverPort"},
+			{name: "serverClientLog"}
+		]
+	}).hide();
+	
+	$("#serverIp").textbox({
+		fieldLabel: $.su.CHAR.SYSLOG.SEVER_IP,
+		vtype:"ip",
+		hint:$.su.CHAR.OPERATION.IP_HINT,
+		allowBlank:false
+
+	});
+
+	$("#serverPort").textbox({
+		fieldLabel: $.su.CHAR.SYSLOG.SEVER_PORT,
+		cls:"inline",
+		vtype:"number",
+		maxLength: 5,
+    	allowBlank:false,
+    	tips: $.su.CHAR.SYSLOG.SEVER_PORT_TIP,
+		validator:function(val){
+			if ((val >= 1025 && val <= 65535) || val == 514)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+	});
+
+	$("input#clientEnable").checkbox({
+		fieldLabel: $.su.CHAR.SYSLOG.MORE_LOG,
+		items: [
+			{boxlabel: $.su.CHAR.SYSLOG.ENABLE, uncheckedValue:"false", inputValue: "true"}
+		]
+	});
+
+/* remove nvram log
+	$("input#nvramEnable").checkbox({
+		fieldLabel: $.su.CHAR.SYSLOG.ENABLE_NVRAM,
+		items: [
+			{boxlabel: $.su.CHAR.SYSLOG.ENABLE_NVRAM, uncheckedValue:"false", inputValue: "true"}
+		]
+	});
+*/
+	//这里多个表格调用一个proxy，proxy需要单独定义！
+	var logProxy = new $.su.Proxy({
+		url: LOG_DATA_URL
+	});
+
+	$("form#log_setting").form({
+		proxy: logProxy,
+		fields: [
+			{name: "mailFrom", mapping: "mailFrom"},
+			{name: "mailTo", mapping: "mailTo"},
+			{name: "smtpSvr", mapping: "smtpSvr"},
+			{name: "sslEnable", mapping: "sslEnable"},
+			{name: "smtpPort", mapping: "smtpPort"},
+			{name: "mailAuth", mapping: "mailAuth"},
+			{name: "mailUsername", mapping: "mailUsername"},
+			{name: "mailPassword", mapping: "mailPassword"},
+			{name: "mailPassConf", mapping: "mailPassConf"},
+			{name: "mailEnable", mapping: "mailEnable"},
+			{name: "mailTime", mapping: "mailTime"},
+			{name: "every_day_time", mapping: "every_day_time"},
+			{name: "mailHourHour", mapping: "mailHourHour"},
+			{name: "serverEnable", mapping: "serverEnable"},
+			{name: "serverIp", mapping: "serverIp"},
+			{name: "serverPort", mapping: "serverPort"},
+			{name: "serverClientLog", mapping: "serverClientLog"}
+			//{name: "nvramEnable", mapping: "nvramEnable"}			
+		],
+		autoLoad: true,
+		submitBtn: "default"
+	}).on("ev_loadData", function(e, data){
+		
+		if(data.mailEnable == true)
+		{
+			 $("#auto_mail_cnt").fieldset("show");
+			 setMailCntEn(true);
+		}
+		else
+		{
+			 $("#auto_mail_cnt").fieldset("hide");
+			 setMailCntEn(false);
+		}
+
+		if(data.mailAuth == true)
+		{
+  	 		$("input#mailUsername").textbox("enable");
+    		$("input#mailPassword").password("enable");
+		    $("input#mailPassConf").password("enable");
+			 $("#auth_cnt").fieldset("show");
+		}
+		else
+		{
+  	 		$("input#mailUsername").textbox("disable");
+    		$("input#mailPassword").password("disable");
+		    $("input#mailPassConf").password("disable");
+			 $("#auth_cnt").fieldset("hide");
+		}
+
+	  if(data.serverIp == "0.0.0.0")
+		{
+		 	$("#serverIp").textbox("setValue", "");
+		}
+
+		if(data.serverEnable == true)
+		{
+			 $("#server_cnt").fieldset("show");
+       setServerCntEn(true);
+		}
+		else
+		{
+			 $("#server_cnt").fieldset("hide");
+			 setServerCntEn(false);
+		}
+
+	});
+
+	
+});
+</script>
+</body>
+
+</html>

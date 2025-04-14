@@ -1,0 +1,16 @@
+lib/libcrc32.o: lib/libcrc32.c \
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/stdc-predef.h \
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/stdint.h \
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/bits/alltypes.h \
+ /home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/bits/stdint.h \
+ include/crc32.h
+
+/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/stdc-predef.h:
+
+/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/stdint.h:
+
+/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/bits/alltypes.h:
+
+/home/tplink/share/EAP772_gpl/PLATFORM/build/toolchain/toolchain-aarch64_cortex-a73_gcc-7.5.0_musl/include/bits/stdint.h:
+
+include/crc32.h:

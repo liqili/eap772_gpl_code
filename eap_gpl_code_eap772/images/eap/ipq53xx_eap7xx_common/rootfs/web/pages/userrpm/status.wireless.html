@@ -1,0 +1,680 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Device</title>
+<style>
+.left-side, .right-side{
+	display: inline-block;
+	width: 45%;
+}
+</style>
+</head>
+
+<body>
+	<div class="func-container">
+		<div id="ssid_list">
+			<div id="ssidListGrid"></div>
+		</div>
+	</div>
+
+	<div id="radio_settings_panel">		
+		<div id="radio_settings_freq" class="wireless-freq">
+			<div class="mode-change">
+				<span id="show_settings_2g" class="first-mode mode-select"></span>
+				<span> | </span>
+				<span id="show_settings_5g" class="second-mode"></span>
+				<span> | </span>
+				<span id="show_settings_5g2" class="second-mode"></span>
+				<span> | </span>
+				<span id="show_settings_6g" class="second-mode third-mode"></span>
+			</div>
+		</div>
+
+		<form id="radio_settings">
+			<input type="text"  id="radio_enable" name="enable" value="" />
+			<input type="text"  id="radio_channel" name="channel" value="" />
+			<input type="text"  id="radio_chanWidth" name="chanWidth" value="" />
+			<input type="text"  id="radio_mode" name="mode" value="" />
+			<input type="text"  id="radio_rate" name="rate" value="" />
+			<input type="text"  id="radio_power" name="power" value="" />
+			<input type="hidden"  id="radio_radioID" name="radioID" value="0" />
+		</form>
+	</div>
+
+
+
+	<div id="radio_traffic">		
+		<div id="radio_traffic_freq" class="wireless-freq">
+			<div class="mode-change">
+				<span id="show_traffic_2g" class="first-mode mode-select"></span>
+				<span> | </span>
+				<span id="show_traffic_5g" class="second-mode"></span>
+				<span> | </span>
+				<span id="show_traffic_5g2" class="second-mode"></span>
+				<span> | </span>
+				<span id="show_traffic_6g" class="second-mode third-mode"></span>
+			</div>
+		</div>
+
+		<form id="radio_traffic">
+			<div class="left-side">
+				<input type="text"  id="traffic_rx_packets" name="rx_packets" value="" />
+				<input type="text"  id="traffic_rx_bytes" name="rx_bytes" value="" />
+				<input type="text"  id="traffic_rx_dropped" name="rx_dropped" value="" />
+				<input type="text"  id="traffic_rx_errors" name="rx_errors" value="" />
+				<input type="hidden"  id="traffic_radioID" name="radioID" value="" />
+			</div>
+			
+			<div class="right-side">
+				<input type="text"  id="traffic_tx_packets" name="tx_packets" value="" />
+				<input type="text"  id="traffic_tx_bytes" name="tx_bytes" value="" />
+				<input type="text"  id="traffic_tx_dropped" name="tx_dropped" value="" />
+				<input type="text"  id="traffic_tx_errors" name="tx_errors" value="" />
+			</div>
+		</form>
+	</div>
+
+	<div id="lan_traffic">
+		
+		<form id="lan_traffic_form">
+			<div class="left-side">
+				<input type="text"  id="lan_traffic_rx_packets" name="rx_packets" value="" />
+				<input type="text"  id="lan_traffic_rx_bytes" name="rx_bytes" value="" />
+				<input type="text"  id="lan_traffic_rx_dropped" name="rx_dropped" value="" />
+				<input type="text"  id="lan_traffic_rx_errors" name="rx_errors" value="" />
+			</div>
+
+			<div class="right-side">
+				<input type="text"  id="lan_traffic_tx_packets" name="tx_packets" value="" />
+				<input type="text"  id="lan_traffic_tx_bytes" name="tx_bytes" value="" />
+				<input type="text"  id="lan_traffic_tx_dropped" name="tx_dropped" value="" />
+				<input type="text"  id="lan_traffic_tx_errors" name="tx_errors" value="" />
+			</div>
+		</form>
+
+	</div>
+	
+<script type="text/javascript">
+
+$(document).ready(function(e){
+	var DUT_MODE = {
+		BAND_24G: 0,
+		BAND_24G_5G: 1,
+		BAND_24G_5G1_5G2: 2,
+		BAND_24G_5G_6G: 3,
+		BAND_24G_5G1_5G2_6G: 4
+	};
+
+	$("div.func-container").page({
+		title: $.su.CHAR.STATUS_WIRELESS.TITLE,
+		help: ""	//可能是个调用的id 也可能是个url
+	});
+
+	$('div#ssid_list').panel({
+		title: $.su.CHAR.STATUS_WIRELESS.SSID_LIST,
+		collapsible: false
+	});
+
+
+	function num2Str(num)
+	{
+		var str = "";
+		if(num <= 1000)
+		{
+			str += num;
+		}
+		else
+		{
+			str += Math.floor(num/1000) + "k";
+		}
+
+		return str;
+	}
+
+
+	var URL_SSID_LIST = "./data/status.wireless.ssid.json";
+
+	var RADIO = {
+		BAND_24G: 0,
+		BAND_5G: 1,
+		BAND_5G2: 2,
+		BAND_6G: 3,
+	}
+
+	var blockClientStore = new $.su.Store({
+		proxy: {
+			url: URL_SSID_LIST,
+			type: "GET"
+		},
+		fields: [
+            {name: "SSID"},
+            {name: "clients"},
+            {name: "Radio"},
+            {name: "security"},
+            {name: "portal"},
+            {name: "vlan"},
+            {name: "guest"},
+            {name: "upTh"},
+            {name: "downTh"},
+            {name: "ml"}
+		],
+		autoLoad: true,
+		updateMode: "complete"
+	});
+
+	var ssidListGridColumns = [
+		{
+			xtype: "rownumberer",
+			width: 40
+		},
+		{
+			text: $.su.CHAR.STATUS_WIRELESS.SSID_NAME,
+			dataIndex: "SSID"
+		},
+		{
+			text: $.su.CHAR.STATUS_WIRELESS.MLO,
+			width: 40,
+			dataIndex: "ml",
+			renderer: function(val, index, row){
+				if (row.ml) {
+					return $.su.CHAR.STATUS_WIRELESS.MLO
+				} else {
+					return '--'
+				}
+			}
+		},
+		{
+			text: $.su.CHAR.STATUS_WIRELESS.CLIENTS,
+			width: 80,
+			dataIndex: "clients"
+		},
+		{
+			text: $.su.CHAR.STATUS_WIRELESS.BAND,
+			width: 80,
+			dataIndex: "Radio",
+			renderer: function(val, index, row){
+				// 非 mlo 的 ssid
+				if (!row.ml) {
+					if(val==0){
+						return $.su.CHAR.STATUS_WIRELESS.GHZ_24;
+					}else if(val==1){
+						return ($.su.dutMode===2||$.su.dutMode===4)?$.su.CHAR.STATUS_WIRELESS.GHZ_5G1:$.su.CHAR.STATUS_WIRELESS.GHZ_5;
+					}else if(val==2){
+						return $.su.CHAR.STATUS_WIRELESS.GHZ_5G2;
+					}else if(val==3){
+						return $.su.CHAR.STATUS_WIRELESS.GHZ_6G;
+					}
+				} else {
+					var radios = []
+
+					var mlBitMap = row.ml.toString(2).split('')
+					var mlData = []
+					$.each(mlBitMap, function (index, item) {
+						if (item == 1) {
+							mlData.push(mlBitMap.length - 1 - index)
+						}
+					})
+					$.each(mlData, function (index, item) {
+						switch (item) {
+							case RADIO.BAND_24G:
+								radios.unshift($.su.CHAR.MODE.MODE_2G)
+								break;
+							case RADIO.BAND_5G:
+								radios.unshift($.su.CHAR.MODE.MODE_5G)
+								break;
+							case RADIO.BAND_6G:
+								radios.unshift($.su.CHAR.MODE.MODE_6G)
+								break;
+						}
+					})
+
+					return radios.join(',<br>')
+				}
+			}
+		},
+		{
+			text: $.su.CHAR.STATUS_WIRELESS.SECURITY,
+			width: 80,
+			dataIndex: "security",
+			renderer:function(val, index){
+				switch(val){
+					case 0:
+						return $.su.CHAR.STATUS_WIRELESS.SECURITY_NONE;
+					case 1:
+						return $.su.CHAR.STATUS_WIRELESS.SECURITY_WEP;
+					case 2:
+						return $.su.CHAR.STATUS_WIRELESS.SECURITY_WPA_ENTERPRISE;
+					case 3:
+						return $.su.CHAR.STATUS_WIRELESS.SECURITY_WPA_PERSONAL;
+					case 6:
+						return $.su.CHAR.WIRELESS.ENHANCED_OPEN;
+					case 7:
+						return $.su.CHAR.WIRELESS.WPA3_PERSONAL;
+					case 8:
+						return $.su.CHAR.WIRELESS.WPA3_ENTER;
+					default:
+						return '';
+				}
+			}
+		},
+		{
+			text: $.su.CHAR.STATUS_WIRELESS.PORTAL,
+			width: 80,
+			dataIndex: "portal",
+			renderer: function(val){
+				if(val==0){
+					return $.su.CHAR.STATUS_WIRELESS.DISABLE;
+				}else{
+					return $.su.CHAR.STATUS_WIRELESS.ENABLE;
+				}
+			}
+		},
+		{
+			text: $.su.CHAR.STATUS_WIRELESS.VLAN_ID,
+			width: 80,
+			dataIndex: "vlan",
+			renderer: function(val){
+				if(val==0){
+					return $.su.CHAR.STATUS_WIRELESS.DISABLE;
+				}else{
+					return val;
+				}
+			}
+		},
+		{
+			text: $.su.CHAR.STATUS_WIRELESS.GUEST_NETWORK,
+			width: 120,
+			dataIndex: "guest",
+			renderer: function(val){
+				if(val==0){
+					return $.su.CHAR.STATUS_WIRELESS.DISABLE;
+				}else{
+					return $.su.CHAR.STATUS_WIRELESS.ENABLE;
+				}
+			}
+		},
+		{
+			text: $.su.CHAR.STATUS_WIRELESS.DOWN_BYTES,
+			width: 110,
+			dataIndex: "downTh",
+			renderer: function(val){
+				return num2Str(val);
+			}
+		},
+		{
+			text: $.su.CHAR.STATUS_WIRELESS.UP_BYTES,
+			width: 110,
+			dataIndex: "upTh",
+			renderer: function(val){
+				return num2Str(val);
+			}
+		}
+	]
+
+	if (!$.su.supportMlo) {
+		ssidListGridColumns.splice(2, 1)
+	}
+
+	$("div#ssidListGrid").grid({
+		store: blockClientStore,
+		paging: {numPerPage: 8},
+		columns: ssidListGridColumns,
+		operation: [
+			"refresh"
+		]
+	});
+
+/////////////////////////////////////////////////////////////////
+	
+	
+	$('div#radio_settings_panel').panel({
+		title: $.su.CHAR.STATUS_WIRELESS.RADIO_SETTINGS,
+		collapsible: false
+	});
+
+    $("#show_settings_2g").html($.su.CHAR.MODE.MODE_2G);
+    $("#show_settings_6g").html($.su.CHAR.MODE.MODE_6G);
+
+    $("span#show_settings_2g").click(function(){
+    	$('#radio_radioID').val(0);
+        if(!($(this).hasClass("mode-select")))
+        {
+            $(this).addClass("mode-select");
+            $("span#show_settings_5g").removeClass("mode-select");
+            $("span#show_settings_5g2").removeClass("mode-select");
+            $("span#show_settings_6g").removeClass("mode-select");
+            
+            $("input#radio_enable").textbox('setFieldLabel', $.su.CHAR.STATUS_WIRELESS.RADIO_24);
+            $("form#radio_settings").form("load", {radioID: 0});
+        }
+    });
+
+    $("span#show_settings_5g").click(function(){
+    	$('#radio_radioID').val(1);
+        if(!($(this).hasClass("mode-select")))
+        {
+            $(this).addClass("mode-select");
+            $("span#show_settings_2g").removeClass("mode-select");            
+            $("span#show_settings_5g2").removeClass("mode-select");   
+            $("span#show_settings_6g").removeClass("mode-select");         
+
+			$("input#radio_enable").textbox('setFieldLabel', ($.su.dutMode===2||$.su.dutMode===4)?$.su.CHAR.STATUS_WIRELESS.RADIO_5G1:$.su.CHAR.STATUS_WIRELESS.RADIO_5);			
+            $("form#radio_settings").form("load", {radioID: 1});
+        }
+    });
+
+    $("span#show_settings_5g2").click(function(){
+    	$('#radio_radioID').val(2);
+        if(!($(this).hasClass("mode-select")))
+        {
+            $(this).addClass("mode-select");
+            $("span#show_settings_2g").removeClass("mode-select");            
+            $("span#show_settings_5g").removeClass("mode-select"); 
+            $("span#show_settings_6g").removeClass("mode-select");           
+
+            $("input#radio_enable").textbox('setFieldLabel', $.su.CHAR.STATUS_WIRELESS.RADIO_5G2);
+            $("form#radio_settings").form("load", {radioID: 2});
+        }
+    });
+
+    $("span#show_settings_6g").click(function(){
+    	$('#radio_radioID').val(3);
+        if(!($(this).hasClass("mode-select")))
+        {
+            $(this).addClass("mode-select");
+            $("span#show_settings_2g").removeClass("mode-select");            
+            $("span#show_settings_5g").removeClass("mode-select");            
+            $("span#show_settings_5g2").removeClass("mode-select");            
+
+            $("input#radio_enable").textbox('setFieldLabel', $.su.CHAR.STATUS_WIRELESS.RADIO_6);
+            $("form#radio_settings").form("load", {radioID: 3});
+        }
+    });
+
+	$("input#radio_enable").textbox({
+		fieldLabel: $.su.CHAR.STATUS_WIRELESS.RADIO_24,
+		readOnly: true
+	});
+	
+	$("input#radio_channel").textbox({
+		fieldLabel: $.su.CHAR.STATUS_WIRELESS.CHANNEL_FREQUENCY,
+		readOnly: true
+	});
+	
+	$("input#radio_chanWidth").textbox({
+		fieldLabel: $.su.CHAR.STATUS_WIRELESS.CHANNEL_WIDTH,
+		readOnly: true
+	});
+	
+	$("input#radio_mode").textbox({
+		fieldLabel: $.su.CHAR.STATUS_WIRELESS.RD_MODE,
+		readOnly: true
+	});
+	
+	$("input#radio_rate").textbox({
+		fieldLabel: $.su.CHAR.STATUS_WIRELESS.MAX_TX_RATE,
+		readOnly: true
+	});
+	
+	$("input#radio_power").textbox({
+		fieldLabel: $.su.CHAR.STATUS_WIRELESS.TX_POWER,
+		readOnly: true
+	});
+
+	var radioSettingProxy = new $.su.Proxy({
+		url: "/data/status.wireless.radio.json",
+		type: "GET"
+	});
+
+	$("form#radio_settings").form({
+		proxy: radioSettingProxy,
+		fields: [
+			{name: "enable", mapping: "enable"},
+			{name: "channel", mapping: "channel"},
+			{name: "chanWidth", mapping: "chanWidth"},
+			{name: "mode", mapping: "mode"},
+			{name: "rate", mapping: "rate"},
+			{name: "power", mapping: "power"},
+			{name: "radioID", mapping: "radioID"}
+		],
+		autoLoad: false,
+		submitBtn: null
+	});
+
+	$("form#radio_settings").form("load", {radioID: 0});
+
+////////////////////////////////////////////////////////////////
+	
+	
+	$('div#radio_traffic').panel({
+		title: $.su.CHAR.STATUS_WIRELESS.RADIO_TRAFFIC,
+		collapsible: false
+	});
+
+
+    $("#show_traffic_2g").html($.su.CHAR.MODE.MODE_2G);
+    $("#show_traffic_6g").html($.su.CHAR.MODE.MODE_6G);
+
+    $("span#show_traffic_2g").click(function(){
+    	$('#traffic_radioID').val(0);
+        if(!($(this).hasClass("mode-select")))
+        {
+            $(this).addClass("mode-select");
+            $("span#show_traffic_5g").removeClass("mode-select");
+            $("span#show_traffic_5g2").removeClass("mode-select");
+            $("span#show_traffic_6g").removeClass("mode-select");
+            
+            $("form#radio_traffic").form("load", {radioID: 0, type:'radio'});
+        }
+    });
+
+    $("span#show_traffic_5g").click(function(){
+    	$('#traffic_radioID').val(1);
+        if(!($(this).hasClass("mode-select")))
+        {
+            $(this).addClass("mode-select");
+            $("span#show_traffic_2g").removeClass("mode-select");
+            $("span#show_traffic_5g2").removeClass("mode-select");
+            $("span#show_traffic_6g").removeClass("mode-select");
+
+            $("form#radio_traffic").form("load", {radioID: 1, type:'radio'});
+        }
+    });
+
+    $("span#show_traffic_5g2").click(function(){
+    	$('#traffic_radioID').val(2);
+        if(!($(this).hasClass("mode-select")))
+        {
+            $(this).addClass("mode-select");
+            $("span#show_traffic_2g").removeClass("mode-select");
+            $("span#show_traffic_5g").removeClass("mode-select");
+            $("span#show_traffic_6g").removeClass("mode-select");
+
+            $("form#radio_traffic").form("load", {radioID: 2, type:'radio'});
+        }
+    });
+
+    $("span#show_traffic_6g").click(function(){
+    	$('#traffic_radioID').val(3);
+        if(!($(this).hasClass("mode-select")))
+        {
+            $(this).addClass("mode-select");
+            $("span#show_traffic_2g").removeClass("mode-select");
+            $("span#show_traffic_5g").removeClass("mode-select");
+            $("span#show_traffic_5g2").removeClass("mode-select");
+
+            $("form#radio_traffic").form("load", {radioID: 3, type:'radio'});
+        }
+    });
+
+	$("input#traffic_rx_packets").textbox({
+		fieldLabel: $.su.CHAR.STATUS_WIRELESS.RX_PACKETS,
+		readOnly: true
+	});
+	
+	$("input#traffic_rx_bytes").textbox({
+		fieldLabel: $.su.CHAR.STATUS_WIRELESS.RX_BYTES,
+		readOnly: true
+	});
+	
+	$("input#traffic_rx_dropped").textbox({
+		fieldLabel: $.su.CHAR.STATUS_WIRELESS.RX_DROPPED,
+		readOnly: true
+	});
+	
+	$("input#traffic_rx_errors").textbox({
+		fieldLabel: $.su.CHAR.STATUS_WIRELESS.RX_ERRORS,
+		readOnly: true
+	});
+
+	$("input#traffic_tx_packets").textbox({
+		fieldLabel: $.su.CHAR.STATUS_WIRELESS.TX_PACKETS,
+		readOnly: true
+	});
+	
+	$("input#traffic_tx_bytes").textbox({
+		fieldLabel: $.su.CHAR.STATUS_WIRELESS.TX_BYTES,
+		readOnly: true
+	});
+	
+	$("input#traffic_tx_dropped").textbox({
+		fieldLabel: $.su.CHAR.STATUS_WIRELESS.TX_DROPPED,
+		readOnly: true
+	});
+	
+	$("input#traffic_tx_errors").textbox({
+		fieldLabel: $.su.CHAR.STATUS_WIRELESS.TX_ERRORS,
+		readOnly: true
+	});
+
+	var radioTrafficProxy = new $.su.Proxy({
+		url: "./data/status.traffic.radio.json",
+		type: "GET"
+	});
+
+	$("form#radio_traffic").form({
+		proxy: radioTrafficProxy,
+		fields: [
+			{name: "rx_packets", mapping: "rx_packets"},
+			{name: "rx_bytes", mapping: "rx_bytes"},
+			{name: "rx_dropped", mapping: "rx_dropped"},
+			{name: "rx_errors", mapping: "rx_errors"},
+			{name: "tx_packets", mapping: "tx_packets"},
+			{name: "tx_bytes", mapping: "tx_bytes"},
+			{name: "tx_dropped", mapping: "tx_dropped"},
+			{name: "tx_errors", mapping: "tx_errors"},
+			{name: "radioID", mapping: "radioID"}
+		],
+		autoLoad: false,
+		submitBtn: null
+	});
+	$("form#radio_traffic").form("load", {radioID: 0, type:'radio'});
+
+////////////////////////////////////////////////////////////
+	
+	$('div#lan_traffic').panel({
+		title: $.su.CHAR.STATUS_WIRELESS.LAN_TRAFFIC,
+		collapsible: false
+	});
+
+	$("input#lan_traffic_rx_packets").textbox({
+		fieldLabel: $.su.CHAR.STATUS_WIRELESS.RX_PACKETS,
+		readOnly: true
+	});
+	
+	$("input#lan_traffic_rx_bytes").textbox({
+		fieldLabel: $.su.CHAR.STATUS_WIRELESS.RX_BYTES,
+		readOnly: true
+	});
+	
+	$("input#lan_traffic_rx_dropped").textbox({
+		fieldLabel: $.su.CHAR.STATUS_WIRELESS.RX_DROPPED,
+		readOnly: true
+	});
+	
+	$("input#lan_traffic_rx_errors").textbox({
+		fieldLabel: $.su.CHAR.STATUS_WIRELESS.RX_ERRORS,
+		readOnly: true
+	});
+
+	$("input#lan_traffic_tx_packets").textbox({
+		fieldLabel: $.su.CHAR.STATUS_WIRELESS.TX_PACKETS,
+		readOnly: true
+	});
+	
+	$("input#lan_traffic_tx_bytes").textbox({
+		fieldLabel: $.su.CHAR.STATUS_WIRELESS.TX_BYTES,
+		readOnly: true
+	});
+	
+	$("input#lan_traffic_tx_dropped").textbox({
+		fieldLabel: $.su.CHAR.STATUS_WIRELESS.TX_DROPPED,
+		readOnly: true
+	});
+	
+	$("input#lan_traffic_tx_errors").textbox({
+		fieldLabel: $.su.CHAR.STATUS_WIRELESS.TX_ERRORS,
+		readOnly: true
+	});
+
+	var lanTrafficProxy = new $.su.Proxy({
+		url: "./data/status.traffic.lan.json",
+		type: "GET"
+	});
+
+	$("form#lan_traffic_form").form({
+		proxy: lanTrafficProxy,
+		fields: [
+			{name: "rx_packets", mapping: "rx_packets"},
+			{name: "rx_bytes", mapping: "rx_bytes"},
+			{name: "rx_dropped", mapping: "rx_dropped"},
+			{name: "rx_errors", mapping: "rx_errors"},
+			{name: "tx_packets", mapping: "tx_packets"},
+			{name: "tx_bytes", mapping: "tx_bytes"},
+			{name: "tx_dropped", mapping: "tx_dropped"},
+			{name: "tx_errors", mapping: "tx_errors"}
+		],
+		autoLoad: false,
+		submitBtn: null
+	});
+
+	$("form#lan_traffic_form").form('load', {type:'lan'});
+
+	if (0 === $.su.dutMode)		/* single radio */
+	{
+		$("div.wireless-freq").hide();
+	}
+	if (1 === $.su.dutMode || 3 === $.su.dutMode)		/* single radio */
+	{
+		$("#show_settings_5g2").hide();	
+		$("#show_settings_5g").html($.su.CHAR.MODE.MODE_5G);
+		
+		$("#show_traffic_5g2").hide();
+		$("#show_traffic_5g").html($.su.CHAR.MODE.MODE_5G);
+	}
+	if (2 === $.su.dutMode || 4 === $.su.dutMode)		/* single radio */
+	{
+		// $("div.wireless-freq").hide();	
+		$("#show_settings_5g2").show();		
+		$("#show_settings_5g").html($.su.CHAR.MODE.MODE_5G1);
+   		$("#show_settings_5g2").html($.su.CHAR.MODE.MODE_5G2);
+		
+		$("#show_traffic_5g2").show();	
+		$("#show_traffic_5g").html($.su.CHAR.MODE.MODE_5G1);
+		$("#show_traffic_5g2").html($.su.CHAR.MODE.MODE_5G2);
+	}
+
+	if (DUT_MODE.BAND_24G_5G1_5G2_6G === $.su.dutMode || DUT_MODE.BAND_24G_5G_6G === $.su.dutMode)
+	{
+		$("#show_settings_6g").show();		
+		$("#show_traffic_6g").show();	
+	} else {
+		$("#show_settings_6g").hide();
+		$("#show_traffic_6g").hide();
+	}
+
+});
+</script>
+</body>
+</html>

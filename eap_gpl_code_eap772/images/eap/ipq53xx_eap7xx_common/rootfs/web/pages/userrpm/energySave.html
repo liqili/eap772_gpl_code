@@ -1,0 +1,289 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Energy Save</title>
+</head>
+
+<body>
+	<div class="func-container">
+		<div id="energy_save">
+			<form id="energy_save_form" class="no-padding">
+				<input id="day_data_enable" name="dayDataEnable" />
+				<div id="day_data_fieldset" class="power-saving-field">
+					<input type="text"  id="begin_time" name="beginTime" value="" />
+					<input type="text"  id="end_time" name="endTime" value="" />
+					<div class="note energy-saving-note">
+						<h5 id="day_data_note_title" class="title"></h5>
+						<p id="day_data_note" class="content"></p>
+					</div>
+				</div>
+				<input id="rid_data_enable" name="ridDataEnable" />
+				<div id="rid_data_fieldset" class="power-saving-field">
+					<input type="text"  id="rid_input" name="rid" value="" />
+					<input type="text"  id="waiting_min" name="waitingMin" value="60" />
+					<div class="note energy-saving-note">
+						<h5 id="rid_data_note_title" class="title"></h5>
+						<p id="rid_data_note" class="content"></p>
+					</div>
+				</div>
+			</form>
+			<button id="energy_saving_submit" class="energy-saving-submit"></button>
+		</div>
+	</div>
+	
+<script type="text/javascript">
+
+$(document).ready(function(e){
+	var DUT_MODE = {
+		BAND_24G: 0,
+		BAND_24G_5G: 1,
+		BAND_24G_5G1_5G2: 2,
+		BAND_24G_5G_6G: 3,
+		BAND_24G_5G1_5G2_6G: 4
+	};
+
+	var BAND_OPTIONS = [
+		{name: $.su.CHAR.ENERGY_SAVE.GHZ_24, value:0}
+	]
+
+	if ($.su.dutMode == DUT_MODE.BAND_24G_5G || $.su.dutMode == DUT_MODE.BAND_24G_5G_6G) {
+		BAND_OPTIONS.push({name: $.su.CHAR.ENERGY_SAVE.GHZ_5, value:1})
+	}
+	if ($.su.dutMode == DUT_MODE.BAND_24G_5G1_5G2 || $.su.dutMode == DUT_MODE.BAND_24G_5G1_5G2_6G) {
+		BAND_OPTIONS.push({name: $.su.CHAR.ENERGY_SAVE.GHZ_5G1, value:1}, {name: $.su.CHAR.ENERGY_SAVE.GHZ_5G2, value:2})
+	}
+	if ($.su.dutMode == DUT_MODE.BAND_24G_5G1_5G2_6G || $.su.dutMode == DUT_MODE.BAND_24G_5G_6G) {
+		BAND_OPTIONS.push({name: $.su.CHAR.ENERGY_SAVE.GHZ_6G, value:3})
+	}
+
+	var ENABLE_STATUS = {
+		ENABLE: 1,
+		DISABLE: 0
+	}
+
+	var energySavingProxy = new $.su.Proxy({
+		url: "./data/energysave.config.json"
+	});
+
+	$("#rid_data_note_title").html($.su.CHAR.ENERGY_SAVE.NOTE + ":");
+	$("#day_data_note_title").html($.su.CHAR.ENERGY_SAVE.NOTE + ":");
+
+	$("div.func-container").page({
+		title: $.su.CHAR.ENERGY_SAVE.ENERGY_SAVE,
+		help: ""	//可能是个调用的id 也可能是个url
+	});
+
+	$('div#energy_save').panel({
+		title: $.su.CHAR.ENERGY_SAVE.ENERGY_SAVE,
+		collapsible: false
+	});
+
+	$('#day_data_enable').checkbox({
+		fieldLabel: $.su.CHAR.ENERGY_SAVE.TRIGGER_BY_TIME,
+		items: [
+			{boxlabel: $.su.CHAR.ENERGY_SAVE.ENABLE, inputValue: "1", uncheckedValue:"0", checked:true}
+		],
+		cls: 'energy-saving-checkbox'
+	}).on('ev_change', function(e, oldValue, newValue) {
+		var enable = newValue[0] === "dayDataEnable" || newValue[0] == "1";
+		if (enable) {
+			$("#begin_time").time("enable");
+			$("#end_time").time("enable");
+			$("#day_data_fieldset").show();
+		} else {
+			$("#begin_time").time("disable");
+			$("#end_time").time("disable");
+			$("#day_data_fieldset").hide();
+		}
+	});
+
+	$('#begin_time').time({
+		fieldLabel: $.su.CHAR.ENERGY_SAVE.START_TIME,
+		format: 'h:s',
+		allowBlank: false
+	}).on('ev_change', function(e,fd,d){
+		refreshEnergySavingNote();
+	});
+
+	$('#end_time').time({
+		fieldLabel: $.su.CHAR.ENERGY_SAVE.END_TIME,
+		format: 'h:s',
+		allowBlank: false
+	}).on('ev_change', function(e,fd,d){
+		refreshEnergySavingNote();
+	});
+	
+	$('#rid_data_enable').checkbox({
+		fieldLabel: $.su.CHAR.ENERGY_SAVE.TRIGGER_BY_BAND,
+		items: [
+			{boxlabel: $.su.CHAR.ENERGY_SAVE.ENABLE, inputValue: "1", uncheckedValue:"0", checked:true}
+		],
+		cls: 'energy-saving-checkbox'
+	}).on('ev_change', function(e, oldValue, newValue) {
+		var enable = newValue[0] === "ridDataEnable" || newValue[0] == "1";
+		if (enable) {
+			$("#rid_input").combobox("enable");
+			$("#waiting_min").textbox("enable");
+			$("#rid_data_fieldset").show();
+		} else {
+			$("#rid_input").combobox("disable");
+			$("#waiting_min").textbox("disable");
+			$("#rid_data_fieldset").hide();
+		}
+	});
+
+	$("#rid_input").combobox({
+		fieldLabel: $.su.CHAR.ENERGY_SAVE.BANDS,
+		multiSelect: true,
+		inputCls: "l",
+		allowBlank: false,
+		items: BAND_OPTIONS
+	}).on("ev_change", function () {
+		refreshEnergySavingNote();
+	})
+
+	$("#waiting_min").textbox({
+		fieldLabel: $.su.CHAR.ENERGY_SAVE.IDLE_DURATION,
+		hint: $.su.CHAR.ENERGY_SAVE.MINUTES,
+		allowBlank: false,
+		vtype: "number",
+		validator:function(val){
+			var min = 60;
+			var max = 1440
+			if((val >= min && val <= max)) {
+				return true;
+			} else {
+				return $.su.CHAR.ENERGY_SAVE.NUMBER_MIN_MAX.replace("%min", min).replace("%max", max);
+			}
+		}
+	}).on("ev_change", function () {
+		refreshEnergySavingNote();
+	})
+
+	$("#energy_saving_submit").button({
+		cls: "submit",
+		text: $.su.CHAR.OPERATION.SAVE,
+	}).on("click", function () {
+		var data = $("#energy_save_form").form("serialize");
+		var rid = $("input#rid_input").combobox("getValue");
+		if (data.ridDataEnable == ENABLE_STATUS.ENABLE && rid.length === 0) {
+			$("#rid_input").combobox("setError");
+			return ;
+		}
+		if (!$("#energy_save_form").form("validate")) {
+			return ;
+		}
+
+		rid = $.map(rid, function (item) {
+			return parseInt(item)
+		})
+
+		var dayDataEnable = parseInt(data.dayDataEnable);
+		var dayData;
+
+		if (dayDataEnable) {
+			dayData = {
+				enable: dayDataEnable,
+				beginHour: parseInt(data.beginTime.split(":")[0]),
+				beginMin: parseInt(data.beginTime.split(":")[1]),
+				endHour: parseInt(data.endTime.split(":")[0]),
+				endMin: parseInt(data.endTime.split(":")[1])
+			}
+		} else {
+			dayData = {
+				enable: dayDataEnable
+			}
+		}
+
+		var ridDataEnable = parseInt(data.ridDataEnable);
+		var ridData;
+
+		if (ridDataEnable) {
+			ridData = {
+				enable: ridDataEnable,
+				rid: rid,
+				waitingMin: parseInt(data.waitingMin)
+			}
+		} else {
+			ridData = {
+				enable: ridDataEnable
+			}
+		}
+
+		var submitData = {
+			dayData: dayData,
+			ridData: ridData
+		}
+		
+		$("#energy_save_form").form("showLoading");
+		energySavingProxy.write({data: $.su.json.toJSONString(submitData)}, function () {
+			$("#energy_save_form").form("prompt", true);
+			$("#energy_save_form").form("hideLoading");
+			getEnergySavingData();
+		}, function () {
+			$("#energy_save_form").form("hideLoading")
+		}, function () {
+			$("#energy_save_form").form("hideLoading")
+		})
+	})
+
+	$("#energy_save_form").form({
+		proxy: energySavingProxy,
+		autoLoad: false,
+		fields: [
+			{name: "dayDataEnable"},
+			{name: "beginTime"},
+			{name: "endTime"},
+			{name: "ridDataEnable"},
+			{name: "rid"},
+			{name: "waitingMin"},
+		]
+	});
+
+	function getEnergySavingData () {
+		energySavingProxy.read({}, function (data) {
+			var res = {
+				dayDataEnable: data.dayData.enable,
+				beginTime: supplementZero(data.dayData.beginHour) + ":" + supplementZero(data.dayData.beginMin),
+				endTime: supplementZero(data.dayData.endHour) + ":" + supplementZero(data.dayData.endMin),
+				ridDataEnable: data.ridData.enable,
+				rid: data.ridData.rid,
+				waitingMin: data.ridData.waitingMin,
+			}
+
+			$("#energy_save_form").form("loadData", res);
+			refreshEnergySavingNote();
+		})
+	};
+	getEnergySavingData();
+
+	function refreshEnergySavingNote () {
+		var data = $("#energy_save_form").form("serialize");
+		var beginTime = data.beginTime;
+		var endTime = data.endTime;
+		var rid = $("input#rid_input").combobox("getValue");
+		var bandsText = rid && rid.length > 0 && $("#rid_input").combobox("getSelectedText");
+		var waitingMin = $("#waiting_min").textbox("getValue");
+
+		$("#day_data_note").html($.su.CHAR.ENERGY_SAVE.DAY_DATA_LABEL.replace("%startTime%",beginTime).replace("%endTime%",endTime));
+		var ridDataNote = '';
+		if (bandsText) {
+				ridDataNote = $.su.CHAR.ENERGY_SAVE.RID_DATA_LABEL.replace("%bands%", bandsText);
+		} else {
+				ridDataNote = $.su.CHAR.ENERGY_SAVE.RID_DATA_LABEL_NO_BAND;
+		}
+		$("#rid_data_note").html(ridDataNote.replace("%timeThreshold%", waitingMin || "0"));
+	}
+
+	function supplementZero (num) {
+		if ($.isNumeric(num) && num < 10) {
+			return "0" + num;
+		}
+
+		return num;
+	}
+});
+</script>
+</body>
+</html>

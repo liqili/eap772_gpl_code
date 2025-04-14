@@ -1,0 +1,70 @@
+#!/bin/bash
+
+UCLIBC_LIBS="ld-uClibc libcrypt libdl libm libnsl libpthread libresolv librt libuClibc libutil"
+UCLIBC_GCC="libgcc_s"
+UCLIBC_CPP="libstdc++*[o0-9]"
+
+if [ $# -lt 2 -o -z "$1"  -o -z "$2" ]; then
+	echo "usage: cplibs SRCDIR DSTDIR"
+	exit 1
+fi;
+
+if [ -d "$1/build_mips/lib" ]; then
+	SRC_DIR="$1/build_mips/lib/"
+elif [ -d "$1/build_mips/staging_dir/lib" ]; then
+	SRC_DIR="$1/build_mips/staging_dir/lib/"
+else
+	SRC_DIR="$1/"
+fi;
+
+UCLIB=$(find ${SRC_DIR} -name "libuClibc-*.so" | head -1)
+SRC_DIR=${UCLIB%/*}
+CPPLIB=$(find ${SRC_DIR}/.. -name "libstdc++.so*" | head -1)
+CPP_DIR=${CPPLIB%/*}
+
+DST_DIR=$2/lib/
+mkdir -p ${DST_DIR}
+
+UCLIB_SUFFIX=${UCLIB##*\/libuClibc-}
+UCLIBC_VERSION=${UCLIB_SUFFIX%.so}
+UCLIBC_VERSION_MAIN=${UCLIB_SUFFIX%%.*}
+
+if [ -z "${UCLIB_SUFFIX}" -o -z "${UCLIBC_VERSION}" -o -z "${SRC_DIR}" -o -z "${DST_DIR}" ]; then
+	echo "cannot found uclibc under path '$2'!"
+	exit 1;
+fi;
+
+echo "install path: "${DST_DIR}
+echo "uClibc  path: "${SRC_DIR##$1/}
+echo "uClibc  version: "${UCLIBC_VERSION}
+
+# install uClibc
+for l in ${UCLIBC_LIBS}; do
+	cp -f ${SRC_DIR}/${l}-${UCLIB_SUFFIX} ${DST_DIR}
+	ln -sf ${l}-${UCLIB_SUFFIX} ${DST_DIR}/${l}.so
+	ln -sf ${l}-${UCLIB_SUFFIX} ${DST_DIR}/${l}.so.${UCLIBC_VERSION_MAIN}
+done;
+ln -sf libuClibc-${UCLIB_SUFFIX} ${DST_DIR}/libc.so.${UCLIBC_VERSION_MAIN}
+
+# install gcc lib
+for l in ${UCLIBC_GCC}; do
+	for b in $(cd ${SRC_DIR} && ls ${UCLIBC_GCC}* 2>/dev/null); do
+		[ "${b}" = "${l}.so" ] || cp -f ${SRC_DIR}/${b} ${DST_DIR}
+		[ "${b}" = "${l}.so" ] || ln -sf ${b} ${DST_DIR}/${l}.so
+	done;
+done;
+
+# install c++ lib
+if [ $# -gt 2 -a -n "${CPP_DIR}" ]; then
+	HAS_LIBCPP=$3
+else
+	HAS_LIBCPP=0
+fi
+if [ "${HAS_LIBCPP}" == 1 ]; then
+	echo "libC++ suport: yes"
+	for l in ${UCLIBC_CPP}; do
+		cp -af ${CPP_DIR}/${l} ${DST_DIR}
+	done
+else
+	echo "libC++ suport: no"
+fi;

@@ -1,0 +1,613 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate" />
+<meta http-equiv="expires" content="Wed, 26 Feb 1997 08:33:43 GMT" />
+<link rel="icon" href="themes/dark/img/favicon.png" type="image/png" /> 
+<link type="text/css" href="css/widget.css" rel="stylesheet" />
+
+<link type="text/css" href="themes/dark/css/widget.css" rel="stylesheet" />
+<link type="text/css" href="themes/dark/css/style.css" rel="stylesheet" />
+
+<title>EAP</title>
+<style type="text/css">
+h5.note-warn-label{
+	font-weight: bold;
+	margin-bottom: 14px;
+	margin-top: 28px;
+	margin-left: 26px;
+	font-size: 15px;
+	vertical-align: middle;
+	margin-bottom: 26px;
+}
+
+input.text-hint.password-hint.l{
+	width:160px;
+}
+
+
+</style>
+</head>
+
+<body id="index-body">
+
+<div class="top" id="top-wrapper">
+	<div class="top-header">
+		<div class="top-header-wrap">
+			<h1 id="product-tag">
+				<span class="icon"></span>
+				<span class="separate hidden" style="display:none"></span>
+				<span class="text hidden" id="devname"></span>
+			</h1>
+
+			<div id="top-control" class="top-control">
+				<div id="lan-select-container">
+					<input class="hidden" id="lan-select" class="lan-select-container" />
+				</div>
+				<span class="control-gap hidden">|</span>
+
+				<a class="top-control-btn" id="top-control-logout" href="javascript:logout();">
+					<span class="icon"></span>
+					<span class="text" id="text_logout"></span>
+				</a>
+
+				<a class="top-control-btn" id="top-control-help" href="javascript:void(0);"
+					onClick="window.open('http://www.tp-link.com/en/Support')">
+					<span class="icon"></span>
+					<span class="text" id="text_help"></span>
+				</a>
+
+				<a class="top-control-btn" id="top-control-about" href="javascript:about();">
+					<span class="icon"></span>
+					<span class="text" id="text_about"></span>
+				</a>
+
+			</div>
+		</div>
+	</div>
+    
+    <div class="top-menu">
+    	<div class="top-menu-wrap">
+        	<div class="menu-container" id="top-menu"></div>
+        </div>
+    </div>
+    
+    <p class="top-menu-bug-wrap"></p>
+    
+    <div class="top-main">
+        <div class="top-main-wrap">
+            <div class="top-content">
+                <div class="top-content-wrap" id="top-content">
+                </div>
+            </div><!-- top-content -->
+            
+            
+            <!--<div class="top-footer">
+                <div class="top-footer-wrap">
+                    <span id="product-info">
+                        <span>Firmware Version:3.12.4&nbsp;Bulid&nbsp;100910&nbsp;Rel.57694n</span>
+                        <span>Hardware&nbsp;Version:WR841N&nbsp;v500000000</span>
+                    </span>
+                            
+                    <span class="help-faq">
+                        <a id="btn-faq" class="btn-faq" href="javascript:void(0);">Support</a>
+                    </span>
+                </div>
+            </div>-->
+        </div>
+    </div>
+	
+</div><!-- top-wrapper -->
+
+<div id="mask" class="mask"></div>
+<div id="logout_confirm_msg" class="hidden">
+	<div class="warning-msg">
+		<h4 class="title">
+			<span class="icon"></span>
+			<span id="logout_confirm_msg_text" class="text"></span>
+		</h4>
+	</div>
+</div>
+
+<div id="about-msg" class="hidden">
+	<div class="">
+		<input id="allow-data-collection" name="allowDataCollection" value="" />
+		<p id="allow-data-collection-note"></p>
+	</div>
+</div>
+
+
+<div id="reset-user-msg-container" class="hidden">
+	<h5 id="text_setup" class="note-warn-label"></h5>
+	<div id="reset-user-form" >
+		<div class="reset-user-content">
+			<input id="new-username" name="new_username" type="text" />
+			<input id="new-password" name="new_password" type="text" />
+			<input id="confirm-password" name="confirm_password" type="text" />
+			<input id="password-status"  value="" />
+			<div class="button-container submit form-submit">
+				<button id="confirm-btn" type="button"></button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--  jquery框架加载  -->
+<script type="text/javascript" src="js/libs/jquery.min.js"></script>
+<script type="text/javascript" src="js/libs/md5.js"></script>
+<script type="text/javascript" src="js/libs/netUtil.js"></script>
+<!-- <script type="text/javascript" src="js/libs/jquery.extend.js"></script> -->
+<!-- <script type="text/javascript" src="js/libs/jquery.cookies.min.js"></script> -->
+
+<!--  语言部分加载  -->
+<script id="lan-js" type="text/javascript" src="locale/en_US/lan.js"></script>
+<link id="lan-css" type="text/css" rel="stylesheet" href="locale/en_US/lan.css" />
+
+<!--  引入框架代码， 最后需要统一到一个文件下面  -->
+<script type="text/javascript" src="js/su/su.js"></script>
+
+<script type="text/javascript" src="js/su/data/proxy.js"></script>
+<script type="text/javascript" src="js/su/data/store.js"></script>
+<script type="text/javascript" src="js/su/data/treestore.js"></script>
+
+<script type="text/javascript" src="js/su/widget/widget.js"></script>
+
+<script type="text/javascript" src="js/su/widget/window/panel.js"></script>
+<script type="text/javascript" src="js/su/widget/window/page.js"></script>
+<script type="text/javascript" src="js/su/widget/window/wizard.js"></script>
+<script type="text/javascript" src="js/su/widget/window/msg.js"></script>
+<script type="text/javascript" src="js/su/widget/window/foldertree.js"></script>
+<script type="text/javascript" src="js/su/widget/window/keyword.js"></script>
+
+<script type="text/javascript" src="js/su/widget/grid/grid.js"></script>
+<script type="text/javascript" src="js/su/widget/grid/editor.js"></script>
+<script type="text/javascript" src="js/su/widget/grid/paging.js"></script>
+
+<script type="text/javascript" src="js/su/widget/form/form.js"></script>
+<script type="text/javascript" src="js/su/widget/form/fieldset.js"></script>
+<script type="text/javascript" src="js/su/widget/form/combobox.js"></script>
+<script type="text/javascript" src="js/su/widget/form/checkbox.js"></script>
+<script type="text/javascript" src="js/su/widget/form/radio.js"></script>
+<script type="text/javascript" src="js/su/widget/form/textbox.js"></script>
+<script type="text/javascript" src="js/su/widget/form/textarea.js"></script>
+<script type="text/javascript" src="js/su/widget/form/button.js"></script>
+<script type="text/javascript" src="js/su/widget/form/time.js"></script>
+<script type="text/javascript" src="js/su/widget/form/file.js"></script>
+<script type="text/javascript" src="js/su/widget/form/buttongroup.js"></script>
+<script type="text/javascript" src="js/su/widget/form/timepicker.js"></script>
+<script type="text/javascript" src="js/su/widget/form/progressbar.js"></script>
+<script type="text/javascript" src="js/su/widget/form/tip.js"></script>
+<script type="text/javascript" src="js/su/widget/form/region.js"></script>
+<script type="text/javascript" src="js/su/widget/form/password.js"></script>
+<script type="text/javascript" src="js/su/widget/form/status.js"></script>
+
+<!-- 运行时代码 -->
+<script type="text/javascript">
+//<![CDATA[
+//页面初始化
+var ENABLE_STATUS = {
+	ENABLE: 1,
+	DISABLE: 0
+}
+
+var sysModeProxy = new $.su.Proxy({
+	type: "GET",
+	dataType: 'json',
+	url: "./data/sysmod.json"+"?rdm="+Math.random()
+});
+
+var deviceProxy = new $.su.Proxy({
+	type: 'GET',
+	url: "./data/status.device.json"
+});
+
+var PRIVACY_POLICY_URL = "./data/privacyPolicy.json";
+
+var privacyPolicyProxy = new $.su.Proxy({
+	url: PRIVACY_POLICY_URL
+});
+
+function rdCallBackFunc(data)
+{
+	$.su.dutMode = data["multiRadio"];
+	// $.su.dutModeName = data["dutMode"];
+	// $.su.dutManageMode = data["newMode"];
+	// $.su.dutWorkMode = data["workmode"];
+    $.su.dutWlanMode = data["wlanMode"];
+    $.su.dutWlanMaxSta = data["maxSta"];
+    $.su.dutWlan2GCap = data["radioMode2G"];
+	$.su.dutWlan5GCap = data["radioMode5G"];
+	$.su.dutWlan6GCap = data["radioMode6G"]==undefined?0:data["radioMode6G"];
+	$.su.supportWpa3 = data["supportWpa3"];
+	$.su.supportOfdma = data["support_ofdma"];
+	$.su.supportCBC = data["support_cbc"];
+	$.su.supportWepAndTkip = data["supp_legacy_encrypt"];
+	$.su.supportFragThresh = data["supp_frag_thresh"];
+	$.su.supportMlo = data["supportMlo"]
+	$.su.supportMloArray = data["supportMloArray"] || []
+	$("span#devname").html($.su.dutModeName);
+}
+var obj = sysModeProxy.read({}, rdCallBackFunc);
+
+/**********END*app定义END*********/
+$.su.app = {
+    runningModule: {
+        name: "",
+        busy: false,
+        addUnloadHandler: function(fn){
+            if ($.isFunction(fn)){
+                this.unloadHandlers.push(fn);
+            }
+        },
+        clearUnloadHandler: function(){
+            this.unloadHandlers = [];
+        },
+        unload: function(oldN, newN){
+            this.name = newN;
+            var handlers = this.unloadHandlers;
+            for (var index in handlers){
+                var fn = handlers[index];
+                if ($.isFunction(fn)){
+                    fn();
+                }
+            };
+            this.clearUnloadHandler();
+        },
+        unloadHandlers: []
+    },
+    menuGoTo: function(name, url, isAdvanced){
+    	if($.su.app.runningModule.busy === true){
+    		return;
+    	}
+    	$.su.app.runningModule.busy = true;
+        var contentContainer = $("div#top-content");		
+        //旧模块卸载
+        $.su.Manager.removeLocal();
+        //var runningModule = $.su.app.runningModule;
+        //$.su.app.runningModule.trigger("ev_beforeunload", [$.su.app.runningModule[0].name, name]);
+        //console.log("menuGoTo", runningModule)
+        var runningModule = $.su.app.runningModule;
+            runningModule.unload(runningModule.name, name);
+
+        contentContainer.load(url, function(response,status,xhr){
+            //$.su.app.runningModule.trigger("ev_unload", [name]);
+            $.su.layout.doLayout();
+            $.su.app.runningModule.busy = false;
+        });
+    }
+};
+//$.su.app.init();
+/**********END*app定义END*********/
+
+/**********STR*菜单部分效果*STR**********/
+var menu = new $.su.Menu({
+    data: "./data/menu.json",
+    urlPath: "./pages/userrpm/",
+    container: "div#top-menu",
+    idTag: "top",
+    cls: "top",
+    handlers: {
+        init: function(e){
+            this.goTo("status");
+        },
+        goTo: function(e, name, url){
+        	$.su.app.menuGoTo(name, url, true);
+        }
+    }
+});
+//
+
+$.su.menu = menu;
+
+//reset user and password
+var resetUserMsg = $("div#reset-user-msg-container").msg({
+	type: "window",
+	global: true,
+	closeBtn:false,
+	title:"",
+	cls: "l reset-user"
+});
+
+$("input#new-username").textbox({
+	fieldLabel: $.su.CHAR.INDEX.NEW_USERNAME,
+	hint: $.su.CHAR.INDEX.NEW_USERNAME,
+	_maxLength: 64,
+	//cls: "login-text",
+	allowBlank: false
+});
+
+$("input#new-password").password({
+	fieldLabel: $.su.CHAR.INDEX.NEW_PASSWORD,
+	hint: $.su.CHAR.INDEX.NEW_PASSWORD,
+	_maxLength: 64,
+	vtype: "ascii_visible",
+	allowBlank: false,
+	validator:function(val){
+		var cfm_pwd = $("input#confirm-password").password("getValue");
+		if (!$.su.func.checkPswLevel(val)) {
+			return $.su.CHAR.VTYPETEXT.PSW_LEVEL_ERROR
+		}
+
+		if(val == cfm_pwd)
+		{
+			$("#password-status").status("setSuccess");
+			return true;
+		}
+		else
+		{
+			if (cfm_pwd.length != 0) {
+				$("#password-status").status("setFailed");
+				return true;
+			} else {
+				return true;
+			}
+		}
+	}
+});
+
+
+$("#password-status").status({
+	cls:"inline"
+});
+
+$("input#confirm-password").password({
+	fieldLabel: $.su.CHAR.INDEX.CONF_PASSWORD,
+	hint: $.su.CHAR.INDEX.CONF_PASSWORD,
+	showLevel:false,
+	allowBlank:false,
+	_minLength: 0,
+	_maxLength: 64,
+	vtype:"ascii_visible",
+	cls:"inline",
+	validator:function(val){
+		var new_pwd = $("input#new-password").password("getValue");
+		if(val == new_pwd)
+		{
+			$("#password-status").status("setSuccess");
+			return true;
+		}
+		else
+		{
+			$("#password-status").status("setFailed");
+			return true;
+		}
+	}
+}).on("ev_change", function(e, value, key, keyCode){
+	if (key == "Enter" || keyCode == 13){
+	    $("button#confirm-btn").focus();
+	    return doChpwd();
+	};
+});
+
+
+var forceChpwdProxy = new $.su.Proxy({
+	url: "./data/forceChpwd.json"
+});
+
+var chPwdForm = $("div#reset-user-form").form({
+	proxy: forceChpwdProxy,
+	fields: [
+		{name: "new-username", mapping: "new-username"},
+		{name: "new-password", mapping: "new-password"}
+	],
+	autoLoad:false,
+	submitBtn: null
+});
+
+var doChpwd = function(){
+	if( !$("input#new-username").textbox('validate') 
+		|| !$("input#new-password").password('validate')
+		|| !$("input#confirm-password").password('validate') ){
+		return false;
+	}
+
+	if (0 == $("input#new-username").textbox("getValue").length)
+	{
+		$("input#new-username").textbox("setError", $.su.CHAR.INDEX.ERR_USERNAME_EMPTY);
+		return false;
+	}
+
+	if ($("input#new-password").textbox("getValue").toUpperCase() == "ADMIN"){
+		$("input#new-password").textbox("setError", $.su.CHAR.INDEX.PWD_NOT_ALLOWED);
+		return false;
+	}
+	
+	if (0 == $("input#new-password").textbox("getValue").length)
+	{
+		$("input#new-password").textbox("setError", $.su.CHAR.INDEX.ERR_PWD_EMPTY);
+		return false;
+	}
+
+	if (0 == $("input#confirm-password").textbox("getValue").length)
+	{
+		$("input#confirm-password").textbox("setError", $.su.CHAR.INDEX.ERR_PWD_CONFIRM_EMPTY);
+		return false;
+	}
+
+	if ($("input#new-password").textbox("getValue") != $("input#confirm-password").textbox("getValue"))
+	{
+		$("input#confirm-password").textbox("setError", $.su.CHAR.INDEX.ERR_PWD_CONFIRM_WRONG);
+		return false;
+	}
+		
+	if(!$.su.vtype.types.ascii_visible.regex.test($("input#new-password").textbox("getValue")))
+	{
+		$("input#new-password").textbox("setError", $.su.vtype.types.ascii_visible.vtypeText);
+		return false;
+	}
+
+	if(!$.su.vtype.types.ascii_visible.regex.test($("input#confirm-password").textbox("getValue")))
+	{
+		$("input#confirm-password").textbox("setError", $.su.vtype.types.ascii_visible.vtypeText);
+		return false;
+	}
+	
+	$("input#new-password").textbox("setValue", md5($("input#new-password").textbox("getValue")).toUpperCase());
+	$("input#confirm-password").textbox("setValue", md5($("input#confirm-password").textbox("getValue")).toUpperCase());
+	chPwdForm.form('submit',null, function(){resetUserMsg.msg("close");});
+	
+	return true;
+};
+
+$("button#confirm-btn").button({
+        text: $.su.CHAR.INDEX.CONFIRM,
+        handler: function(e){
+			doChpwd();
+        },
+        cls: "submit inline-block"
+});
+
+//"21232F297A57A5A743894A0E4A801FC3"
+$.su.sysmodDfd = $.Deferred();
+$.ajax({
+	url: "./data/sysmod.json",
+	type: 'GET',
+	cache: false,
+	data: {
+	},
+	dataType: 'json',
+	error: function(){return false;},
+	success: function(response){
+
+		$.su.isFestaAp = response.data.supportFesta;
+		$.su.sysmodDfd.resolve();
+		if (response.data.factoryStatus){
+			resetUserMsg.msg("show");
+			$("input#new-username").focus();
+		}
+	}
+});
+
+/**********END*菜单部分效果*END**********/
+
+/**********SRT*布局调整SRT*********/
+$.su.layout.doLayout = function(){
+	var wh = $(window).height();
+	var hh = $("div.top-header").height();
+	var secMenuHeight = $("ul.menu-tree li.selected .menu-sec-wrap").height();
+	$('.top-menu-bug-wrap').height(secMenuHeight);
+	var mh = $("div.top-menu-wrap").height() + $("p.top-menu-bug-wrap").height();
+	//var fh = $("div.top-footer").height();
+	//console.log(wh, hh, mh);
+	$("div.top-main").css({
+		"height" : (wh - hh - mh)
+	});
+	
+};
+/**********END*布局调整END*********/
+
+/**页面初始化**/
+$(window).on("resize load", function(){
+    $.su.layout.doLayout();
+});
+
+$("a#top-control-logout").tip({
+	text: $.su.CHAR.INDEX.LOGOUT,
+	cls: "control-tip",
+	positionRelative: "me",
+	position: {
+		pageX: 600,//684,
+		pageY: 38
+	},
+	showDelay: 100
+});
+
+$("a#top-control-help").tip({
+	text: "Help",
+	cls: "control-tip",
+	positionRelative: "me",
+	position: {
+		pageX: 642,
+		pageY: 38
+	},
+	showDelay: 100
+});
+
+$("a#top-control-about").tip({
+	text: $.su.CHAR.INDEX.ABOUT,
+	cls: "control-tip",
+	positionRelative: "me",
+	position: {
+		pageX: 684,
+		pageY: 38
+	},
+	showDelay: 100
+});
+
+$('span#logout_confirm_msg_text').html($.su.CHAR.CONFIRM_LOGOUT);
+$('span#text_logout').html($.su.CHAR.INDEX.LOGOUT);
+$('span#text_help').html($.su.CHAR.INDEX.HELP);
+$('span#text_about').html($.su.CHAR.INDEX.ABOUT);
+$('h5#text_setup').html($.su.CHAR.INDEX.SET_UP);
+
+
+var logoutConfirmMsg = $("div#logout_confirm_msg").msg({
+    type: "prompt",
+    global: true,
+    cls: 'm',
+    okHandler: function(e){
+        if (localStorage){
+            localStorage.token = "";
+        };
+        top.location.href = "./logout.html";
+    }
+});
+
+function logout()
+{
+	logoutConfirmMsg.msg("show");
+}
+
+var aboutMsg = $("div#about-msg").msg({
+	type: "window",
+	global: true,
+	_title: $.su.CHAR.INDEX.ABOUT_TITLE,
+	cls: 'xl'
+});
+
+$("p#allow-data-collection-note").html($.su.CHAR.INDEX.ALLOW_DATA_COLLECTION_NOTE);
+
+$("input#allow-data-collection").checkbox({
+	fieldLabel: $.su.CHAR.INDEX.ALLOW_DATA_COLLECTION,
+	labelCls: 'm',
+	items: [
+		{boxlabel: $.su.CHAR.WIZARD.ENABLE, inputValue: ENABLE_STATUS.ENABLE, uncheckedValue: ENABLE_STATUS.DISABLE, checked:true}
+	]
+}).on("ev_change", function (e, oldVal, newVal) {
+	var dataCollectionEnable = (newVal[0]==="allowDataCollection" || newVal[0] === ENABLE_STATUS.ENABLE) ? ENABLE_STATUS.ENABLE : ENABLE_STATUS.DISABLE;
+	$.ajax({
+		type: "POST",
+		url: PRIVACY_POLICY_URL,
+		timeout: 5000,
+		dataType: "json",
+		cache: false,
+		data: {
+			"operation": "write",
+			enable: dataCollectionEnable
+		},
+		traditional: true
+	});
+})
+
+deviceProxy.read({}, function(data){
+	var deviceName = data.deviceName || data.mac;
+	var title = $.su.CHAR.INDEX.ABOUT_TITLE.replace('%Devices Name%', deviceName)
+	title = $.su.func.escapeHtml(title);
+	$("div#about-msg").msg('setTitle',title);
+});
+
+privacyPolicyProxy.read({}, function (data) {
+	$("input#allow-data-collection").checkbox("setValue", data.enable)
+})
+
+function about()
+{
+	aboutMsg.msg("show");
+}
+
+//]]>
+</script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+#!/bin/sh
+cat /usr/bin/eap-cs > /dev/null
+chk_res=$?
+if [ $chk_res -ne 0 ]; then
+	echo "/usr/bin/eap-cs is bad, rebooting -------------"
+	reboot
+fi
+
+cat /usr/bin/httpd_portal > /dev/null
+chk_res=$?
+if [ $chk_res -ne 0 ]; then
+	echo "/usr/bin/httpd_portal is bad, rebooting -------------"
+	reboot
+fi
+
+cat /usr/bin/tddpd > /dev/null
+chk_res=$?
+if [ $chk_res -ne 0 ]; then
+	echo "/usr/bin/tddpd is bad, rebooting -------------"
+	reboot
+fi
+
+cat /usr/bin/tdpd > /dev/null
+chk_res=$?
+if [ $chk_res -ne 0 ]; then
+	echo "/usr/bin/tdpd is bad, rebooting -------------"
+	reboot
+fi
+
+until [ -d /tmp/okTddp ]
+do
+	sleep 1
+done
+echo "now ok to start tddp---------------------"
+
+if [ -f "/etc/tdbEnable" ];then
+tdb -r /usr/bin/tddpd &
+else
+/usr/bin/tddpd &
+fi
+
+until [ -d /tmp/ucliteok ]
+do
+	sleep 2;
+done
+echo "uclite init ok, now startup eap-cs ---------------------"
+
+if [ -f "/etc/tdbEnable" ] && [ -f "/usr/bin/tdb" ];then
+tdb -r /usr/bin/httpd_portal &
+tdb -r /usr/bin/tdpd &
+tdb -r /usr/bin/eap-cs &
+if [ -f "/usr/bin/cloud-brd" ] && [ ! -f "/tmp/cloudDisable" ];then
+tdb -r /usr/bin/cloud-brd -c /etc/cloud_config.cfg &
+fi
+else
+/usr/bin/httpd_portal &
+/usr/bin/tdpd &
+/usr/bin/eap-cs &
+if [ -f "/usr/bin/cloud-brd" ] && [ ! -f "/tmp/cloudDisable" ];then
+/usr/bin/cloud-brd -c /etc/cloud_config.cfg &
+fi
+fi
+
+#eap220_chk="`/usr/bin/uclited -s | grep "EAP220"`"
+#wifi1_chk="`cat /proc/net/dev | grep "wifi1"`"
+#if [ -n "$eap220_chk" -a ! -n "$wifi1_chk" ]; then
+#    echo "EAP220 cannot detect wifi1, reboot-------------"
+#    reboot
+#fi
+
+sleep 15
+#ecs_proc="`ps | grep "eap-cs" | grep "/usr/bin"`"
+#if [ ! -n "$ecs_proc" ]; then
+#	echo "eap-cs is not start, rebooting----------------"
+#	reboot
+#fi
+
+httpd_proc="`ps | grep "httpd_portal" | grep "/usr/bin"`"
+if [ ! -n "$httpd_proc" ]; then
+	echo "httpd_portal is not start, restart httpd_portal----------------"
+	if [ -f "/etc/tdbEnable" ];then
+		tdb -r /usr/bin/httpd_portal &
+	else
+	/usr/bin/httpd_portal &
+fi
+fi
+
+echo 1 > /tmp/ecs_http_ok
+
+if [ -f "/etc/drop_caches" ];then
+	/etc/drop_caches &
+fi
+
+if [ -f "/etc/eapMonitorEnable" ];then
+/usr/bin/eap-monitor &
+fi
+

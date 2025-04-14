@@ -1,0 +1,367 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Web Server</title>
+
+<style type="text/css">
+
+	p.note-warn-label{
+	/*color: #f9644e;*/
+	color: #c11c66;
+	margin-bottom: 14px;
+	margin-top: 28px;
+	font-size: 14px;
+}	
+	
+</style>
+
+
+</head>
+
+<body>
+	<div class="func-container">
+		<div id="webserver">
+			<form id="webserver_setting" class="natSeries">
+				<!--<p id="note" class="note"></p>-->
+				<input type="checkbox" id="secureConnEnable" name="secureConnEnable" value=""/>
+				<input type="text"     id="secureServerPort" name="secureServerPort" value=""/>
+				<input type="text"     id="serverPort"       name="serverPort"       value=""/>
+				<input type="text"     id="sessionTimeout"   name="sessionTimeout"   value=""/>
+				<input type="checkbox"  id="l3AccessEnable" name="l3AccessEnable" value="" />
+				<input type="checkbox"  id="unsafeTlsEn" name="unsafeTlsEn" value="" />
+				<div class="help-item-content">
+					<div class="help-item-icon"></div>
+					<div class="help-item-container">
+						<div class="help-item-delta-container">
+							<span class="help-item-delta"></span>
+						</div>
+						<div class="help-item-text-container">
+							<p id="unsafe_tls_help" class="help-item-text"></p>
+						</div>
+					</div>
+				</div>
+				<div>
+					<input type="checkbox"  id="olderKitsEn" name="olderKitsEn" value="" />
+					<div class="help-item-content">
+						<div class="help-item-icon"></div>
+						<div class="help-item-container">
+							<div class="help-item-delta-container">
+								<span class="help-item-delta"></span>
+							</div>
+							<div class="help-item-text-container">
+								<p id="older_kits_help" class="help-item-text"></p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<input type="checkbox"  id="httpConnEnable" name="httpConnEnable" value="" />
+	      <div>
+		    	<p id="webserver_warn" class="note-warn-label" />
+		    	<p id="webserver_note" />
+		    </div>
+				
+				<button type="button"  id="submitButton"     name="submitButton"     value=""></button>
+			</form>
+		</div>
+	</div>
+	
+<script type="text/javascript">
+//<![CDATA[
+$(document).ready(function(e){
+
+	$("div.func-container").page({
+		title: $.su.CHAR.WEB_SERVER.TITLE,
+		help: ""	//可能是个调用的id 也可能是个url
+	});
+
+	$('div#webserver').panel({
+		title: $.su.CHAR.WEB_SERVER.TITLE,
+		collapsible: false
+	});
+
+	$('#unsafe_tls_help').html($.su.CHAR.WEB_SERVER.UNSAFE_TLS_HELP);
+	$('#older_kits_help').html($.su.CHAR.WEB_SERVER.OLDER_SECURITY_KITS_HELP);
+
+	$("input#secureConnEnable").checkbox({
+		fieldLabel: $.su.CHAR.WEB_SERVER.HTTPS,
+		//labelCls: 's',
+        cls: 'hidden',
+		items: [
+			{boxlabel: $.su.CHAR.WEB_SERVER.HTTPS_ENABLE, inputValue: "true", uncheckedValue: "false", checked:true}
+		]
+	}).on("ev_change", function(e, oldValue, newValue){
+		var val = (newValue[0]=="secureConnEnable" || newValue[0]=="on") ? "true" : "false";
+		switch(val)
+		{
+			case 'false':
+			  $("input#secureServerPort").textbox("disable");
+				break;
+			case 'true':
+				$("input#secureServerPort").textbox("enable");
+				break;
+		}
+	});
+	
+	$("input#secureServerPort").textbox({
+		fieldLabel: $.su.CHAR.WEB_SERVER.HTTPS_PORT,
+		vtype: "number",
+		invalidText:$.su.CHAR.WEB_SERVER.HTTPS_PORT_ERR_OUT_SCOPE,
+		//labelCls: 's',
+		validator:function(val){
+			if(((val >= 1024) && (val <= 65535))
+			 || 443 == val)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+	});
+	
+	$("input#serverPort").textbox({
+		fieldLabel: $.su.CHAR.WEB_SERVER.HTTP_PORT,
+		vtype: "number",
+		invalidText:$.su.CHAR.WEB_SERVER.HTTP_PORT_ERR_OUT_SCOPE,
+		//labelCls: 's',
+		validator:function(val){
+			if(((val >= 1024) && (val <= 65535))
+			|| 80 == val)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+	});
+	
+	$("input#sessionTimeout").textbox({
+		fieldLabel: $.su.CHAR.WEB_SERVER.TIMEOUT,
+		tips: $.su.CHAR.WEB_SERVER.TIMEOUT_NOTE,
+		vtype: "number",
+		invalidText:$.su.CHAR.WEB_SERVER.TIMEOUT_ERR_OUT_SCOPE,
+		//labelCls: 's',
+		validator:function(val){
+			if((val >= 1) && (val <= 60))
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+	});
+
+	$("input#l3AccessEnable").checkbox({
+		//labelCls: 's',
+		fieldLabel: $.su.CHAR.WEB_SERVER.L3_ACCESS,
+		items: [
+			{boxlabel: $.su.CHAR.WEB_SERVER.L3_ENABLE, inputValue: "true", uncheckedValue: "false", checked:true}
+		]
+	});
+
+	$("input#unsafeTlsEn").checkbox({
+		cls: 'inline-block',
+		fieldLabel: $.su.CHAR.WEB_SERVER.UNSAFE_TLS,
+		items: [
+			{boxlabel: $.su.CHAR.WEB_SERVER.UNSAFE_TLS_ENABLE, inputValue: "true", uncheckedValue: "false", checked:true}
+		]
+	});
+
+	$("input#olderKitsEn").checkbox({
+		cls: 'inline-block',
+		fieldLabel: $.su.CHAR.WEB_SERVER.OLDER_SECURITY_KITS,
+		items: [
+			{boxlabel: $.su.CHAR.WEB_SERVER.UNSAFE_TLS_ENABLE, inputValue: "true", uncheckedValue: "false", checked:false}
+		]
+	});
+
+	$("input#httpConnEnable").checkbox({
+		fieldLabel: $.su.CHAR.WEB_SERVER.HTTP_SERVER,
+		items: [
+			{boxlabel: $.su.CHAR.WEB_SERVER.HTTP_SERVER_ENABLE, inputValue: "true", uncheckedValue: "false", checked:true}
+		]
+	});
+	
+	$("button#submitButton").button({
+		text: $.su.CHAR.OPERATION.SAVE,
+		handler: function(){
+
+      var httpsEn = $("input#secureConnEnable").checkbox("getValue");
+		  var httpsPort = $("input#secureServerPort").textbox("getValue");
+		  var httpPort = $("input#serverPort").textbox("getValue");
+		  var sessTmo = $("input#sessionTimeout").textbox("getValue");
+
+			var reg = /^-?[0-9]\d*$/;
+
+      if("secureConnEnable" == httpsEn)
+      {
+			  if(!(reg.test(httpsPort)))
+			  {
+			  	 $("#secureServerPort").textbox("setError", $.su.CHAR.VTYPETEXT.NUMBER);
+		    	 return false;
+			  }
+		    
+		    if((parseInt(httpsPort,10) > 65535) || (((parseInt(httpsPort,10) < 1025) && (parseInt(httpsPort,10) != 443))))
+		    {
+		    	 $("#secureServerPort").textbox("setError", $.su.CHAR.WEB_SERVER.HTTPS_PORT_ERR_OUT_SCOPE);
+		    	 return false;
+		    }
+		  }
+
+			if(!(reg.test(httpPort)))
+			{
+				 $("#serverPort").textbox("setError", $.su.CHAR.VTYPETEXT.NUMBER);
+		  	 return false;
+			}
+		  
+		  if((parseInt(httpPort,10) > 65535) || (((parseInt(httpPort,10) < 1025) && (parseInt(httpPort,10) != 80))))
+		  {
+		  	 $("#serverPort").textbox("setError", $.su.CHAR.WEB_SERVER.HTTP_PORT_ERR_OUT_SCOPE);
+		  	 return false;
+		  }
+
+			if(!(reg.test(sessTmo)))
+			{
+				 $("#sessionTimeout").textbox("setError", $.su.CHAR.VTYPETEXT.NUMBER);
+		  	 return false;
+			}
+		  
+		  if((parseInt(sessTmo,10) > 60) || (parseInt(sessTmo,10) < 1))
+		  {
+		  	 $("#sessionTimeout").textbox("setError", $.su.CHAR.WEB_SERVER.TIMEOUT_ERR_OUT_SCOPE);
+		  	 return false;
+		  }
+
+			var enVal = "false";
+			if("secureConnEnable" == $("input#secureConnEnable").checkbox("getValue") || "true" == $("input#secureConnEnable").checkbox("getValue"))
+			{
+				enVal = "true";
+			}
+
+			var l3EnVal = "false";
+			if("l3AccessEnable" == $("input#l3AccessEnable").checkbox("getValue") || "true" == $("input#l3AccessEnable").checkbox("getValue"))
+			{
+				l3EnVal = "true";
+			}
+
+			var unsafeTlsEn = "false";
+			if("unsafeTlsEn" == $("input#unsafeTlsEn").checkbox("getValue") || "true" == $("input#unsafeTlsEn").checkbox("getValue"))
+			{
+				unsafeTlsEn = "true";
+			}
+
+			var olderKitsEn = "false";
+			if("olderKitsEn" == $("input#olderKitsEn").checkbox("getValue") || "true" == $("input#olderKitsEn").checkbox("getValue"))
+			{
+				olderKitsEn = "true";
+			}
+
+			var httpConnEnable = "false";
+			if("httpConnEnable" == $("input#httpConnEnable").checkbox("getValue") || "true" == $("input#httpConnEnable").checkbox("getValue"))
+			{
+				httpConnEnable = "true";
+			}
+
+			var data = {};
+			data = $.extend({
+				"operation": "write",
+				"secureConnEnable": enVal,
+				"l3AccessEnable": l3EnVal,
+				"unsafeTlsEn": unsafeTlsEn,
+				"olderKitsEn": olderKitsEn,
+				"httpConnEnable": httpConnEnable,
+				"secureServerPort": $("input#secureServerPort").textbox("getValue"),
+				"serverPort": $("input#serverPort").textbox("getValue"),
+				"sessionTimeout": $("input#sessionTimeout").textbox("getValue")
+			}, data);
+
+			$.ajax({
+				url: "./data/webserver.json",
+				type: 'POST',
+				data: data,
+				dataType: 'json',
+				cache:false,
+				error: function(){return false;},
+				success: function(result){
+					if(result.errCode == 40008)
+					{
+						$("#serverPort").textbox("setError", $.su.CHAR.WEB_SERVER.HTTP_PORT_CONFLICT_HTTPS);
+					}
+					else if(result.errCode == 40009)
+					{
+						$("#serverPort").textbox("setError", $.su.CHAR.WEB_SERVER.HTTP_PORT_CONFLICT_SSH);
+					}
+					else if(result.errCode == 40010)
+					{
+						$("#secureServerPort").textbox("setError", $.su.CHAR.WEB_SERVER.HTTPS_PORT_CONFLICT_SSH);
+					}
+					else
+					{
+						$("#webserver_setting").form("prompt", true);
+						if(result.data.relogin == true)
+						{
+							var pageUrl = top.location.href;
+							if(result.data.httpConnEnable == false) {
+								pageUrl = pageUrl.replace('http:','https:')
+							}
+							var stIindex = pageUrl.indexOf('//');
+							top.location.href = pageUrl.slice(0, stIindex+2) + pageUrl.slice(stIindex+2).split('/')[0].split(':')[0] + ':' + result.data.newport;
+						}
+						else
+						{
+		           $("form#webserver_setting").form("load");
+		           $("input#secureServerPort").textbox("setValid");
+		           $("input#secureServerPort").textbox("normal");
+		           
+	           }
+					}
+				}
+			});
+		},
+		cls:"submit"
+	});
+
+	$("p#webserver_warn").html($.su.CHAR.WEB_SERVER.WEB_SERVER_WARN);  
+	$("p#webserver_note").html($.su.CHAR.WEB_SERVER.WEB_SERVER_NOTE);  
+
+	var webserverProxy = new $.su.Proxy({
+		url: "./data/webserver.json"
+	});
+
+	$("form#webserver_setting").form({
+		proxy: webserverProxy,
+		fields: [
+			{name: "secureConnEnable", mapping: "secureConnEnable"},
+			{name: "l3AccessEnable", mapping: "l3AccessEnable"},
+			{name: "unsafeTlsEn", mapping: "unsafeTlsEn"},
+			{name: "olderKitsEn", mapping: "olderKitsEn"},
+			{name: "httpConnEnable", mapping: "httpConnEnable"},
+			{name: "secureServerPort", mapping: "secureServerPort"},
+			{name: "serverPort", mapping: "serverPort"},
+			{name: "sessionTimeout", mapping: "sessionTimeout"}
+		],		
+		
+		autoLoad: true,
+		//submitBtn: "default"
+		submitBtn: null
+	}).on("ev_loadData", function(e, data){
+		if(data.secureConnEnable == true)
+		{
+			 $("input#secureServerPort").textbox("enable");
+		}
+		else
+		{
+			 $("input#secureServerPort").textbox("disable");
+		}
+		$("input#secureServerPort").textbox("setValue", data.secureServerPort);
+	});
+});
+</script>
+</body>
+</html>

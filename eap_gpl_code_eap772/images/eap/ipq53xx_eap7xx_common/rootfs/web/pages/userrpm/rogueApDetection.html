@@ -1,0 +1,792 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Rogue AP Detection</title>
+<style type="text/css">
+
+	div#ra_raList div#scan_wrp {
+		text-align: right;
+	}
+
+	div#ra_backupRestore div#restore form#upload_macFile{
+		padding-left: 0;
+	}
+
+    div#raListGrid div.ta_opCmd span,
+    div#taListGrid div.ta_opCmd span{
+        /*color: rgb(31, 187, 166);*/
+        color: #4acbd6;
+		font-size: 13px;
+		cursor: pointer;
+    }
+	
+	div#recycle_bin{
+		position: absolute;
+		left: 0;
+	}
+
+</style>
+</head>
+
+<body>
+<div class="func-container">
+
+	<div id="status">
+		<form id="status_form">
+			<input type="checkbox" id="ra_status" name="ra_status" value="" />
+		</form>
+	</div>
+
+    <div id="ra_raList">
+        <!--<div id="scan_wrp">
+			<button id="scan_btn"></button>
+		</div>-->
+        <div id="raListGrid">
+        </div>
+    </div>
+
+    <div id="ra_taList">
+        <div id="taListGrid">
+        </div>
+    </div>
+
+    <div id="ra_backupRestore">
+        <div class="inside-panel">
+        <input id="saveAction" name="saveAction" type="text" />
+        <div id="restore">
+            <form id="upload_macFile">
+                <input id="mac_file" name="mac_file" type="file" />
+            </form>
+            <input id="fileManage" name="fileManage" type="text" />
+        </div>
+        <button id="save" name="save" type="button"></button>
+    </div>
+    </div>
+
+	<div id="scan_confirm_cnt">
+		<div class="warning-msg">
+			<h4 class="title">
+				<span class="icon"></span>
+				<span class="text" id="scan_confirm_note"></span>
+			</h4>
+		</div>
+	</div>
+	
+	<div id="taListMaxNote">
+		<div class="warning-msg">
+			<h4 class="title">
+				<span class="icon"></span>
+				<span class="text" id="taListMaxNoteContent"></span>
+			</h4>
+		</div>
+	</div>
+	
+	<div id="enableRADNote">
+		<div class="warning-msg">
+			<h4 class="title">
+				<span class="icon"></span>
+				<span class="text" id="enableRADNoteContent"></span>
+			</h4>
+		</div>
+	</div>
+
+    <div id="recycle_bin" class="hidden">
+        <div id="ra_scan_tip">
+            <span class="waiting"></span>
+            <span class="scan_tip"></span>
+        </div>
+    </div>
+
+</div>
+<script type="text/javascript">
+//<![CDATA[
+$(document).ready(function(e){
+
+    var URL_STATUS      = "./data/rogueApDetect.status.json";
+    var URL_RASCAN      = "./data/rogueApDetect.scan.json";
+    var URL_RALIST      = "./data/rogueApDetect.raList.json";
+    var URL_TALIST      = "./data/rogueApDetect.taList.json";
+    var URL_OPTA        = "./data/rogueApDetect.opta.json";
+    var URL_BACKUP      = "./data/rogueApDetect.backup.json";
+    var URL_RESTORE     = "./data/rogueApDetect.restore.json";
+    var URL_SETFLOP     = "./data/rogueApDetect.setFileOp.json";
+    var URL_SCANSTATE   = "./data/rogueApDetect.scanState.json";
+    var URL_IMPORTSTATE = "./data/rogueApDetect.importState.json";
+
+    
+    var opTaProxy = new $.su.Proxy({
+        type: "GET",
+        dataType: 'json',
+        url: URL_OPTA
+    });
+
+    var import_query_interval = false;
+    var scan_query_interval = false;
+    var import_query_count = 10;
+    var scan_query_count = 10;
+	
+	var rogue_AP_detection_status = true;
+
+    function showScanTip()
+    {
+        $("div#ra_scan_tip span.scan_tip").html($.su.CHAR.ROGUE_AP_DETECTION.RALIST_SCAN_TIP);
+        //$("div#ra_scan_tip").appendTo("#scan_btn");
+		$("div#recycle_bin").css({
+			"display": "block"
+		});
+    }
+
+    function closeScanTip()
+    {
+        $("div#ra_scan_tip span.scan_tip").empty();
+        //$("div#ra_scan_tip").appendTo("#recycle_bin");
+		$("div#recycle_bin").css({
+			"display": "none"
+		});
+    }
+
+    function showRestore()
+    {
+		$("div#restore").show();
+        $("div#restore").insertAfter( $("input#saveAction").radio("getContainer") );
+    }
+
+    function hideRestore()
+    {
+        $("div#restore").hide();
+    }
+
+    function reloadTable()
+    {
+        $("div#raListGrid").grid("getStore").load();
+        $("div#taListGrid").grid("getStore").load();
+    }
+
+    function getScanState()
+    {
+        scan_query_count --;
+        if (0 == scan_query_count)
+        {
+            clearInterval(scan_query_interval);
+            scan_query_interval = false;
+			closeScanTip();
+            reloadTable();
+			$("button#scan_btn").button("enable");
+            return;
+        }
+
+        var data = {};
+        data = $.extend({
+                "operation": "getScanState"
+            }, data);
+
+        $.ajax({
+            url: URL_SCANSTATE,
+            type: "GET",
+            timeout: 5000,
+            dataType: "json",
+            data: data,
+            cache: false,
+            success: function(data, status, xhr){
+                if(data.success && data.data.refresh == true)
+                {
+                    clearInterval(scan_query_interval);
+                    scan_query_interval = false;
+                    closeScanTip();
+                    reloadTable();
+                    $("button#scan_btn").button("enable");
+                }
+            },
+            error: function(e, status){
+                //console.log("error", e, status);
+            }
+        });
+
+    }
+
+    function getImportState()
+    {
+        import_query_count --;
+        if (0 == import_query_count)
+        {
+            clearInterval(import_query_interval);
+            import_query_interval = false;
+            reloadTable();
+            return;
+        }
+
+        var data = {};
+        data = $.extend({
+                "operation": "getImportState"
+            }, data);
+
+        $.ajax({
+            url: URL_IMPORTSTATE,
+            type: "GET",
+            timeout: 5000,
+            dataType: "json",
+            data: data,
+            cache: false,
+            success: function(data, status, xhr){
+                if(data.success && data.data.refresh == true)
+                {
+                    clearInterval(import_query_interval);
+                    import_query_interval = false;
+                    reloadTable();
+					
+					if (0 != data.error)
+					{
+						$("#mac_file").file("setError", $.su.CHAR.ROGUE_AP_DETECTION.FILE_IMPORT_FAIL);
+					}
+					else
+					{
+						var rogueInput = document.getElementById("mac_file");
+						rogueInput.form.reset();
+						$("form#upload_macFile").form("prompt", true, $.su.CHAR.ROGUE_AP_DETECTION.IMPORT_SUCC);
+					}
+                }
+            },
+            error: function(e, status){
+                //console.log("error", e, status);
+            }
+        });
+
+    }
+
+	$("div.func-container").page({
+		title: $.su.CHAR.ROGUE_AP_DETECTION.TITLE,
+		help: ""
+	});
+
+	$("div#status").panel({
+		title: $.su.CHAR.ROGUE_AP_DETECTION.STATUS_TITLE,
+		collapsible: false
+	});
+
+	$("input#ra_status").checkbox({
+		fieldLabel: $.su.CHAR.ROGUE_AP_DETECTION.STATUS_ENABLE_TITLE,
+		items: [
+			{boxlabel: $.su.CHAR.ROGUE_AP_DETECTION.STATUS_ENABLE_LABEL, inputValue: "on", uncheckedValue: "off", checked:true}
+		]
+	});
+
+    var raStatusProxy = new $.su.Proxy({
+		url: URL_STATUS,
+        type: "GET"
+	});
+
+	$("#status_form").form({
+		proxy: raStatusProxy,
+		fields: [
+			{name: "ra_status", mapping: "ra_status"}
+		],
+		autoLoad: true,
+		submitBtn: "default"
+	}).on("ev_loadData", function(e, data){
+		var ra_status = data.ra_status;
+
+		if ("on" == ra_status)
+		{
+			$("button#scan_btn").button("enable");
+			rogue_AP_detection_status = true;
+		}
+		else if ("off" == ra_status)
+		{
+			/*$("button#scan_btn").button("disable");*/
+			rogue_AP_detection_status = false;
+		}
+
+		reloadTable();
+	});
+
+    $("div#ra_raList").panel({
+		title: $.su.CHAR.ROGUE_AP_DETECTION.RALIST_TITLE,
+		collapsible: false
+    });
+
+	$("div#scan_confirm_cnt").msg({
+		okHandler: function(){
+
+            var data = {};
+            data = $.extend({
+                "operation": "scan"
+                }, data);
+
+            $.ajax({
+                type: "GET",
+                url: URL_RASCAN,
+                dataType: "json",
+				timeout: 5000,
+                data: data,
+                cache: false,
+                success: function(data){
+                    if(data.success && 0 == data.error){
+                        $("button#scan_btn").button("disable");
+                        showScanTip();
+
+                        scan_query_count = data.data.scanTime;
+                        if(!scan_query_interval)
+                        {
+                            scan_query_interval = setInterval(getScanState, 1000);
+                        }
+                    }
+                }
+            });
+
+		},
+		cancelHandler: function(){
+			return true;
+		},
+		type: "prompt",
+		cls: "m"
+	});
+
+	$("#scan_confirm_note").html($.su.CHAR.ROGUE_AP_DETECTION.RALIST_SCAN_CONFIRM);
+
+	$("div#taListMaxNote").msg({
+		type: "alert",
+		cls: "m"
+	});
+
+	$("div#enableRADNote").msg({
+		type: "alert",
+		cls: "m"
+	});
+
+	/*$("button#scan_btn").button({
+		fieldLabel: null,
+		text: $.su.CHAR.ROGUE_AP_DETECTION.RALIST_SCAN,
+		cls:"inline",
+		handler:function(){
+
+			$("div#scan_confirm_cnt").msg("show");
+
+		}
+	});*/
+
+    var raList = new $.su.Store({
+        proxy: {
+            url: URL_RALIST,
+            type: "GET"
+        },
+        fields: [
+            {name: "MAC"},
+            {name: "SSID"},
+            {name: "Channel"},
+            {name: "Security"},
+            {name: "bcnInvl"},
+            {name: "Signal"}
+        ],
+        autoLoad: false,
+		updateMode: "complete"
+    });
+
+    $("div#raListGrid").grid({
+        store: raList,
+		paging: {numPerPage: 10},
+        columns: [
+			{
+				text: $.su.CHAR.ROGUE_AP_DETECTION.RALIST_MAC,
+				width: 190,
+				dataIndex: "MAC"
+			},
+			{
+				text: $.su.CHAR.ROGUE_AP_DETECTION.RALIST_SSID,
+				width: 210,
+				dataIndex: "SSID"
+			},
+			{
+				text: $.su.CHAR.ROGUE_AP_DETECTION.RALIST_BAND,
+				width: 82,
+                dataIndex: "Channel",
+                renderer: function(chnl){
+                    var channel = parseInt(chnl);
+                    
+                    if (channel === -1) {
+                        return '---'
+                    } else if( channel<=2484 ){
+                        band = '2.4';
+                    }else if( 5000< channel && channel< 5925 ){
+                        band = '5.0'
+                    }else if( channel>5950 ){
+                        band = '6.0'
+                    }else{
+                        band = "---";
+                    }
+
+                    return band;
+                }
+			},
+			{
+				text: $.su.CHAR.ROGUE_AP_DETECTION.RALIST_CHANNEL,
+				width: 82,
+				dataIndex: "Channel",
+                renderer: function(chnl){
+                    var channel = parseInt(chnl);
+                    var convertVal;
+                    
+                    if (channel === -1) {
+                        return '---'
+                    } else if( channel<=2484 ){
+                        convertVal = channel==2484?14:(channel-2407)/5;
+                    }else if( 5000< channel && channel< 5925 ){
+                        convertVal = (channel-5000)/5
+                    }else if( channel>5950 ){
+                        convertVal = (channel-5950)/5
+                    }else{
+                        convertVal = '---';
+                    }
+
+                    return convertVal;
+                }
+			},
+			{
+				text: $.su.CHAR.ROGUE_AP_DETECTION.RALIST_SECURITY,
+				width: 82,
+				dataIndex: "Security",
+                renderer: function(val){
+                    var security = "";
+                    if (val == -1)
+                        security = "---";
+                    else if(val == 0)
+                        security = "OFF";
+                    else
+                        security = "ON";
+
+                    return security;
+                }
+			},
+			{
+				text: $.su.CHAR.ROGUE_AP_DETECTION.RALIST_BCNINVL,
+				width: 82,
+				dataIndex: "bcnInvl"
+			},
+			{
+				text: $.su.CHAR.ROGUE_AP_DETECTION.RALIST_SIGNAL,
+				/*width: 80,*/
+				dataIndex: "Signal",
+                renderer: function(signalNum){
+					var offsetX = "-463px";
+					var offsetY = "-12px";
+                    var sgnlImg = "";
+            		var signalLevels = new Array(
+            			{min:-9999, max:-105, offsetX:"-313px"},
+            			{min:-105,  max:-100, offsetX:"-343px"},
+            			{min:-100,  max:-95,  offsetX:"-373px"},
+            			{min:-95,   max:-90,  offsetX:"-403px"},
+            			{min:-90,   max:-85,  offsetX:"-433px"},
+            			{min:-85,   max:9999, offsetX:"-463px"}
+            		);
+
+                    for (var i = 0, len = signalLevels.length; i < len; i++)
+                    {
+                        if (signalNum >= signalLevels[i].min && signalNum < signalLevels[i].max)
+                        {
+                            offsetX = signalLevels[i].offsetX;
+                            break;
+                        }
+                    }
+
+                    sgnlImg += "<div title=\"" + signalNum + "\">";
+                    sgnlImg += "<span class=\"signal\" style=\"background-position:" + offsetX + " " + offsetY + ";\"></span>";
+                    sgnlImg += "</div>";
+                    return sgnlImg;
+                }
+			},
+            {
+                text: $.su.CHAR.ROGUE_AP_DETECTION.RALIST_ACTION,
+                width: 100,
+                dataIndex: "MAC",
+                renderer: function(val){
+                    var knownLabel = "";
+                    knownLabel += "<div class=\"ta_opCmd\" op=\"add\" mac_addr=\"" + val + "\">";
+                    knownLabel += "<span>" + $.su.CHAR.ROGUE_AP_DETECTION.KNOWN_BUTTON + "</span>";
+                    knownLabel += "</div>";
+                    return knownLabel;
+                }
+			}
+        ],
+		operation: [{
+			xtype: "button",
+			text: $.su.CHAR.ROGUE_AP_DETECTION.RALIST_SCAN,
+			iconCls: "btn-scan",
+			id: "scan_btn",
+			handler:function(){
+				if (true == rogue_AP_detection_status)
+				{
+					$("div#scan_confirm_cnt").msg("show");
+				}
+				else
+				{
+                    $("#enableRADNoteContent").html($.su.CHAR.ROGUE_AP_DETECTION.ENABLE_RAD_NOTE);
+					$("div#enableRADNote").msg("show");
+				}
+			}
+		}]
+    });
+	
+	$("div#raListGrid").find("div.operation-container").prepend($("div#recycle_bin"));
+	
+
+	$("div#ra_taList").panel({
+		title: $.su.CHAR.ROGUE_AP_DETECTION.TALIST_TITLE,
+		collapsible: false
+	});
+
+	var taList = new $.su.Store({
+		proxy: {
+			url: URL_TALIST,
+            type: "GET"
+		},
+		fields: [
+			{name: "MAC"},
+			{name: "SSID"},
+			{name: "Channel"},
+            {name: "Security"}
+		],
+		autoLoad: false,
+		updateMode: "complete"
+	});
+
+    $("div#taListGrid").grid({
+        store: taList,
+		paging: {numPerPage: 10},
+        columns: [
+			{
+				text: $.su.CHAR.ROGUE_AP_DETECTION.TALIST_MAC,
+				width: 190,
+				dataIndex: "MAC"
+			},
+			{
+				text: $.su.CHAR.ROGUE_AP_DETECTION.TALIST_SSID,
+				width: 210,
+				dataIndex: "SSID"
+			},
+			{
+				text: $.su.CHAR.ROGUE_AP_DETECTION.TALIST_BAND,
+				width: 82,
+                dataIndex: "Channel",
+                renderer: function(chnl){
+                    var channel = parseInt(chnl);
+                    
+                    if (channel === -1) {
+                        return '---'
+                    } else if( channel<=2484 ){
+                        band = '2.4';
+                    }else if( 5000< channel && channel< 5925 ){
+                        band = '5.0'
+                    }else if( channel>5950 ){
+                        band = '6.0'
+                    }else{
+                        band = "---";
+                    }
+
+                    return band;
+                }
+			},
+			{
+				text: $.su.CHAR.ROGUE_AP_DETECTION.TALIST_CHANNEL,
+				width: 82,
+				dataIndex: "Channel",
+                renderer: function(chnl){
+                    var channel = parseInt(chnl);
+                    var convertVal;
+                    
+                    if (channel === -1) {
+                        return '---'
+                    } else if ( channel<=2484 ){
+                        convertVal = channel==2484?14:(channel-2407)/5;
+                    }else if( 5000< channel && channel< 5925 ){
+                        convertVal = (channel-5000)/5
+                    }else if( channel>5950 ){
+                        convertVal = (channel-5950)/5
+                    }else{
+                        convertVal = '---';
+                    }
+
+                    return convertVal;
+                }
+			},
+			{
+				text: $.su.CHAR.ROGUE_AP_DETECTION.TALIST_SECURITY,
+				/*width: 82,*/
+				dataIndex: "Security",
+                renderer: function(val){
+                    var security = "";
+                    if (val == -1)
+                        security = "---";
+                    else if(val == 0)
+                        security = "OFF";
+                    else
+                        security = "ON";
+
+                    return security;
+                }
+			},
+            {
+                text: $.su.CHAR.ROGUE_AP_DETECTION.TALIST_ACTION,
+                width: 100,
+                dataIndex: "MAC",
+                renderer: function(val){
+                    var unknownLabel = "";
+                    unknownLabel += "<div class=\"ta_opCmd\" op=\"del\" mac_addr=\"" + val + "\">";
+                    unknownLabel += "<span>" + $.su.CHAR.ROGUE_AP_DETECTION.UNKNOWN_BUTTON + "</span>";
+                    unknownLabel += "</div>";
+                    return unknownLabel;
+                }
+			}
+        ]
+    });
+
+    $("div#raListGrid, div#taListGrid").delegate(".ta_opCmd", "click", function(){
+
+        var data = {};
+        data = $.extend({
+                "operation": $(this).attr("op"),
+                "mac_addr": $(this).attr("mac_addr")
+            }, data);
+
+        opTaProxy.read(data, function (data) {
+            reloadTable();
+        }, function () {
+            $("#taListMaxNoteContent").html($.su.CHAR.ROGUE_AP_DETECTION.TALIST_MAX_NOTE);
+            $("div#taListMaxNote").msg("show");
+        })
+
+    });
+
+	$("div#ra_backupRestore").panel({
+		title: $.su.CHAR.ROGUE_AP_DETECTION.BACKUPRESTORE_TITLE,
+		collapsible: false
+	});
+
+    $("input#saveAction").radio({
+        fieldLabel: $.su.CHAR.ROGUE_AP_DETECTION.BACKUPRESTORE_SAVEACTION,
+		columns: 2,
+        items: [
+            {boxlabel: $.su.CHAR.ROGUE_AP_DETECTION.BACKUPRESTORE_RESTOREVAL, inputValue: 'restore', id: "restoreAction", name: "saveAction", checked: true},
+            {boxlabel: $.su.CHAR.ROGUE_AP_DETECTION.BACKUPRESTORE_BACKUPVAL, inputValue: 'backup', id: "backupAction", name: "saveAction"}
+        ]
+    }).on('ev_change', function(e, oldValue, newValue){
+        if (newValue == "restore"){
+            showRestore();
+        }
+        else if (newValue == "backup"){
+            hideRestore();
+        }
+    });
+
+	$("#mac_file").file({
+		fieldLabel: $.su.CHAR.ROGUE_AP_DETECTION.BACKUPRESTORE_SRCFNAME,
+		allowBlank:false,
+		extension: "cfg"
+	});
+
+    $("input#fileManage").radio({
+        fieldLabel: $.su.CHAR.ROGUE_AP_DETECTION.BACKUPRESTORE_FILEMANAGE,
+        columns: 2,
+        items: [
+            {boxlabel: $.su.CHAR.ROGUE_AP_DETECTION.BACKUPRESTORE_REPLACE, inputValue: 'replace', id: "replaceManage", name: "fileManage", checked: true},
+            {boxlabel: $.su.CHAR.ROGUE_AP_DETECTION.BACKUPRESTORE_MERGE, inputValue: 'merge', id: "mergeManage", name: "fileManage"}
+        ]
+    });
+
+    $("button#save").button({
+        text: $.su.CHAR.ROGUE_AP_DETECTION.BACKUPRESTORE_BUTTONLABEL,
+        handler: function(){
+            var saveAction = $("input#saveAction").radio("getValue");
+            if ("backup" == saveAction)
+            {
+				var url = URL_BACKUP + "?operation=backupRestore&saveAction=backup";
+				var a = document.createElement('a');
+				if (!a.click)  // Only IE have
+				{
+					window.location = url;
+					return;
+				}
+				a.setAttribute("href", url);
+				a.style.display = "none";
+				document.body.appendChild(a);
+				a.click();
+				//location.href = url;
+            }
+            else if ("restore" == saveAction)
+            {
+				var filePath = $("#mac_file").file("getValue");
+				if(filePath == "")
+				{
+					$("#mac_file").file("setError", $.su.CHAR.ROGUE_AP_DETECTION.NO_FILE_CHOSEN);
+					return false;
+				}
+				var pathStr = filePath.split("\\");
+			    var fileNameStr = pathStr[pathStr.length-1];
+
+				if(63 < fileNameStr.length)
+				{
+					$("#mac_file").file("setError", $.su.CHAR.ROGUE_AP_DETECTION.FILE_NAME_TOO_LONG);
+					return false;
+				}
+
+				var tmp = filePath.split(".");
+				var ext = tmp[tmp.length-1];
+				if(ext != "cfg")
+				{
+					return false;
+				}
+				
+                var fileOp = $("input#fileManage").radio("getValue");
+                var data = {};
+                data = $.extend({
+                    "operation": "backupRestore",
+                    "saveAction": "restore",
+                    "fileManage": fileOp
+                }, data);
+
+                $.ajax({
+                    url: URL_SETFLOP,
+                    type: "GET",
+                    timeout: 5000,
+                    dataType: "json",
+                    data: data,
+                    cache: false,
+                    success: function(data, status, xhr){
+                        if(data.success)
+                        {
+                            $("#upload_macFile").form('submit');
+                            if(!import_query_interval)
+                            {
+                                import_query_count = data.data.importTime;
+                                import_query_interval = setInterval(getImportState, 1000);
+                            }
+                        }
+                    },
+                    error: function(e, status){
+                        //console.log("error", e, status);
+                    }
+                });
+            }
+        },
+        cls: "submit"
+    });
+
+    var restoreProxy = new $.su.Proxy({
+        url: URL_RESTORE,
+        type: "POST"
+    });
+
+	$("#upload_macFile").form({
+		proxy: restoreProxy,
+        formEnctype: "multipart/form-data",
+        traditional: true,
+        hiddenFrame: true,
+		fields: [
+		],
+        autoLoad: false
+	});
+
+});
+</script>
+
+</body>
+</html>

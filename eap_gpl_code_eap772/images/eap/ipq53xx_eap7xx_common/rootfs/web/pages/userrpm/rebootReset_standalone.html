@@ -1,0 +1,364 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+</head>
+
+<body>
+<div class="func-container">
+
+	 <div id="reboot_reset_cnt">
+		<div class="inside-panel">
+		 	<div id="para">
+		 		<form id="para_setting">
+		    	<input id="defaultIP" name="defaultIP" class="hidden"/>
+		    </form>
+			</div>
+
+		 	<div id="reboot">
+		 		<form id="reboot_setting">
+		    	<button type="button"  id="reboot" name="reboot" value="" />
+		    </form>
+			</div>
+
+		  	<div id="reset">
+			  	<form id="reset_setting">
+			    	<button type="button"  id="reset" name="reset" value="" />
+			    </form>
+			</div>
+				 
+			<div id="pro_cnt" class="hidden">
+				<span id="pro-bar-label"></span>
+				<input id="pro_bar" type="text" />
+			</div>
+		</div>
+
+	  <div id="reboot_alert_cnt">
+	  	<div class="warning-msg">
+         <h4 class="title">
+         <span class="icon"></span>
+         <span class="text" id="confirm_reboot"></span>
+         </h4>
+      </div>
+	  </div>
+
+	  <div id="reset_alert_cnt">
+	  	<div class="warning-msg">
+         <h4 class="title">
+         <span class="icon"></span>
+         <span class="text" id="confirm_reset"></span>
+         </h4>
+      </div>
+	  </div>
+
+	</div>
+
+</div>
+
+<script type="text/javascript">
+$(document).ready(function(e){
+
+  var reboot_time = 300*1000;
+  var reset_time = 120*1000;
+  var time_margin = 2*1000;
+  var protocalTime = 3*60*1000;
+
+	var REBOOT_URL = "./data/configReboot.json";
+	var RESET_URL = "./data/configReset.json";
+	var REBOOT_TIME_URL = "./data/rebootState.json";
+
+	$("div.func-container").page({
+		title: $.su.CHAR.REBOOT_RESET.TITLE,
+		help: ""	//可能是个调用的id 也可能是个url
+	});
+
+	$("#reboot_reset_cnt").panel({
+		title: $.su.CHAR.REBOOT_RESET.TITLE,
+		collapsible: false
+
+	});
+
+	var connectProxy = new $.su.Proxy({
+		url: REBOOT_TIME_URL,
+		async: false,
+		timeout: 2000,
+		type: "GET"
+	});
+
+	$("button#reboot").button({
+		fieldLabel: $.su.CHAR.REBOOT_RESET.REBOOT_LABEL,
+        labelCls:"xl",
+		text:$.su.CHAR.REBOOT_RESET.REBOOT,
+		handler:function(){
+			$("#reboot_alert_cnt").msg("show");
+		},
+	});
+
+	$("button#reset").button({
+		fieldLabel: $.su.CHAR.REBOOT_RESET.RESET_LABEL,
+        labelCls:"xl",
+		text:$.su.CHAR.REBOOT_RESET.RESET,
+		mask: true,
+		handler:function(){
+			$("#reset_alert_cnt").msg("show");			
+		}
+	});
+
+	function goToIp()
+	{
+		 top.location.href = "http://" + $("input#defaultIP").textbox("getValue");
+	}
+
+	$("#reboot_alert_cnt").msg({
+		okHandler:function(){
+        	// rebootFun();
+
+			$("button#reboot").button("disable");
+			$("button#reset").button("disable");
+		 	
+			$("#pro_cnt").fadeIn(200);
+			$("#pro-bar-label").html($.su.CHAR.REBOOT_RESET.REBOOTING);
+			$.su.mask.show();
+
+			$.ajax({
+				url: REBOOT_URL,
+				type: 'GET',
+				data: {},
+				dataType: 'json',
+				cache:false,
+				error: function(){return false;},
+				success: function(result){
+
+					if (true == result.timeout)
+					{
+						window.top.location.href = "/";
+					}
+			  		var protocol = document.location.protocol;
+
+			  		if(protocol.toUpperCase() == 'HTTPS:'){
+			  			$('input#pro_bar').progressbar("animate", 0, 1, protocalTime);
+			  			setTimeout('location=location', protocalTime);
+			  		}else{
+			$('input#pro_bar').progressbar("animate", 0, 1, reboot_time, function(){
+				location=location;
+			});
+			var hasHandled = false;
+			setTimeout(function(){
+				var checkServer = setInterval(function(){
+					connectProxy.read({}, function(){
+						if(!hasHandled){
+							hasHandled = true;
+							clearInterval(checkServer);
+							$('input#pro_bar').progressbar("stop");
+							$('input#pro_bar').progressbar("animate", $('input#pro_bar').progressbar("getValue"), 1, 5000, function(){
+								location=location;
+							});
+						}
+					});
+			}, 10000);
+						}, 10000);
+			  		}
+					$.su.mask.show();
+				}
+
+			});
+
+			//////
+
+						
+			// setTimeout('location=location', reboot_time+time_margin);
+		},
+		
+		cancelHandler:function(){
+		return true;
+		},
+		type: "prompt",
+		cls:"m"
+	});
+
+	$("#reset_alert_cnt").msg({
+		okHandler:function(){
+			// if(1){						  
+	      		// resetFunc();
+
+				$("button#reboot").button("disable");
+				$("button#reset").button("disable");
+
+
+				$("#pro_cnt").fadeIn(200);
+				$("#pro-bar-label").html($.su.CHAR.REBOOT_RESET.RESETTING);
+			  	$.su.mask.show();
+
+			  	$.ajax({
+			  		url: RESET_URL,
+			  		type: 'GET',
+			  		data: {},
+			  		dataType: 'json',
+			  		cache:false,
+			  		error: function(){return false;},
+			  		success: function(result){
+						if (true == result.timeout)
+						{
+							window.top.location.href = "/";
+						}					
+			  			if(result.defaultIP != "")
+			  			{
+			  				 $("input#defaultIP").textbox("setValue", result.defaultIP);
+			  			}
+
+			  			var protocol = document.location.protocol;
+
+				  		if(protocol.toUpperCase() == 'HTTPS:'){
+				  			$('input#pro_bar').progressbar("animate", 0, 1, protocalTime);
+				  			setTimeout(goToIp, protocalTime);
+				  		}else{
+						  	$('input#pro_bar').progressbar("animate", 0, 1, reset_time);
+
+				  			var hasHandled = false;
+							setTimeout(function(){
+								var checkServer = setInterval(function(){
+									connectProxy.read({}, function(){
+										if(!hasHandled){
+											hasHandled = true;
+											clearInterval(checkServer);
+											$('input#pro_bar').progressbar("stop");
+											$('input#pro_bar').progressbar("animate", $('input#pro_bar').progressbar("getValue"), 1, 5000, function(){
+												goToIp();
+											});
+										}
+									});
+								}, 10000);
+							}, 10000); 
+				  		}
+
+			  			$.su.mask.show();
+			  		}
+			  	});
+
+
+			  	// $('input#pro_bar').progressbar("animate", 0, 1, reset_time);
+			  	// $("#pro_cnt").fadeIn(200);
+		  		// setTimeout(goToIp, reset_time+time_margin);
+		  		
+		  		/*var protocol = document.location.protocol;
+
+		  		if(protocol.toUpperCase() == 'HTTP:'){
+		  			$('input#pro_bar').progressbar("animate", 0, 1, protocalTime);
+				  	$("#pro_cnt").fadeIn(200);
+		  			setTimeout(goToIp, protocalTime);
+		  		}else{
+			  	$('input#pro_bar').progressbar("animate", 0, 1, reset_time);
+			  	$("#pro_cnt").fadeIn(200);
+
+				var hasHandled = false;
+				setTimeout(function(){
+					var checkServer = setInterval(function(){
+						connectProxy.read({}, function(){
+							if(!hasHandled){
+								hasHandled = true;
+								clearInterval(checkServer);
+								$('input#pro_bar').progressbar("stop");
+								$('input#pro_bar').progressbar("animate", $('input#pro_bar').progressbar("getValue"), 1, 5000, function(){
+									goToIp();
+								});
+							}
+						});
+					}, 1000);
+				}, 10000); 
+		  		}*/
+		 
+
+					
+			// }
+		},
+		
+		cancelHandler:function(){
+			return true;
+		},
+		type: "prompt",
+		cls:"m"
+	});
+
+	var pro_bar  = $('input#pro_bar').progressbar({
+		fieldLabel: null,
+		cls: 'inline',
+		width: 300,
+		height: 6,
+		value: 0
+	});
+	
+	$("#reboot_alert_cnt").css("top", ($(window).height()-$("#reboot_alert_cnt").height()-76)/2);
+	$("#reboot_alert_cnt").css("left", "50%" );
+	$("#confirm_reboot").html($.su.CHAR.REBOOT_RESET.CONFIRM_REBOOT);
+
+	$("#reset_alert_cnt").css("top", ($(window).height()-$("#reset_alert_cnt").height()-76)/2);
+	$("#reset_alert_cnt").css("left", "50%" );
+	$("#confirm_reset").html($.su.CHAR.REBOOT_RESET.CONFIRM_RESET);
+
+	$("input#para_setting").textbox({
+		fieldLabel: "",
+	});
+
+  var rebootFun = function(){
+	  $.ajax({
+	  	url: REBOOT_URL,
+	  	type: 'GET',
+	  	data: {},
+	  	dataType: 'json',
+	  	cache:false,
+	  	error: function(){return false;},
+	  	success: function(result){
+	  		$.su.mask.show();
+	  	}
+	  });
+  }
+
+  var resetFunc = function(){
+  	
+  	$.ajax({
+  		url: RESET_URL,
+  		type: 'GET',
+  		data: {},
+  		dataType: 'json',
+  		cache:false,
+  		error: function(){return false;},
+  		success: function(result){
+			if (true == result.timeout)
+			{
+				window.top.location.href = "/";
+			}		
+  			// protocalTime = 1000*( parseInt(result.resetTime)+parseInt(result.rebootTime) +10 );
+  			if(result.defaultIP != "")
+  			{
+  				 $("input#defaultIP").textbox("setValue", result.defaultIP);
+  			}
+  			$.su.mask.show();
+  		}
+  	});
+  	
+  }
+
+
+	var paraProxy = new $.su.Proxy({
+		url: RESET_URL
+	});
+
+	$("form#para_setting").form({
+		proxy: paraProxy,
+		fields: [
+			{name: "defaultIP", mapping: "defaultIP"}
+		],
+		autoLoad: false,
+		submitBtn: null
+	});
+
+   	
+    	
+
+
+});
+</script>
+</body>
+
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html
+          PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Status Management</title>
+</head>
+
+<body>
+    <div id="page-ssh-loader"></div>
+    <div id="page-reboot-loader"></div>
+
+    <script type="text/javascript">
+        //<![CDATA[
+        $(document).ready(function (e) {
+            $("#page-ssh-loader").load("./pages/userrpm/ssh.html");
+            $("#page-reboot-loader").load("./pages/userrpm/rebootReset_standalone.html");
+
+        });
+    </script>
+</body>
+
+</html>

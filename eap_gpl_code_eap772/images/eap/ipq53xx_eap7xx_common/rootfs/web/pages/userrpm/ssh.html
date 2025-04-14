@@ -1,0 +1,155 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>SSH Server</title>
+</head>
+
+<body>
+	<div class="func-container">
+		<div id="ssh">
+			<form id="ssh_setting" class="natSeries">
+				<!--<p id="note" class="note"></p>-->
+				<input type="text"  id="serverPort" name="serverPort" value="" />
+				<input type="checkbox"  id="remoteEnable" name="remoteEnable" value="" />
+				<input type="text" style="display:none;"/>
+				<input type="checkbox"  id="sshServerEnable" name="sshServerEnable" value="" />
+				<button type="button" id="submitButton" name="submitButton" value=""></button>
+				<!--<span id="error_str" class="error"></span>-->
+			</form>
+		</div>
+	</div>
+	
+<script type="text/javascript">
+//<![CDATA[
+$(document).ready(function(e){
+
+	$("div.func-container").page({
+		title: $.su.CHAR.SSH.TITLE,
+		help: ""	//可能是个调用的id 也可能是个url
+	});
+
+	$('div#ssh').panel({
+		title: $.su.CHAR.SSH.TITLE,
+		collapsible: false
+	});
+	
+	$("input#serverPort").textbox({
+		fieldLabel: $.su.CHAR.SSH.SSH_PORT,
+		vtype: "number",
+		tips:$.su.CHAR.SSH.SSH_RANGE,
+	    max: 65535,
+	    min: 1,
+    	allowBlank: false
+	});
+
+	$("input#sshServerEnable").checkbox({
+		fieldLabel: $.su.CHAR.SSH.SSH_LOGIN,
+		items: [
+			{boxlabel: $.su.CHAR.SSH.SSH_ENABLE, inputValue: "true", uncheckedValue: "false", checked:true}
+		]
+	});
+
+	$("input#remoteEnable").checkbox({
+		fieldLabel: $.su.CHAR.SSH.SSH_REMOTE,
+		items: [
+			{boxlabel: $.su.CHAR.SSH.SSH_ENABLE, inputValue: "true", uncheckedValue: "false", checked:true}
+		]
+	});
+
+  $("button#submitButton").button({
+		text: $.su.CHAR.SSH.SSH_SAVE,
+		handler: function(){
+
+		if(!$("input#serverPort").textbox("validate")){
+			return false;
+		}
+
+		var curPort = parseInt($("input#serverPort").textbox("getValue"), 10);
+		if(((curPort <= 1024) && (curPort != 22)) || (curPort > 65535))
+		{
+			$("#serverPort").textbox("setError", $.su.CHAR.SSH.SSH_PORT_INVALID);
+			return false;
+		}
+
+	    var remoteEnVal = "false";
+	    if("remoteEnable" == $("input#remoteEnable").checkbox("getValue") || "true" == $("input#remoteEnable").checkbox("getValue"))
+	    {
+	    	remoteEnVal = "true";
+	    }
+
+	    var enVal = "false";
+	    if("sshServerEnable" == $("input#sshServerEnable").checkbox("getValue") || "true" == $("input#sshServerEnable").checkbox("getValue"))
+	    {
+	    	enVal = "true";
+	    }
+
+	    var data = {};
+	    data = $.extend({
+	    	      "operation": "write",
+	    	      "remoteEnable": remoteEnVal,
+	    	      "serverPort": $("input#serverPort").textbox("getValue"),
+	    	      "sshServerEnable": enVal
+        }, data);
+
+	  $.ajax({
+	  	url: "./data/sshServer.json",
+	  	type: 'POST',
+	  	data: data,
+	  	dataType: 'json',
+	  	cache:false,
+	  	error: function(){return false;},
+	  	success: function(result){
+	  		if(result.errCode == 43001)
+	  		{
+	  			 //$("#error_str").html($.su.CHAR.SSH.SSH_PORT_UNAVAILABLE);
+				   $("#serverPort").textbox("setError", $.su.CHAR.SSH.SSH_PORT_UNAVAILABLE);
+		    }
+		    else if(result.errCode == 43002)
+		    {
+			     //$("#error_str").html($.su.CHAR.SSH.SSH_PORT_CONFLICT_HTTP);
+			     $("#serverPort").textbox("setError", $.su.CHAR.SSH.SSH_PORT_CONFLICT_HTTP);
+		    }
+		    else if(result.errCode == 43003)
+		    {
+			     //$("#error_str").html($.su.CHAR.SSH.SSH_PORT_CONFLICT_HTTPS);
+			     $("#serverPort").textbox("setError", $.su.CHAR.SSH.SSH_PORT_CONFLICT_HTTPS);
+		    }
+		    else
+		    {
+		    	 //$("#error_str").html("");
+		    	 //$("#serverPort").textbox("setError", "");
+		    	 $("#serverPort").textbox("setValid");
+		    	 $("#serverPort").textbox("setNormal");
+		    	 $("#ssh_setting").form("prompt", true);
+		    }
+	  	}
+	  });
+    
+	  
+		},
+		cls:"submit"
+	});
+
+	var sshProxy = new $.su.Proxy({
+		url: "./data/sshServer.json"
+	});
+
+
+	$("form#ssh_setting").form({
+		proxy: sshProxy,
+		fields: [
+			{name: "sshServerEnable", mapping: "sshServerEnable"},
+			{name: "remoteEnable", mapping: "remoteEnable"},
+			{name: "serverPort", mapping: "serverPort"}			
+		],
+
+		autoLoad: true,
+		//submitBtn: "default"
+		submitBtn: null
+	});
+
+});
+</script>
+</body>
+</html>

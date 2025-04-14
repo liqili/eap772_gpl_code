@@ -1,0 +1,284 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>User Account</title>
+</head>
+
+<body>
+<div class="func-container">
+	 <div id="account">
+	 	<form id="account-setting">
+	    	<input type="text"  id="curUserName" name="curUserName" value="" />
+	    	
+	    	<input type="text"  id="oldPwd" name="oldPwd" value="" />
+			  <input type="text"  id="newUserName" name="newUserName" value="" />
+	    	<input type="password"  id="newPwd" name="newPwd" value="" />
+			  <input type="password"  id="confirmPwd" name="confirmPwd" value="" />
+			  <input id="pwdStatus"  value="" />
+			  <button id="save"></button>
+	    </form>
+	 </div>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function(e){
+
+	$("div.func-container").page({
+		title: $.su.CHAR.ACCOUNT.TITLE,
+		help: ""	//可能是个调用的id 也可能是个url
+	});
+
+	$("div#account").panel({
+		title: $.su.CHAR.ACCOUNT.ACCOUNTINFO,
+		collapsible: false
+	});
+
+	$("input#curUserName").textbox({
+		fieldLabel: $.su.CHAR.ACCOUNT.OLDUSER,
+		_maxLength: 64,
+    _minLength: 1,    
+		allowBlank:false
+	});
+
+	$("input#oldPwd").password({
+		fieldLabel: $.su.CHAR.ACCOUNT.OLDPWD,
+		showLevel:false,
+		allowBlank:false,
+		_minLength:0,
+		_maxLength:64,
+		vtype:"ascii_visible"
+	});
+
+	$("input#newUserName").textbox({
+		fieldLabel: $.su.CHAR.ACCOUNT.NEWUSER,
+		allowBlank:false,
+		_maxLength: 64,
+    _minLength: 1
+	});
+
+	$("input#newPwd").password({
+		fieldLabel: $.su.CHAR.ACCOUNT.NEWPWD,
+		allowBlank:false,
+    _minLength: 0,
+    _maxLength: 64,
+		vtype:"ascii_visible",
+		validator:function(value){
+			if (!$.su.func.checkPswLevel(value)) {
+				return $.su.CHAR.VTYPETEXT.PSW_LEVEL_ERROR
+			}
+
+			var confirm_pwd = $("input#confirmPwd").password("getValue");
+			if (confirm_pwd !== '') {
+				$("input#confirmPwd").password('validate');
+			}
+			return true;
+		}
+	});
+
+	$("input#confirmPwd").password({
+		fieldLabel: $.su.CHAR.ACCOUNT.CONFIRM,
+		showLevel:false,
+		allowBlank:false,
+		cls: "inline-block",
+
+    _minLength: 0,
+    _maxLength: 64,
+    
+		//vtype:"wanpwd",
+		vtype:"ascii_visible",
+		validator:function(val){
+			var new_pwd = $("input#newPwd").password("getValue");
+			
+			/*this line is for bug62646*/
+			$("input#confirmPwd").password("setValue", val);
+
+			if(val == new_pwd)
+			{
+				$("#pwdStatus").status("setSuccess");
+				return true;
+			}
+			else
+			{
+				$("#pwdStatus").status("setFailed");
+				return false;
+			}
+		}
+				
+	});
+
+	$("#pwdStatus").status({
+		cls:"inline"
+
+	});
+
+	$("#save").button({
+		text: $.su.CHAR.OPERATION.SAVE,
+		cls:"submit",
+		handler:function(){
+
+
+			var para = {};
+			para.operation = "write";
+			para.curUserName = $("#curUserName").textbox("getValue");
+			para.newUserName = $("#newUserName").textbox("getValue");
+			para.curPassword = "";
+		  para.newPwd = "";
+
+			var oldUserName = $("#curUserName").textbox("getValue");
+			var oldPwd = $("#oldPwd").textbox("getValue");
+			var curUserName = $("#curUserName").textbox("getValue")
+			var newUserName = $("#newUserName").textbox("getValue")
+			var newPwd = $("#newPwd").textbox("getValue");
+			var confirmPwd = $("#confirmPwd").textbox("getValue");
+			
+			if( !$("input#newUserName").textbox('validate') 
+				|| !$("input#newPwd").password('validate')
+				|| !$("input#confirmPwd").password('validate') ){
+				return false;
+			}
+
+			if(oldUserName == "")
+			{	 
+		    $("#curUserName").textbox("setError", $.su.CHAR.ACCOUNT.OLDUSER_IS_EMPTY);
+				return false;
+			}
+
+			if(oldPwd == "")
+			{	 
+		    $("#oldPwd").textbox("setError", $.su.CHAR.ACCOUNT.OLDPASS_IS_EMPTY);
+				return false;
+			}
+
+			if(newUserName == "")
+			{
+				$("#newUserName").textbox("setError", $.su.CHAR.ACCOUNT.NEWUSER_IS_EMPTY);
+				return false;
+			}
+
+			if(newUserName.length < 1 || newUserName.length > 64)
+			{
+				$("#newUserName").textbox("setError", $.su.CHAR.ACCOUNT.NAME_LEN_IS_INVALID);
+				return false;
+			}
+
+			if(newPwd == "")
+			{	 
+		    $("#newPwd").textbox("setError", $.su.CHAR.ACCOUNT.NEWPASS_IS_EMPTY);
+				return false;
+			}
+
+			if(!$("#curUserName").textbox("validate") ||
+				!$("#oldPwd").textbox("validate") ||
+				!$("#newUserName").textbox("validate") ||
+				!$("#newPwd").textbox("validate") ||
+				!$("#confirmPwd").textbox("validate")) {
+					
+				return false;
+			}
+
+			if(newPwd != confirmPwd)
+			{
+				$("#confirmPwd").textbox("setError", $.su.CHAR.ACCOUNT.PASS_IS_NOT_MATCH);
+				return false;
+			}
+
+			if(newPwd.length > 64)
+			{
+				$("#newPwd").password("setError", $.su.CHAR.ACCOUNT.PWD_LEN_IS_INVALID);
+				return false;
+			}
+			
+			if("ADMIN" == newPwd.toUpperCase())
+			{
+				$("#newPwd").password("setError", $.su.CHAR.ACCOUNT.PWD_IS_ADMIN);
+				return false;
+			}
+
+			if(!$.su.vtype.types.ascii_visible.regex.test(oldPwd))
+			{
+				$("#oldPwd").textbox("setError", $.su.vtype.types.ascii_visible.vtypeText);
+				return false;
+			}
+
+			if(!$.su.vtype.types.ascii_visible.regex.test(newPwd))
+			{
+				$("#newPwd").textbox("setError", $.su.vtype.types.ascii_visible.vtypeText);
+				return false;
+			}
+
+			if(!$.su.vtype.types.ascii_visible.regex.test(confirmPwd))
+			{
+				$("#confirmPwd").textbox("setError", $.su.vtype.types.ascii_visible.vtypeText);
+				return false;
+			}
+
+			if(newPwd == oldPwd && curUserName == newUserName)
+			{
+				$("#newUserName").textbox("setError", $.su.CHAR.VTYPETEXT.SAME_NAME_PASSWORD);
+				return false;
+			}
+
+			para.curPassword = md5($("input#oldPwd").textbox("getValue")).toUpperCase();
+			para.newPwd = md5($("input#newPwd").textbox("getValue")).toUpperCase();
+      
+	    $.ajax({
+	    	url: "./data/userAccount.json",
+	    	type: 'POST',
+	    	data: para,
+	    	dataType: 'json',
+	    	cache:false,
+	    	error: function(){return false;},
+	    	success: function(result){
+	    		if(result.errCode == 41001)
+	    		{
+		  		   $("#curUserName").textbox("setError", $.su.CHAR.ACCOUNT.OLDUSER_IS_INVALID);
+		      }
+		      else if(result.errCode == 41002)
+		      {
+		  	     $("#oldPwd").textbox("setError", $.su.CHAR.ACCOUNT.OLDPASSWD_IS_INVALID);
+		      }
+		      else if(result.errCode == 41003)
+		      {
+		  	     $("#newUserName").textbox("setError", $.su.CHAR.ACCOUNT.NEWUSER_IS_INVALID);
+		      }
+		      else if(result.errCode == 41004)
+		      {
+		  	     $("#newUserName").textbox("setError", $.su.CHAR.ACCOUNT.NEWUSER_IS_TOO_LONG);
+		      }
+		      else
+		      {
+		      	 $("#curUserName").textbox("setValid");
+		      	 $("#curUserName").textbox("setNormal");
+		      	 $("#oldPwd").textbox("setValid");
+		      	 $("#oldPwd").textbox("setNormal");
+		      	 $("#account-setting").form("prompt", true);
+		      }
+	    	}
+	    });
+
+		}
+	});
+
+
+	var pwdProxy = new $.su.Proxy({
+		url: "./data/userAccount.json",
+		autoLoad:false
+	});
+
+	$("form#account-setting").form({
+		proxy: pwdProxy,
+		fields: [
+			//{name: "curUserName", mapping: "curUserName"}
+
+		],
+		autoLoad:false,
+		//submitBtn: "default"
+		submitBtn:null
+	});
+
+});
+</script>
+</body>
+
+</html>

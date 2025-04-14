@@ -1,0 +1,354 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Management Access Control</title>
+</head>
+
+<body>
+	<div class="func-container">
+		<div id="mac">
+			<form id="mac_setting" class="natSeries">
+				<input type="checkbox"  id="macAuthEnable" name="macAuthEnable" value="" />
+				<input type="text"  id="mac1" name="mac1" value="" />
+				<input type="text"  id="mac2" name="mac2" value="" />
+				<input type="text"  id="mac3" name="mac3" value="" />
+				<input type="text"  id="mac4" name="mac4" value="" />
+				<input type="text"  id="hostMac" name="hostMac" value="" class="hidden"/>
+				<button type="button" id="addPcMac" name="addPcMac" value=""></button>
+				<!--<button type="button" id="submitButton" name="submitButton" value""></button>-->
+			</form>
+		</div>
+
+		<div id="vlan_manage">
+			<form id="vlan_manage_setting" class="natSeries">
+				<!--<p id="note" class="note"></p>-->
+				<input type="checkbox"  id="ManagementVlanEnable" name="ManagementVlanEnable" value="" />
+				<input type="text"  id="ManagementVlanID" name="ManagementVlanID" value="" />
+				<input type="text" style="display:none;"/>
+				<button type="button" id="submitButton" name="submitButton" value=""></button>
+				<!--<span id="error_str" class="error"></span>-->
+			</form>
+		</div>
+		
+	  <!--<div id="mac_alert_cnt">
+	  	<p id="confirm_content"></p>
+    </div>-->
+		
+	</div>
+	
+<script type="text/javascript">
+//<![CDATA[
+$(document).ready(function(e){
+
+	function add_pc_mac()
+	{
+		var pcMac = $("input#hostMac").textbox("getValue");
+		if ("" == pcMac || "00-00-00-00-00-00" == pcMac)
+		{
+				alert($.su.CHAR.MAC.MAC_PC_NOT_EXIT);
+				return ;
+		}
+		
+		if($("input#mac1").textbox("getValue") == pcMac)
+		{
+			 $("#mac1").textbox("setError", $.su.CHAR.MAC.MAC_EXIST);
+		}
+		else if($("input#mac2").textbox("getValue") == pcMac)
+		{
+			 $("#mac2").textbox("setError", $.su.CHAR.MAC.MAC_EXIST);
+		}
+		else if($("input#mac3").textbox("getValue") == pcMac)
+		{
+			 $("#mac3").textbox("setError", $.su.CHAR.MAC.MAC_EXIST);
+		}
+		else if($("input#mac4").textbox("getValue") == pcMac)
+		{
+			 $("#mac4").textbox("setError", $.su.CHAR.MAC.MAC_EXIST);
+		}
+		else if($("input#mac1").textbox("getValue") == "")
+		{
+				$("input#mac1").textbox("setValue", pcMac);
+		}
+		else if($("input#mac2").textbox("getValue") == "")
+		{
+				$("input#mac2").textbox("setValue", pcMac);
+		}		
+		else if($("input#mac3").textbox("getValue") == "")
+		{
+				$("input#mac3").textbox("setValue", pcMac);
+		}
+		else if($("input#mac4").textbox("getValue") == "")
+		{
+				$("input#mac4").textbox("setValue", pcMac);
+		}
+		else
+		{
+				alert($.su.CHAR.MAC.MAC_FULL);
+	  }
+	  
+  }
+
+  function setEn(isEn)
+  {
+  	 if(isEn)
+  	 {
+  	 		$("input#mac1").textbox("enable");
+				$("input#mac2").textbox("enable");
+				$("input#mac3").textbox("enable");
+				$("input#mac4").textbox("enable");
+				$("button#addPcMac").button("enable");
+		 }
+		 else
+		 {
+		 		$("input#mac1").textbox("disable");
+				$("input#mac2").textbox("disable");
+				$("input#mac3").textbox("disable");
+				$("input#mac4").textbox("disable");
+				$("button#addPcMac").button("disable");
+		 }
+  }
+
+	$("div.func-container").page({
+		title: $.su.CHAR.MAC.TITLE,
+		help: ""	//可能是个调用的id 也可能是个url
+	});
+
+	$('div#mac').panel({
+		title: $.su.CHAR.MAC.TITLE,
+		collapsible: false
+	});
+	
+
+	$("input#macAuthEnable").checkbox({
+		fieldLabel: $.su.CHAR.MAC.MAC_AUTH,
+		items: [
+			{boxlabel: $.su.CHAR.MAC.MAC_ENABLE, inputValue: "true", uncheckedValue: "false", checked:true}
+		]
+	}).on("ev_change", function(e, oldValue, newValue){
+		var val = (newValue[0]=="macAuthEnable" || newValue[0]=="on") ? "true" : "false";
+		switch(val)
+		{
+			case 'false':
+			  setEn(false);
+				break;
+			case 'true':
+				setEn(true);
+				break;
+		}
+	});
+
+
+	$("input#mac1").textbox({
+		fieldLabel: $.su.CHAR.MAC.MAC_MAC1,
+		hint:$.su.CHAR.OPERATION.MAC_HINT,
+		isMac: true,
+		vtype: {
+			vtype: "mac",
+			allowAllZeroFlag: false
+		}
+	});
+
+	$("input#mac2").textbox({
+		fieldLabel: $.su.CHAR.MAC.MAC_MAC2,
+		hint:$.su.CHAR.OPERATION.MAC_HINT,
+		isMac: true,
+		vtype: {
+			vtype: "mac",
+			allowAllZeroFlag: false
+		}
+	});
+
+	$("input#mac3").textbox({
+		fieldLabel: $.su.CHAR.MAC.MAC_MAC3,
+		hint:$.su.CHAR.OPERATION.MAC_HINT,
+		isMac: true,
+		vtype: {
+			vtype: "mac",
+			allowAllZeroFlag: false
+		}
+	});
+
+	$("input#mac4").textbox({
+		fieldLabel: $.su.CHAR.MAC.MAC_MAC4,
+		hint:$.su.CHAR.OPERATION.MAC_HINT,
+		isMac: true,
+		vtype: {
+			vtype: "mac",
+			allowAllZeroFlag: false
+		}
+	});
+
+	$("input#hostMac").textbox({
+		fieldLabel: "",
+		cls: "hidden"
+	});
+
+	$("button#addPcMac").button({
+		text:$.su.CHAR.MAC.MAC_PCMAC,
+		handler:function(){
+			add_pc_mac();			
+		},
+		fieldLabel:""
+	});
+
+
+	var macProxy = new $.su.Proxy({
+		url: "./data/mac.json"
+	});
+
+	$("form#mac_setting").form({
+		proxy: macProxy,
+		fields: [
+			{name: "macAuthEnable", mapping: "macAuthEnable"},
+			{name: "mac1", mapping: "mac1"},
+			{name: "mac2", mapping: "mac2"},
+			{name: "mac3", mapping: "mac3"},
+			{name: "mac4", mapping: "mac4"},
+			{name: "hostMac", mapping: "hostMac"}
+		],
+		
+		validator:function(){
+			var mac1 = $("input#mac1").textbox("getValue").toUpperCase();
+			var mac2 = $("input#mac2").textbox("getValue").toUpperCase();
+			var mac3 = $("input#mac3").textbox("getValue").toUpperCase();
+			var mac4 = $("input#mac4").textbox("getValue").toUpperCase();
+			var en = $("input#macAuthEnable").checkbox("getValue");
+			
+			if(en != "macAuthEnable")
+			{
+				 return true;
+			}
+			
+			if((mac1 == "") && (mac2 == "") && (mac3 == "") && (mac4 == ""))
+			{
+				 $("#mac1").textbox("setError", $.su.CHAR.MAC.MAC_EMPTY);
+				 return false;
+			}
+
+			if((mac1 != "") && ((mac1 == mac2) || (mac1 == mac3) || (mac1 == mac4)))
+			{
+				 $("#mac1").textbox("setError", $.su.CHAR.MAC.MAC_SAME);
+				 return false;
+			}
+
+			if((mac2 != "") && ((mac2 == mac3) || (mac2 == mac4)))
+			{
+				 $("#mac2").textbox("setError", $.su.CHAR.MAC.MAC_SAME);
+				 return false;
+			}
+
+			if((mac3 != "") && (mac3 == mac4))
+			{
+				 $("#mac3").textbox("setError", $.su.CHAR.MAC.MAC_SAME);
+				 return false;
+			}
+			
+			return true;
+		},
+		
+		autoLoad: true,
+		//submitBtn: null
+		submitBtn: "default"
+
+	}).on("ev_loadData", function(e, data){
+    
+		if(data.macAuthEnable == true)
+		{
+			 setEn(true);
+		}
+		else
+		{
+			 setEn(false);
+		}
+
+	});
+
+/////////////////////////////////////////////////////////////////////////////////////
+	
+	$('div#vlan_manage').panel({
+		title: $.su.CHAR.VLANMANAGE.TITLE,
+		collapsible: false
+	});
+
+	$("input#ManagementVlanEnable").checkbox({
+		fieldLabel: $.su.CHAR.VLANMANAGE.VLAN,
+		items: [
+			{boxlabel: $.su.CHAR.VLANMANAGE.VLANMANAGE_ENABLE, inputValue: "true", uncheckedValue: "false", checked:true}
+		]
+	});
+
+	$("input#ManagementVlanID").textbox({
+		fieldLabel: $.su.CHAR.VLANMANAGE.VLANMANAGE_ID,
+		vtype: "number",
+		tips:$.su.CHAR.VLANMANAGE.VLANMANAGE_RANGE,
+	    max: 4094,
+	    min: 1    
+	});
+
+
+
+	$("button#submitButton").button({
+		text: $.su.CHAR.VLANMANAGE.VLANMANAGE_SAVE,
+		handler: function(){
+
+			if($("form#vlan_manage_setting").form('validate') !== true){
+				return false;
+			}
+
+			var curPort = parseInt($("input#ManagementVlanID").textbox("getValue"), 10);
+			if(!$.isNumeric(curPort) || (curPort < 1) || (curPort > 4094))
+			{
+				$("#ManagementVlanID").textbox("setError", $.su.CHAR.VLANMANAGE.VLANMANAGE_ID_INVALIB);
+				return false;
+			}
+
+			var enVal = "false";
+			if("ManagementVlanEnable" == $("input#ManagementVlanEnable").checkbox("getValue") || "true" == $("input#ManagementVlanEnable").checkbox("getValue"))
+			{
+				enVal = "true";
+			}
+
+			var data = {};
+			data = $.extend({
+				"operation": "write",
+				"ManagementVlanID": $("input#ManagementVlanID").textbox("getValue"),
+				"ManagementVlanEnable": enVal
+			}, data);
+
+			$.ajax({
+				url: "./data/vlanManage.json",
+				type: 'POST',
+				data: data,
+				dataType: 'json',
+				cache:false,
+				error: function(){return false;},
+				success: function(result){
+					$("#ManagementVlanID").textbox("setValid");
+					$("#ManagementVlanID").textbox("setNormal");
+					$("#vlan_manage_setting").form("prompt", true);
+				}
+			});
+		},
+		cls:"submit"
+		});
+
+	var vlanManageProxy = new $.su.Proxy({
+		url: "./data/vlanManage.json"
+	});
+
+	$("form#vlan_manage_setting").form({
+		proxy: vlanManageProxy,
+		fields: [
+			{name: "ManagementVlanEnable", mapping: "ManagementVlanEnable"},
+			{name: "ManagementVlanID", mapping: "ManagementVlanID"}			
+		],
+		autoLoad: true,
+		//submitBtn: "default"
+		submitBtn: null
+	});
+
+});
+</script>
+</body>
+</html>

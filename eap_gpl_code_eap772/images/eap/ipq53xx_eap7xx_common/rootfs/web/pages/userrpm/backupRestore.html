@@ -1,0 +1,280 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+</head>
+
+<body>
+<div class="func-container">
+	 <div id="backup_cnt">
+	 	<form id="backup-setting" enctype="multipart/form-data">
+	 		  <p class="content" id="backup_tip"></p> 
+	    	<button type="button" id="backup" name="backup"></button>
+	    </form>
+	 </div>
+	 
+	<div id="restore_cnt">
+	 	<form id="restore-setting">
+ 	 		  <p class="content" id="restore_tip"></p>
+			  <input id="file" name="archive" type="file" />
+			  <div id="restore_pro_cnt" class="hidden">
+		    	<input id="restore_pro_bar" type="text" />
+		    </div>
+	    	<button type="button" id="restore" name="restore"></button>
+	  </form>
+	  
+	</div>
+	
+	<div id="restore_alert_cnt">
+	  <div class="warning-msg">
+       <h4 class="title">
+       <span class="icon"></span>
+       <span class="text" id="restore_confirm_content"></span>
+       </h4>
+    </div>
+	</div> 
+
+</div>
+
+<script type="text/javascript">
+$(document).ready(function(e){
+	var restore_total_time = 300*1000;
+	var https_restore_total_time = 3*60*1000;
+  var time_margin = 2*1000;
+
+	var restore_step1_time = 30*1000;
+	var restore_mid_val = 0.2;
+	var restore_query_interval = false;
+	var restore_step2_query_flag = false;
+	var restore_count = 0;
+  	var restoreTime = 0;
+
+	var BACKUP_URL = "./data/configBackup.json";
+	var RESTORE_URL = "./data/configRestore.json";
+	var RESTORE_CHECK_URL = "./data/restoreCheck.json";
+	var CONNECT_URL = "./data/rebootState.json";
+	var SYSMOD_URL = "./data/sysmod.json";
+
+	$("div.func-container").page({
+		title: $.su.CHAR.BACKUP.TITLE,
+		help: ""	//可能是个调用的id 也可能是个url
+	});
+
+	$("#backup_cnt").panel({
+		title: $.su.CHAR.BACKUP.BACKUP,
+		collapsible: false
+	});
+
+	$("#restore_cnt").panel({
+		title: $.su.CHAR.BACKUP.RESTORE,
+		collapsible: false
+	});
+
+  $("#backup_tip").html($.su.CHAR.BACKUP.BACKUPTIP);
+  $("#restore_tip").html($.su.CHAR.BACKUP.RESTORETIP);
+
+  	var connectProxy = new $.su.Proxy({
+		url: CONNECT_URL,
+		async: false,
+		timeout: 2000,
+		type: "GET"
+	});
+
+	var restore_pro_bar  = $('input#restore_pro_bar').progressbar({
+		fieldLabel: null,
+		cls: 'inline',
+		width: 300,
+		height: 6,
+		value: 0
+	});	
+
+	
+	$("#file").file({
+		fieldLabel: $.su.CHAR.BACKUP.FILE,
+		extension: "bin",
+		allowBlank: false
+		
+	});
+
+	$("#backup-setting").form({
+		proxy:{url: BACKUP_URL},
+		formEnctype: "multipart/form-data",
+		traditional: true,
+		hiddenFrame: true,
+		autoLoad: false
+	});
+
+
+	var restoreProxy = new $.su.Proxy({
+		url: RESTORE_URL
+	});
+
+	var sysmodeProxy = new $.su.Proxy({
+		type: "GET",
+		url: SYSMOD_URL
+	});
+
+	$("#restore-setting").form({
+		proxy: restoreProxy,
+    formEnctype: "multipart/form-data",
+    traditional: true,
+    hiddenFrame: true,
+		fields: [
+		],
+    autoLoad: false
+	});
+
+
+	$("#backup").button({
+		text: $.su.CHAR.BACKUP.BACKUPBTN,
+		cls: "submit",
+		handler: function(){
+			sysmodeProxy.read({}, function () {
+				var url = BACKUP_URL + "?operation=backup";
+				var a = document.createElement('a');
+				if (!a.click)  // Only IE have
+				{
+					window.location = url;
+					return;
+				}
+				a.setAttribute("href", url);
+				a.style.display = "none";
+				document.body.appendChild(a);
+				a.click();
+				//location.href = url;
+			})
+		}
+	});
+
+	$("#restore").button({
+		text: $.su.CHAR.BACKUP.RESTOREBTN,
+		handler: function(){
+
+       var filePath = $("#file").file("getValue");
+       if(filePath == "")
+       {
+		   	 $("#file").file("setError", $.su.CHAR.BACKUP.NO_FILE_CHOSEN);
+		   	 return false;
+       }
+       
+       var pathStr = filePath.split("\\");
+       var fileNameStr = pathStr[pathStr.length-1];
+
+	     if(63 < fileNameStr.length)
+	     {
+		   	 $("#file").file("setError", $.su.CHAR.BACKUP.FILE_NAME_TOO_LONG);
+		   	 return false;
+		   }
+
+ 		   var tmp = filePath.split(".");
+		   var ext = tmp[tmp.length-1];
+	     if(ext != "bin")
+	     {
+		   	 $("#file").file("setError", $.su.CHAR.BACKUP.FILE_INVALID);
+		   	 return false;
+		   }
+       
+		   $("#restore_alert_cnt").msg("show");
+       
+		},
+		cls: "submit"
+	});
+
+	function restore_getResult()
+	{
+
+	  $.ajax({
+	  	url: RESTORE_CHECK_URL,
+	  	type: 'GET',
+	  	data: null,
+	  	dataType: 'json',
+	  	cache:false,
+	  	error: function(){return false;},
+	  	success: function(result){
+			if (true == result.timeout)
+			{
+				window.top.location.href = "/";
+			}
+	  		if(result.errCode == 0)
+	  		{
+           		$("#file").file("setValid");
+		       	$("#file").file("setNormal");
+           
+		       	$("#restore_pro_cnt").fadeIn(200);
+
+		    	/*restore_pro_bar.progressbar("animate", 0, 1, restore_total_time, function(){
+		    		location=location;
+		     	});*/
+
+
+		     	var protocol = document.location.protocol;
+
+		    	if(protocol.toUpperCase() == 'HTTPS:'){
+		    		restore_pro_bar.progressbar("animate", 0, 1, https_restore_total_time, function(){
+			    		location=location;
+			     	});
+		    	}else{
+		    	restore_pro_bar.progressbar("animate", 0, 1, restore_total_time, function(){
+		    		location=location;
+		     	});
+
+		     	var hasHandled = false;
+				setTimeout(function(){
+					var checkServer = setInterval(function(){
+						connectProxy.read({}, function(){
+							if(!hasHandled){
+								hasHandled = true;
+								clearInterval(checkServer);
+								restore_pro_bar.progressbar("stop");
+								restore_pro_bar.progressbar("animate", restore_pro_bar.progressbar("getValue"), 1, 5000, function(){
+									location=location;
+								});
+							}
+						});
+				}, 10000);
+					}, 10000);
+		    	}
+		       
+		       $.su.mask.show();
+		    }
+		    else
+		    {
+		   	   $("#file").file("setError", $.su.CHAR.BACKUP.RESTORE_FAIL);
+		   	   return false;
+		    }
+	  		
+	  	}
+	  });
+
+	}
+
+	function restore_write()
+	{
+    $("form#restore-setting").form("submit", null, function(){
+    	  restore_getResult();
+		});
+		
+	}
+
+	$("#restore_alert_cnt").msg({
+		okHandler:function(){
+
+			restore_write();
+			
+		},
+		cancelHandler:function(){
+			return true;
+		},
+		type: "prompt",
+		cls:"m"
+	});
+	
+	$("#restore_confirm_content").html($.su.CHAR.BACKUP.RESTORE_CONFIRM_CONTENT);
+
+
+});
+</script>
+</body>
+
+</html>

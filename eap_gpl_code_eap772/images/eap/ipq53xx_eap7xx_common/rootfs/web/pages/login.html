@@ -1,0 +1,304 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate" />
+<meta http-equiv="expires" content="Wed, 26 Feb 1997 08:33:43 GMT" />
+<!-- <link type="text/css" href="../css/reset.css" rel="stylesheet" /> -->
+<link type="text/css" href="../css/widget.css" rel="stylesheet" />
+
+<link type="text/css" href="../themes/dark/css/widget.css" rel="stylesheet" />
+<link type="text/css" href="../themes/dark/css/style.css" rel="stylesheet" />
+
+<title>Login</title>
+</head>
+
+<body id="login-body">
+
+<div class="top" id="top-wrapper" style="display:none">
+	<!--<div class="top-header">
+    	<div class="top-header-wrap">
+        	<h1 id="product-tag">
+            	<span class="icon"></span>
+                <span class="separate"></span>
+                <span class="text">EAP220</span>
+            </h1>
+        </div>
+    </div>-->
+    
+    <div class="top-main">
+    	<div class="top-main-wrap">
+            <div class="top-content hidden">
+            	<div class="top-header">
+                    <div class="top-header-wrap">
+                        <h1 id="product-tag">
+                            <span class="icon"></span>
+                            <span class="separate"></span>
+                            <span class="text" id="devname"></span>
+                        </h1>
+                    </div>
+                </div>
+            	<div class="top-content-wrap" id="top-content">
+                    <form id="form-login" method="post" action="/">
+                        <div class="login-field">
+                            <label id="login-username-label">
+                                <span class="icon"></span>
+                                <span class="text"></span>
+                            </label>
+                            <input id="login-username" name="username" maxlength="64" type="text" />
+                        </div>
+                        <div class="login-field">
+                            <label id="login-password-label">
+                                <span class="icon"></span>
+                                <span class="text"></span>
+                            </label>
+                            <input id="login-password" name="password" type="password" />
+                            <a class="link" href="javascript:void(0);" id="btn_forget_password"></a>
+                        </div>
+                        <!--<div>
+                            <input id="show-characters" />
+                        </div>-->
+                        <button id="login-btn" type="button"></button>
+                    </form>
+                    
+                </div>
+            </div>
+			<div id="under-control-container" class="hidden">
+				<div id="under-control-title"></div>
+				<div id="under-control-reset"></div>
+				<div id="under-control-alert">
+					<div class="icon"></div>
+					<div class="text"></div>
+				</div>
+			</div>
+            
+            <!--<div class="top-footer">
+                <div class="top-footer-wrap">
+                    <span class="help-faq">
+                        <a class="btn-faq" href="javascript:void(0);">support</a>
+                    </span>
+                </div>
+            </div>-->
+        </div>
+    </div>
+</div>
+
+
+<!-- <button id="test">test</button> -->
+
+<script type="text/javascript" src="../js/libs/jquery.min.js"></script>
+<script type="text/javascript" src="../js/libs/md5.js"></script>
+<!--<script type="text/javascript" src="../js/libs/encrypt.js"></script>-->
+
+<script id="lan-js" type="text/javascript" src="../locale/en_US/lan.js"></script>
+<link id="lan-css" type="text/css" rel="stylesheet" href="../locale/en_US/lan.css" />
+
+<script type="text/javascript" src="../js/su/su.js"></script>
+
+<!-- <script type="text/javascript" src="../js/su/data/proxy.js"></script> -->
+
+<script type="text/javascript" src="../js/su/widget/widget.js"></script>
+
+<!-- <script type="text/javascript" src="../js/su/widget/form/form.js"></script> -->
+<script type="text/javascript" src="../js/su/widget/form/textbox.js"></script>
+<script type="text/javascript" src="../js/su/widget/form/password.js"></script>
+<script type="text/javascript" src="../js/su/widget/form/checkbox.js"></script>
+<script type="text/javascript" src="../js/su/widget/form/button.js"></script>
+<script type="text/javascript" src="../js/su/widget/form/progressbar.js"></script>
+
+
+<script type="text/javascript">
+  
+//<![CDATA[
+	$(document).ready(function(e){
+	
+	$("#under-control-title").text($.su.CHAR.LOGIN.UNDER_CONTROLING);
+	$("#under-control-reset").text($.su.CHAR.LOGIN.UNDER_CONTROLING_TIPS);
+	$("#under-control-alert .text").html($.su.CHAR.LOGIN.ALERT_TITLE + "<br />" +$.su.CHAR.LOGIN.ALERT_CONTENT);
+	
+	$.ajax({
+		url: "./data/managedMode.json",
+		type: 'GET',
+		data: {},
+		dataType: 'json',
+		cache:false,
+		error: function(){return false;},
+		success: function(result){	
+			if (!result.success && result.errCode == 403)
+			{
+				$("div#top-wrapper").show();
+				$("div#under-control-container").show();
+				$("#under-control-button").button("hide");
+				$("#under-control-alert").show();
+				//top.location.href = "/login/forbidden";
+			}
+			else
+			{
+				
+				$("div#top-wrapper").show();
+				$(".top-content").show();
+				$("input#login-username").focus();
+			}
+	$.ajax({
+		url: "./data/login.json",
+		type: 'POST',
+                        data: { "operation": "read" },
+		dataType: 'json',
+                        cache: false,
+                        error: function () { return false; },
+                        success: function (result) {
+			$("span#devname").html(result.dutMode);
+
+			$("input#login-username").focus();
+			
+            switch(result.error){
+                case 1:
+                    if(result.retryChances > 3){
+				$("input#login-username").textbox("setError", $.su.CHAR.LOGIN.LOGIN_ERR_FAIL);
+                    }else if(result.retryChances == 0){
+                        $("input#login-username").textbox("setError", $.su.CHAR.LOGIN.LOGIN_LOCKED);
+                    }else{
+                        $("input#login-username").textbox("setError", $.su.CHAR.LOGIN.LOGIN_CHANGE_LEFT.replace('%num%', result.retryChances));
+			}
+                    break;
+                case 2:
+				$("input#login-username").textbox("setError", $.su.CHAR.LOGIN.LOGIN_ERR_TIMEOUT);
+                    break;
+                case 3:
+                    var hours = Math.floor(result.waitTime/3600);
+                    var minutes = Math.floor((result.waitTime%3600)/60);
+                    var seconds = (result.waitTime%3600)%60;
+                    var str;
+                    var hStr = $.su.CHAR.LOGIN.HOUR;
+                    var mStr = $.su.CHAR.LOGIN.MINUTE;
+                    var sStr = $.su.CHAR.LOGIN.SECOND;
+
+                    if(hours>0){
+                        minutes==0?str=hours+hStr:str=hours+hStr+' '+minutes+mStr;
+                        
+                    }else{
+                        if(minutes > 0){
+                            seconds==0?str=minutes+mStr:str=minutes+mStr+' '+seconds+sStr;
+                        }else{
+                            str=seconds+sStr;
+			}
+			}
+                    $("input#login-username").textbox("setError", $.su.CHAR.LOGIN.LOGIN_LOCKED_TIME.replace('%time%', str));                 
+                    break;
+			}
+		}
+	});
+                }
+            });
+
+
+    $("input#login-username").textbox({
+        hint: $.su.CHAR.LOGIN.USERNAME,
+        fieldLabel: null,
+        cls: "inline-block login-text",
+		allowBlank: false,
+		_maxLength: 64,
+		_minLength: 1
+    });
+
+	$("input#login-password").password({
+        showLevel: false,
+        hint: $.su.CHAR.LOGIN.PASSWORD,
+        _maxLength: 64,
+        fieldLabel: null,
+        vtype: "ascii_visible",
+		allowBlank: false,
+        allowVisible: true,
+        cls: "inline-block login-text"
+    }).on("ev_change", function(e, value, key, keyCode){
+        if (key == "Enter" || keyCode == 13){
+            return doLogin();
+        };
+    });
+
+    /*$("input#show-characters").checkbox({
+        items: [
+            {boxlabel: "Show Characters", inputValue: "show-characters-check", id: "show-characters-check"}
+        ],
+        cls: "login-show-characters"
+    });*/
+
+    $("button#login-btn").button({
+        text: $.su.CHAR.LOGIN.LOGIN,
+        handler: function(e){
+			return doLogin();
+        },
+        cls: "submit login-btn inline-block"
+    });
+	
+	var doLogin = function(){
+		$("button#login-btn").focus();
+	
+		if (0 == $("input#login-username").textbox("getValue").length)
+		{
+			$("input#login-username").textbox("setError", $.su.CHAR.PORTAL.ERR_USERNAME_EMPTY);
+			return false;
+		}
+
+        if (!$("input#login-username").textbox("validate")) {
+            return false;
+        }
+		
+		if (0 == $("input#login-password").textbox("getValue").length)
+		{
+			$("input#login-password").textbox("setError", $.su.CHAR.PORTAL.ERR_PWD_EMPTY);
+			return false;
+		}
+			
+		
+		$("input#login-password").textbox("setValue", md5($("input#login-password").textbox("getValue")).toUpperCase());
+        // $("form#form-login").submit();
+        $.ajax({
+            url: '/',
+            type: 'POST',
+            data: {
+                username: $("input#login-username").textbox("getValue"),
+                password: $("input#login-password").textbox("getValue")
+            },
+            dataType: 'json',
+            success: function(data) {
+                if (data.result) {
+                    location = '/';
+                }
+            },
+            fail: function() {
+                location = '/';
+            },
+            error: function() {
+                location = '/';
+            }
+        });
+		
+		return true;
+	};
+
+
+    $("a#btn_forget_password").html($.su.CHAR.LOGIN.FORGET_PASSWORD).on("click", function(e){
+
+    });
+
+    /*$("button#test").click(function(e){
+        $.ajax({
+            url: "./data/internet.json",
+            type: "POST",
+            data: {
+                "name" : "name",
+                "id": "id"
+            },
+            success: function(data, status, xhr){
+                console.log(data);
+            }  
+        });
+    });*/
+
+});
+//]]>
+</script>
+</body>
+</html>

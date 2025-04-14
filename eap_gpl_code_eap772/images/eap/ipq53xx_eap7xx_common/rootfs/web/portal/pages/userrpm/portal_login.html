@@ -1,0 +1,310 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- <link type="text/css" href="../css/reset.css" rel="stylesheet" /> -->
+<link type="text/css" href="../../css/widget.css" rel="stylesheet" />
+
+<link type="text/css" href="../../themes/dark/css/widget.css" rel="stylesheet" />
+<link type="text/css" href="../../themes/dark/css/style.css" rel="stylesheet" />
+
+<title>Login</title>
+</head>
+
+<body id="portal-body">
+<div id="portal_wrapper" class="hidden">
+	<div id="portal_main">
+		<div id="portal_content">
+			<form id="form-login" method="post" action="/portal/portal_entry.json">
+				<div id="portal_title">
+					<span id="title" style="word-wrap:break-word;white-space: pre-wrap"></span>
+				</div>
+
+				<div id="portal_login">
+					<input type="text"  id="username"  name="username"  value=""/>
+					<input type="text"  id="password"  name="password"  value=""/>
+				</div>
+					
+				<div id="portal_useTerm">
+					<p><span id="label_useTerm">Term of Use</span><span>:</span></p>
+					<p id="useTerm" style="word-wrap:break-word;white-space: pre-wrap"></p>
+					<input type="checkbox" id="portal_accept" name="portal_accept" value=""/>
+				</div>
+				
+				<div class="button-container submit form-submit">
+				  <button id="loginBtn" type="button"></button>
+			  </div>
+									
+			</form>
+		</div>
+	</div>
+</div>
+
+<div id="portal_offline" class="hidden">
+	<div class="offline-alert-icon"></div>
+	<p id="offline_reason" class="offline-para-1"></p>
+	<p id="offline_handle" class="offline-para-2"></p>
+</div>
+
+<!-- <button id="test">test</button> -->
+
+<script type="text/javascript" src="../../js/libs/jquery.min.js"></script>
+<!--<script type="text/javascript" src="../js/libs/encrypt.js"></script>-->
+
+<script id="lan-js" type="text/javascript" src="../../locale/en_US/lan.js"></script>
+<link id="lan-css" type="text/css" rel="stylesheet" href="../../locale/en_US/lan.css" />
+
+<script type="text/javascript" src="../../js/su/su.js"></script>
+
+<!-- <script type="text/javascript" src="../js/su/data/proxy.js"></script> -->
+
+<script type="text/javascript" src="../../js/su/widget/widget.js"></script>
+
+<!-- <script type="text/javascript" src="../js/su/widget/form/form.js"></script> -->
+<script type="text/javascript" src="../../js/su/widget/form/textbox.js"></script>
+<script type="text/javascript" src="../../js/su/widget/form/password.js"></script>
+<script type="text/javascript" src="../../js/su/widget/form/checkbox.js"></script>
+<script type="text/javascript" src="../../js/su/widget/form/button.js"></script>
+
+
+<script type="text/javascript">  
+//<![CDATA[
+$(document).ready(function(e){
+	var authType;
+	
+	$('#offline_reason').html($.su.CHAR.PORTAL.AUTH_FAILED);
+	$('#offline_handle').html($.su.CHAR.PORTAL.CONTACT_ADMIN);
+
+    $("input#username").textbox({
+        fieldLabel: $.su.CHAR.PORTAL.USERNAME,
+		allowBlank: false,
+		maxLength: 128
+    });
+
+    $("input#password").password({
+        showLevel: false,
+        fieldLabel: $.su.CHAR.PORTAL.PWD,
+        vtype:"ascii_visible",
+		allowBlank: false,
+		maxLength: 128,
+		validator:function(val){
+			$("input#password").password("setValue", val);
+			return true;
+		}
+		
+	 }).on("ev_change", function(e, value, key, keyCode){
+       if (key == "Enter" || keyCode == 13){
+       	   if ("portal_accept" == $("input#portal_accept").checkbox("getValue"))
+       	   {
+       	   	 return doPortalLogin();
+       	   }
+       };	
+		
+    });
+	
+	$("input#portal_accept").checkbox({
+		fieldLabel: null,
+		items: [
+			{boxlabel: $.su.CHAR.PORTAL.ACCEPT, inputValue: "true", uncheckedValue: "false", checked:true}
+		]
+	}).on("ev_change", function(){
+		if ("portal_accept" == $("input#portal_accept").checkbox("getValue"))
+		{
+			$("button#loginBtn").button("enable");
+		}
+		else
+		{
+			$("button#loginBtn").button("disable");
+		}
+	});
+
+    $("button#loginBtn").button({
+        text: $.su.CHAR.LOGIN.LOGIN,
+        handler: function(e){
+          e.stopPropagation();
+          doPortalLogin();
+        },
+        cls: "submit login-btn inline-block"
+    });
+
+    function EscapPortalStr(str)
+    {
+	return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\r\n/g, "<br>").replace(/\n/g, "<br>").replace(/ /g, " ").replace(/"/g, "&quot;");
+    }
+	
+	function init()
+	{
+		$.ajax({
+			type: "POST",
+			url:  "/portal/portal_entry.json",
+			timeout: 5000,
+			dataType: "json",
+			cache: false,
+			data: {"operation": "read"},
+			traditional: true,
+			success: function(data)
+			{
+				authType = data.data.portal_authType;
+				
+				$("input#username").focus();
+				
+				if(1 == data.data.portal_disconnect)
+				{
+					$('#portal_wrapper').hide();
+					$('#portal_offline').show();
+				}
+				else
+				{
+					$('#portal_offline').hide();
+					$('#portal_wrapper').show();
+
+				if(0 == data.data.portal_authType)
+				{
+					$("input#username").textbox("hide");
+					$("input#password").textbox("hide");
+				}
+				else if(1 == data.data.portal_authType)
+				{
+					$("input#username").textbox("hide");
+					$("input#password").focus();
+				}
+				}
+				
+				$("span#title").html(EscapPortalStr(data.data.portal_title));
+				$("p#useTerm").html(EscapPortalStr(data.data.portal_useTerm));
+				
+				if ("true" == data.data.portal_accept || true == data.data.portal_accept)
+				{
+					$("input#portal_accept").checkbox("setValue", true);
+				}
+				else
+				{
+					$("input#portal_accept").checkbox("setValue", false);
+				}
+			},
+			error: function(e, status)
+			{
+				//console.log("error", e, status);
+			}
+		});
+	}
+
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]); return null;
+    }
+
+	var doPortalLogin = function(){
+
+			//check the authType
+			if (authType > 2 || authType < 0)
+			{
+				$("input#password").textbox("setError", $.su.CHAR.PORTAL.LOGIN_TYPE_ERR);
+				return false;
+			}
+
+			//用户名或密码为空，点击登陆按钮无效
+			if (0 != authType && 1 != authType && 0 == $("input#username").textbox("getValue").length)
+			{
+				$("input#username").textbox("setError", $.su.CHAR.PORTAL.ERR_USERNAME_EMPTY);
+				return false;
+			}
+			if (0 != authType && 0 == $("input#password").textbox("getValue").length)
+			{
+				$("input#password").textbox("setError", $.su.CHAR.PORTAL.ERR_PWD_EMPTY);
+				return false;
+			}
+		
+			$.ajax({
+			type: "POST",
+			url:  "/portal/portal_entry.json",
+			timeout: 5000,
+			dataType: "json",
+			async: false,
+			cache: false,
+			data: {"operation": "login", "username": $("input#username").textbox("getValue"), "password": $("input#password").textbox("getValue"), "clientMac": getQueryString("clientMac"), "origUrl": getQueryString("origUrl")},
+			traditional: true,
+			success: function(data)
+			{
+				$("input#username").focus();
+				
+				if(1 == data.data.portal_disconnect)
+				{
+					$('#portal_wrapper').hide();
+					$('#portal_offline').show();
+				}
+				else
+				{
+					$('#portal_offline').hide();
+					$('#portal_wrapper').show();
+
+				if(0 == data.data.portal_authType)
+				{
+					$("input#username").textbox("hide");
+					$("input#password").textbox("hide");
+				}
+				else if(1 == data.data.portal_authType)
+				{
+					$("input#username").textbox("hide");
+					$("input#password").focus();
+				}
+				}
+				
+				$("span#title").html(EscapPortalStr(data.data.portal_title));
+				$("p#useTerm").html(EscapPortalStr(data.data.portal_useTerm));
+				
+				if ("true" == data.data.portal_accept || true == data.data.portal_accept)
+				{
+					$("input#portal_accept").checkbox("setValue", true);
+				}
+				else
+				{
+					$("input#portal_accept").checkbox("setValue", false);
+				}
+				
+				if (true == data.success)
+				{
+					top.location.href = "/portal/entry?clientMac=" + getQueryString("clientMac") + "&origUrl=" + getQueryString("origUrl");
+				}
+				else
+				{
+					if (1 == data.errCode)
+					{
+						if (1 == data.data.portal_authType)
+						{
+							$("input#password").textbox("setError", $.su.CHAR.PORTAL.ERR_PASSWORD_ERROR);
+						}
+						else
+						{
+							$("input#username").textbox("setError", $.su.CHAR.PORTAL.ERR_LOGIN_FAIL);
+						}
+					}
+					else if (2 == data.errCode)
+					{
+						if (1 == data.data.portal_authType)
+						{
+							$("input#password").textbox("setError", $.su.CHAR.PORTAL.ERR_LOGIN_TIMEOUT);
+						}
+						else
+						{
+							$("input#username").textbox("setError", $.su.CHAR.PORTAL.ERR_LOGIN_TIMEOUT);
+						}
+					}
+				}
+			},
+			error: function(e, status)
+			{
+				//console.log("error", e, status);
+			}
+		});
+	};
+
+
+
+	init();
+});
+//]]>
+</script>
+</body>
+</html>

@@ -1,0 +1,1313 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate" />
+<meta http-equiv="expires" content="Wed, 26 Feb 1997 08:33:43 GMT" />
+<link rel="icon" href="themes/dark/img/favicon.png" type="image/png" /> 
+<link type="text/css" href="css/widget.css" rel="stylesheet" />
+
+<link type="text/css" href="themes/dark/css/widget.css" rel="stylesheet" />
+<link type="text/css" href="themes/dark/css/style.css" rel="stylesheet" />
+
+
+
+<title>Wizard</title>
+</head>
+
+<body class="wizard-body">
+
+
+<div class="top hidden" id="top-wrapper">
+	<div class="top-header">
+    	<div class="top-header-wrap">
+        	<h1 id="product-tag">
+            	<span class="icon"></span>
+                <span class="separate hidden" style="display:none"></span>
+                <span class="text hidden" id="devname" ></span>
+            </h1>            
+        </div>     
+    </div>
+
+    <div class="wizard-content">
+    	<div id="wizard_step_account" class="wizard-step-account">
+			<p id="text_new_account" class="wizard-setup-title"></p>
+			<input type="text"  id="wizard_account_username" name="newUserName" value="" />
+			<input type="password"  id="wizard_account_password" name="newPwd" value="" />
+			<input type="password"  id="wizard_account_confirm" name="confirmPwd" value="" />
+			<input id="wizard_account_status"  value="" />
+			<div class="allow-data-collection-container">
+				<input id="allow-data-collection" name="allowDataCollection" value="" />
+				<div id="allow-data-collection-tip" class="icon tooltip-icon allow-data-collection-tip"></div>
+				<p id="allow-data-collection-note"></p>
+			</div>
+			<button id="wizard_account_next" class=""></button>
+    	</div>
+
+
+    	<div id="wizard_step_wireless" class="wizard-step-wireless hidden">
+			<p id="text_wireless_settings" class="wizard-setup-title"></p>
+
+			<div id="wizard-step-wireless_2g" class="part-separate" >
+				<input id="wireless_enable_2g" name="wireless_enable_2g" />
+				<input id="wireless_ssid_2g" name="wireless_ssid_2g" />
+				<input id="wireless_password_2g" name="wireless_password_2g" />
+			</div>
+
+			<div id="wizard-step-wireless_5g" class="part-separate" >
+				<input id="wireless_enable_5g" name="wireless_enable_5g" />
+				<input id="wireless_ssid_5g" name="wireless_ssid_5g" />
+				<input id="wireless_password_5g" name="wireless_password_5g" />
+			</div>
+
+			<div id="wizard-step-wireless_5g2" class="part-separate hidden" >
+				<input id="wireless_enable_5g2" name="wireless_enable_5g2" />
+				<input id="wireless_ssid_5g2" name="wireless_ssid_5g2" />
+				<input id="wireless_password_5g2" name="wireless_password_5g2" />
+			</div>
+
+			<div id="wizard-step-wireless_6g" class="part-separate hidden" >
+				<input id="wireless_enable_6g" name="wireless_enable_6g" />
+				<input id="wireless_ssid_6g" name="wireless_ssid_6g" />
+				<input id="wireless_password_6g" name="wireless_password_6g" />
+			</div>
+
+			<button id="wizard_wireless_back" class=""></button>
+			<button id="wizard_wireless_next" class=""></button>
+			<button id="wizard_wireless_skip" class="hidden"></button>
+    	</div>
+
+    	<div id="wizard_step_apply" class="wizard-step-apply hidden">
+			<p id="text_applying" class="wizard-setup-title"></p>
+			<input id="wizard_applying_pro" name="probar" />
+    	</div>
+
+    	<div id="wizard_step_finish" class="wizard-step-finish hidden">
+			<p id="text_finish_success" class="wizard-setup-title success"></p>
+			<p id="text_finish_continue"></p>
+
+			<p id="finish_2g_disable"></p>
+			<div id="finish_2g" class="finish-2g-block">
+				<p id="text_finish_2g" class="text-finish-2g"></p>
+				<input id="finish_ssid_2g" name="finish_ssid_2g" />
+				<!-- <input id="finish_password_2g" name="finish_password_2g" /> -->
+				<div id="finish_password_2g_block" class="">
+					<span id="finish_password_2g_label" class="wizard-ssid-label"></span>
+					<p id="finish_password_2g" class="wizard-ssid-content"></p>
+				</div>
+				<div id="finish_security_2g_block" class="">
+					<span id="finish_security_2g_label" class="wizard-ssid-label wizard-security-label"></span>
+					<p id="finish_security_2g" class="wizard-security-content"></p>
+				</div>
+			</div>
+			<p id="finish_5g_disable"></p>
+			<div id="finish_5g" class="finish-5g-block hidden">
+				<p id="text_finish_5g" class="text-finish-5g"></p>
+				<input id="finish_ssid_5g" name="finish_ssid_5g" />
+
+				<div id="finish_password_5g_block" class="">
+					<span id="finish_password_5g_label" class="wizard-ssid-label"></span>
+					<p id="finish_password_5g" class="wizard-ssid-content"></p>
+				</div>
+				<div id="finish_security_5g_block" class="">
+					<span id="finish_security_5g_label" class="wizard-ssid-label wizard-security-label"></span>
+					<p id="finish_security_5g" class="wizard-security-content"></p>
+				</div>
+			</div>
+
+			<p id="finish_5g2_disable"></p>
+			<div id="finish_5g2" class="finish-5g-block hidden">
+				<p id="text_finish_5g2" class="text-finish-5g"></p>
+				<input id="finish_ssid_5g2" name="finish_ssid_5g2" />
+
+				<div id="finish_password_5g2_block" class="">
+					<span id="finish_password_5g2_label" class="wizard-ssid-label"></span>
+					<p id="finish_password_5g2" class="wizard-ssid-content"></p>
+				</div>
+				<div id="finish_security_5g2_block" class="">
+					<span id="finish_security_5g2_label" class="wizard-ssid-label wizard-security-label"></span>
+					<p id="finish_security_5g2" class="wizard-security-content"></p>
+				</div>
+			</div>
+
+			<p id="finish_6g_disable"></p>
+			<div id="finish_6g" class="finish-5g-block hidden">
+				<p id="text_finish_6g" class="text-finish-5g"></p>
+				<input id="finish_ssid_6g" name="finish_ssid_6g" />
+
+				<div id="finish_password_6g_block" class="">
+					<span id="finish_password_6g_label" class="wizard-ssid-label"></span>
+					<p id="finish_password_6g" class="wizard-ssid-content"></p>
+				</div>
+				<div id="finish_security_6g_block" class="">
+					<span id="finish_security_6g_label" class="wizard-ssid-label wizard-security-label"></span>
+					<p id="finish_security_6g" class="wizard-security-content"></p>
+				</div>
+			</div>
+
+			<div class="wizard-finish-confirm">
+				<input id="confirm_conn" name="confirm" />
+				<button id="wizard_finish_button" class=""></button>
+			</div>
+    	</div>
+    </div>    
+</div>
+
+<div id="errorMsg" class="hidden">
+	<p class="frequency-error-tip">
+		<span class="icon"></span>
+		<span class="text" id="frequencyErrorTip"></span>
+	</p>
+</div>
+
+<div id="band_enable_confirm_msg" class="hidden">
+	<h4 class="title">
+		<span class="icon"></span>
+		<span id="band_enable_confirm_text" class="text"></span>
+	</h4>
+</div>
+
+<!--  jquery框架加载  -->
+<script type="text/javascript" src="js/libs/jquery.min.js"></script>
+<script type="text/javascript" src="js/libs/md5.js"></script>
+<script type="text/javascript" src="js/libs/netUtil.js"></script>
+<!-- <script type="text/javascript" src="js/libs/jquery.extend.js"></script> -->
+<!-- <script type="text/javascript" src="js/libs/jquery.cookies.min.js"></script> -->
+
+<!--  语言部分加载  -->
+<script id="lan-js" type="text/javascript" src="locale/en_US/lan.js"></script>
+<link id="lan-css" type="text/css" rel="stylesheet" href="locale/en_US/lan.css" />
+
+<!--  引入框架代码， 最后需要统一到一个文件下面  -->
+<script type="text/javascript" src="js/su/su.js"></script>
+
+<script type="text/javascript" src="js/su/data/proxy.js"></script>
+<script type="text/javascript" src="js/su/data/store.js"></script>
+<script type="text/javascript" src="js/su/data/treestore.js"></script>
+
+<script type="text/javascript" src="js/su/widget/widget.js"></script>
+
+<script type="text/javascript" src="js/su/widget/window/panel.js"></script>
+<script type="text/javascript" src="js/su/widget/window/page.js"></script>
+<script type="text/javascript" src="js/su/widget/window/msg.js"></script>
+
+<script type="text/javascript" src="js/su/widget/form/form.js"></script>
+<script type="text/javascript" src="js/su/widget/form/status.js"></script>
+<script type="text/javascript" src="js/su/widget/form/checkbox.js"></script>
+<script type="text/javascript" src="js/su/widget/form/textbox.js"></script>
+<script type="text/javascript" src="js/su/widget/form/button.js"></script>
+<script type="text/javascript" src="js/su/widget/form/progressbar.js"></script>
+<script type="text/javascript" src="js/su/widget/form/tip.js"></script>
+<script type="text/javascript" src="js/su/widget/form/password.js"></script>
+
+</body>
+
+<script type="text/javascript">
+$(document).ready(function(e){
+
+
+	var URL_SYSMODE = "./data/sysmod.json";
+	var PRIVACY_POLICY_URL = "./data/privacyPolicy.json";
+
+	var DUT_MODE = {
+		BAND_24G: 0,
+		BAND_24G_5G: 1,
+		BAND_24G_5G1_5G2: 2,
+		BAND_24G_5G_6G: 3,
+		BAND_24G_5G1_5G2_6G: 4
+	}
+	
+	var ENABLE_STATUS = {
+		ENABLE: 1,
+		DISABLE: 0
+	}
+
+	var privacyPolicyProxy = new $.su.Proxy({
+		url: PRIVACY_POLICY_URL
+	});
+	
+	var wizardProxy = new $.su.Proxy({
+		url: "./data/wizard.json",
+		timeout: 30000
+	});
+		
+	var stepCode = 1;
+	var needConfirmBandSettings = true;
+
+	var timeZoneItem = [
+	  	{"value": "0", "name": $.su.CHAR.TIMESET.Eniwetok, index:120},
+		{"value": "60", "name": $.su.CHAR.TIMESET.Midway, index:110},
+		{"value": "120", "name": $.su.CHAR.TIMESET.Hawaii, index:100},
+		{"value": "180", "name": $.su.CHAR.TIMESET.Alaska, index:90},
+		{"value": "240", "name": $.su.CHAR.TIMESET.Pacific, index:80},
+		{"value": "300", "name": $.su.CHAR.TIMESET.Mountain, index:70},
+		{"value": "360", "name": $.su.CHAR.TIMESET.Central, index:60},
+		{"value": "420", "name": $.su.CHAR.TIMESET.Eastern, index:50},
+		// {"value": "450", "name": $.su.CHAR.TIMESET.Caracas, index:40},
+	  	{"value": "480", "name": $.su.CHAR.TIMESET.Atlantic, index:40},
+		{"value": "510", "name": $.su.CHAR.TIMESET.Newfoundland, index:35},
+		{"value": "540", "name": $.su.CHAR.TIMESET.Brasilia, index:30},
+		{"value": "600", "name": $.su.CHAR.TIMESET.MidAtlantic, index:20},
+		{"value": "660", "name": $.su.CHAR.TIMESET.Azores, index:10},
+		{"value": "720", "name": $.su.CHAR.TIMESET.Greenwich, index:0},
+
+		{"value": "780", "name": $.su.CHAR.TIMESET.Berlin, index:-10},
+		{"value": "840", "name": $.su.CHAR.TIMESET.Athens, index:-20},
+		{"value": "900", "name": $.su.CHAR.TIMESET.Baghdad, index:-30},
+		{"value": "930", "name": $.su.CHAR.TIMESET.Teheran, index:-35},
+		{"value": "960", "name": $.su.CHAR.TIMESET.Abu, index:-40},
+		{"value": "990", "name": $.su.CHAR.TIMESET.Kabul, index:-45},
+		{"value": "1020", "name": $.su.CHAR.TIMESET.Islamabad, index:-50},
+		{"value": "1050", "name": $.su.CHAR.TIMESET.Madras, index:-55},
+		{"value": "1065", "name": $.su.CHAR.TIMESET.Katmandu, index:-57.5},
+		{"value": "1080", "name": $.su.CHAR.TIMESET.Alma, index:-60},
+		{"value": "1110", "name": $.su.CHAR.TIMESET.Rangoon, index:-65},
+		{"value": "1140", "name": $.su.CHAR.TIMESET.Bangkok, index:-70},
+		{"value": "1200", "name": $.su.CHAR.TIMESET.Beijing, index:-80},
+		{"value": "1260", "name": $.su.CHAR.TIMESET.Tokyo, index:-90},
+		{"value": "1290", "name": $.su.CHAR.TIMESET.Adelaide, index:-95},
+		{"value": "1320", "name": $.su.CHAR.TIMESET.Brisbane, index:-100},
+		{"value": "1380", "name": $.su.CHAR.TIMESET.Magadan, index:-110},
+		{"value": "1440", "name": $.su.CHAR.TIMESET.Fiji, index:-120},
+		{"value": "1500", "name": $.su.CHAR.TIMESET.Nuku, index:-130}
+	];
+
+	function synPcClock()
+	{
+		var date = new Date();
+		var year =date.getFullYear();
+		var month=date.getMonth()+1;
+		month = month < 10 ? "0"+month : month;
+		var day=date.getDate();
+		day = day < 10 ? "0"+day : day;
+		var hour=date.getHours()<10?"0"+date.getHours():date.getHours();
+		var minute=date.getMinutes()<10?"0"+date.getMinutes():date.getMinutes();
+		var second=date.getSeconds()<10?"0"+date.getSeconds():date.getSeconds();
+
+		var d1 = (new Date(2019, 1, 1)).getTimezoneOffset();
+		var d2 = (new Date(2019, 6, 1)).getTimezoneOffset();
+		var localUtc;
+		parseInt(d1)>parseInt(d2)?localUtc=d1/6:localUtc=d2/6;
+		// var localUtc = d1.getTimezoneOffset()/6;
+		for(var e in timeZoneItem){
+			if( timeZoneItem[e].index == localUtc){
+				timeZoneStr = timeZoneItem[e].value;
+				break;
+			}else{
+				timeZoneStr = '720';
+			}
+		}
+
+		var dateStr = month+"/"+day+"/"+year;
+		var timeStr = hour+":"+minute+":"+second;
+
+		return [dateStr, timeStr, timeZoneStr];
+	}
+
+	$('#top-wrapper').removeClass('hidden');
+
+/////////////////////////// account
+
+	$('p#text_new_account').html($.su.CHAR.WIZARD.SETUP_ACCOUNT);
+
+	$("input#wizard_account_username").textbox({
+		fieldLabel: $.su.CHAR.WIZARD.NEW_USERNAME,
+		allowBlank:false,
+		_maxLength: 64,
+		_minLength: 1
+	});
+
+	$("input#wizard_account_password").password({
+		fieldLabel: $.su.CHAR.WIZARD.NEW_PASSWORD,
+		allowBlank:false,
+	    _minLength: 0,
+	    _maxLength: 64,
+		vtype:"ascii_visible",
+		validator:function(value){
+			if (!$.su.func.checkPswLevel(value)) {
+				return $.su.CHAR.VTYPETEXT.PSW_LEVEL_ERROR
+			}
+
+			var confirm_pwd = $("input#wizard_account_confirm").password("getValue");
+			if (confirm_pwd !== '') {
+				$("input#wizard_account_confirm").password('validate');
+			}
+			return true;
+		}
+	})
+
+	$("input#wizard_account_confirm").password({
+		fieldLabel: $.su.CHAR.WIZARD.CONFIRM_PASSWORD,
+		showLevel:false,
+		allowBlank:false,
+		cls: "inline-block",
+		_minLength: 0,
+		_maxLength: 64,
+		vtype:"ascii_visible",
+		validator:function(val){
+			var new_pwd = $("input#wizard_account_password").password("getValue");
+			
+			/*this line is for bug62646*/
+			$("input#wizard_account_confirm").password("setValue", val);
+
+			if(val == new_pwd)
+			{
+				$("#wizard_account_status").status("setSuccess");
+				return true;
+			}
+			else
+			{				
+				// $("input#wizard_account_confirm").textbox('setError', $.su.CHAR.WIZARD.PWD_NOT_MATCH);
+				$("#wizard_account_status").status("setFailed");
+				return false;
+			}
+		}
+				
+	})
+
+	$("#wizard_account_status").status({
+		cls:"inline"
+	});
+
+	$("p#allow-data-collection-note").html($.su.CHAR.INDEX.ALLOW_DATA_COLLECTION_NOTE);
+
+	$("#allow-data-collection-tip").tip({
+		cls: "",
+		positionRelative: "me",
+		content: "#allow-data-collection-note",
+		showDelay: 100,
+		position: {
+			pageX: -10,
+			pageY: 20
+		},
+	});
+
+	$("input#allow-data-collection").checkbox({
+		fieldLabel: $.su.CHAR.INDEX.ALLOW_DATA_COLLECTION,
+		labelCls: 'm',
+		cls: "allow-data-collection",
+		items: [
+			{boxlabel: $.su.CHAR.WIZARD.ENABLE, inputValue: ENABLE_STATUS.ENABLE, uncheckedValue: ENABLE_STATUS.DISABLE, checked:false}
+		]
+	})
+
+	function getPrivacyPolicy () {
+		var dataCollectionEnable = $("input#allow-data-collection").checkbox('getValue').length > 0;
+
+		return dataCollectionEnable
+	}
+
+	$("button#wizard_account_next").button({
+		text: $.su.CHAR.OPERATION.NEXT,
+		cls: 'wizard-btn-next',
+		handler: function(){
+			
+			if( !$("input#wizard_account_username").textbox('validate') 
+				|| !$("input#wizard_account_password").password('validate')
+				|| !$("input#wizard_account_confirm").password('validate') ){
+				return false;
+			}
+
+			if("ADMIN" == $("input#wizard_account_password").password('getValue').toUpperCase())
+			{
+				$("#wizard_account_password").password("setError", $.su.CHAR.WIZARD.PWD_IS_ADMIN);
+				return false;
+			}
+
+			/*$.ajax({
+		    	url: "./data/userAccount.json",
+		    	type: 'POST',
+		    	data: {
+		    		newUserName: $("input#wizard_account_username").textbox('getValue'),
+		    		newPwd: $("input#wizard_account_password").textbox('getValue')
+		    	},
+		    	dataType: 'json',
+		    	cache:false,
+		    	error: function(){return false;},
+		    	success: function(result){
+					if(result.errCode == 41003)
+					{
+						$("#wizard_account_password").textbox("setError", $.su.CHAR.ACCOUNT.NEWUSER_IS_INVALID);
+					}
+					else if(result.errCode == 41004)
+					{
+						$("#wizard_account_password").textbox("setError", $.su.CHAR.ACCOUNT.NEWUSER_IS_TOO_LONG);
+					}					
+		    	}
+		    });*/
+			$('div#wizard_step_account').hide();
+			if (!!$.su.isFestaAp) {
+				handleClickSkip()
+			} else {
+				stepCode = 2;
+				$('div#wizard_step_wireless').show();
+			}
+		}
+	});
+		
+/////////////////////////// wireless
+
+	function WPAPSK_key_invalid(pwd)
+	{
+	    var c;
+	    var zeronum = 0;
+	    var is_Hex = 0;
+	    var ch = "0123456789ABCDEFabcdefGHIJKLMNOPQRSTUVWXYZghijklmnopqrstuvwxyz`~!@#$^&*()-=_+[]{};:\'\"\\|/?.,<>/% ";
+	    var hexch = ch.substring(0, 22);
+	    for (var i = 0; i < pwd.length; i++)
+	    {
+	    	c = pwd.charAt(i);
+	    	if (hexch.indexOf(c) == -1)
+	    	{
+	    		break;
+	    	}
+	    }
+	    if(i == pwd.length)
+	    {
+	    	is_Hex = 1;
+	    }
+	    if (is_Hex == 1) 
+	        ch = ch.substring(0, 22);
+	    for (var i = 0; i < pwd.length; i++) {
+	        c = pwd.charAt(i);
+	        if (ch.indexOf(c) == -1) 
+	            return false;
+	    }
+	    if ((pwd.length < 8 || pwd.length > 63) && (is_Hex == 1) )
+	            return false;
+	    if ((pwd.length < 8 || pwd.length > 63) && (is_Hex == 0) )
+	            return false;
+	    return true;
+	}
+
+	$('p#text_wireless_settings').html($.su.CHAR.WIZARD.SETUP_WIRELESS);
+
+	var wirelessEnable2g = $("input#wireless_enable_2g").checkbox({
+		fieldLabel: $.su.CHAR.WIZARD.ENABLE_WIRELESS_2,
+		labelCls: 'l',
+		items: [
+			{boxlabel: $.su.CHAR.WIZARD.ENABLE, inputValue: "on", uncheckedValue:"off", checked:true}
+		]
+	}).on('ev_change', function(e, oldValue, newValue){
+		/*if(	wirelessEnable2g.checkbox('getValue').length==0
+			&& wirelessEnable5g.checkbox('getValue').length==0){
+			wirelessEnable2g.checkbox('setValue', 'on');
+			return false;
+		}*/
+		if("wireless_enable_2g" == newValue || "on" == newValue)
+		{
+			$("input#wireless_ssid_2g").textbox("enable");
+			$("input#wireless_password_2g").textbox("enable");
+		}
+		else
+		{
+			$("input#wireless_ssid_2g").textbox("setNormal");
+			$("input#wireless_password_2g").textbox("setNormal");
+			$("input#wireless_ssid_2g").textbox("disable");
+			$("input#wireless_password_2g").textbox("disable");
+		}
+	});
+
+	$("input#wireless_ssid_2g").textbox({
+		fieldLabel: $.su.CHAR.WIZARD.SSID,
+		labelCls: 'l',
+		maxLength: 32,
+    	vtype:"wlanssid"
+	});
+
+	$("input#wireless_password_2g").textbox({
+		fieldLabel: $.su.CHAR.WIZARD.PASSWORD,
+		labelCls: 'l',
+		maxLength: 63,
+		autoTrim: false,
+		validator:function(val){			
+			if(val.length > $.trim(val).length){
+				return $.su.CHAR.WIRELESS.PASSWORD_SPACE_TIP;
+			}
+			if(WPAPSK_key_invalid(val.toString()))
+			{
+				return true;
+			}
+			else
+			{
+				return $.su.CHAR.WIZARD.ERROR_TIP;
+			}
+		}
+	})
+
+	var wirelessEnable5g = $("input#wireless_enable_5g").checkbox({
+		fieldLabel: ($.su.dutMode=="2"||$.su.dutMode=="4")?$.su.CHAR.WIZARD.ENABLE_WIRELESS_5G1:$.su.CHAR.WIZARD.ENABLE_WIRELESS_5,
+		labelCls: 'l',
+		items: [
+			{boxlabel: $.su.CHAR.WIZARD.ENABLE, inputValue: "on", uncheckedValue:"off", checked:true}
+		]
+	}).on('ev_change', function(e, oldValue, newValue){
+		/*if(	wirelessEnable2g.checkbox('getValue').length==0
+			&& wirelessEnable5g.checkbox('getValue').length==0){
+			wirelessEnable5g.checkbox('setValue', 'on');
+			return false;
+		}*/
+		if("wireless_enable_5g" == newValue || "on" == newValue)
+		{
+			$("input#wireless_ssid_5g").textbox("enable");
+			$("input#wireless_password_5g").textbox("enable");
+		}
+		else
+		{
+			$("input#wireless_ssid_5g").textbox("setNormal");
+			$("input#wireless_password_5g").textbox("setNormal");
+			$("input#wireless_ssid_5g").textbox("disable");
+			$("input#wireless_password_5g").textbox("disable");
+		}
+	});
+
+	$("input#wireless_ssid_5g").textbox({
+		fieldLabel: $.su.CHAR.WIZARD.SSID,
+		labelCls: 'l',
+		maxLength: 32,
+    	vtype:"wlanssid"
+	});
+
+	$("input#wireless_password_5g").textbox({
+		fieldLabel: $.su.CHAR.WIZARD.PASSWORD,
+		labelCls: 'l',
+		maxLength: 63,
+		autoTrim: false,
+		validator:function(val){			
+			if(val.length > $.trim(val).length){
+				return $.su.CHAR.WIRELESS.PASSWORD_SPACE_TIP;
+			}
+			if(WPAPSK_key_invalid(val.toString()))
+			{
+				return true;
+			}
+			else
+			{
+				return $.su.CHAR.WIZARD.ERROR_TIP;
+			}
+		}
+	})
+	var wirelessEnable5g2 = $("input#wireless_enable_5g2").checkbox({
+		fieldLabel: $.su.CHAR.WIZARD.ENABLE_WIRELESS_5G2,
+		labelCls: 'l',
+		items: [
+			{boxlabel: $.su.CHAR.WIZARD.ENABLE, inputValue: "on", uncheckedValue:"off", checked:true}
+		]
+	}).on('ev_change', function(e, oldValue, newValue){
+		/*if(	wirelessEnable2g.checkbox('getValue').length==0
+			&& wirelessEnable5g.checkbox('getValue').length==0){
+			wirelessEnable5g.checkbox('setValue', 'on');
+			return false;
+		}*/
+		if("wireless_enable_5g2" == newValue || "on" == newValue)
+		{
+			$("input#wireless_ssid_5g2").textbox("enable");
+			$("input#wireless_password_5g2").textbox("enable");
+		}
+		else
+		{
+			$("input#wireless_ssid_5g2").textbox("setNormal");
+			$("input#wireless_password_5g2").textbox("setNormal");
+			$("input#wireless_ssid_5g2").textbox("disable");
+			$("input#wireless_password_5g2").textbox("disable");
+		}
+	});
+
+	$("input#wireless_ssid_5g2").textbox({
+		fieldLabel: $.su.CHAR.WIZARD.SSID,
+		labelCls: 'l',
+		maxLength: 32,
+    	vtype:"wlanssid"
+	});
+
+	$("input#wireless_password_5g2").textbox({
+		fieldLabel: $.su.CHAR.WIZARD.PASSWORD,
+		labelCls: 'l',
+		maxLength: 63,
+		autoTrim: false,
+		validator:function(val){			
+			if(val.length > $.trim(val).length){
+				return $.su.CHAR.WIRELESS.PASSWORD_SPACE_TIP;
+			}
+			if(WPAPSK_key_invalid(val.toString()))
+			{
+				return true;
+			}
+			else
+			{
+				return $.su.CHAR.WIZARD.ERROR_TIP;
+			}
+		}
+	})
+
+	/////////////////////////////////////////6g
+
+	var wirelessEnable6g = $("input#wireless_enable_6g").checkbox({
+		fieldLabel: $.su.CHAR.WIZARD.ENABLE_WIRELESS_6,
+		labelCls: 'l',
+		items: [
+			{boxlabel: $.su.CHAR.WIZARD.ENABLE, inputValue: "on", uncheckedValue:"off", checked:true}
+		]
+	}).on('ev_change', function(e, oldValue, newValue){
+		/*if(	wirelessEnable2g.checkbox('getValue').length==0
+			&& wirelessEnable5g.checkbox('getValue').length==0){
+			wirelessEnable5g.checkbox('setValue', 'on');
+			return false;
+		}*/
+		if("wireless_enable_6g" == newValue || "on" == newValue)
+		{
+			$("input#wireless_ssid_6g").textbox("enable");
+			$("input#wireless_password_6g").textbox("enable");
+		}
+		else
+		{
+			$("input#wireless_ssid_6g").textbox("setNormal");
+			$("input#wireless_password_6g").textbox("setNormal");
+			$("input#wireless_ssid_6g").textbox("disable");
+			$("input#wireless_password_6g").textbox("disable");
+		}
+	});
+
+	$("input#wireless_ssid_6g").textbox({
+		fieldLabel: $.su.CHAR.WIZARD.SSID,
+		labelCls: 'l',
+		maxLength: 32,
+    	vtype:"wlanssid"
+	});
+
+	$("input#wireless_password_6g").textbox({
+		fieldLabel: $.su.CHAR.WIZARD.PASSWORD,
+		labelCls: 'l',
+		maxLength: 63,
+		autoTrim: false,
+		validator:function(val){			
+			if(val.length > $.trim(val).length){
+				return $.su.CHAR.WIRELESS.PASSWORD_SPACE_TIP;
+			}
+			if(WPAPSK_key_invalid(val.toString()))
+			{
+				return true;
+			}
+			else
+			{
+				return $.su.CHAR.WIZARD.ERROR_TIP;
+			}
+		}
+	})
+	
+	function checkWlPwd(val){				
+		if(val.length > $.trim(val).length){
+			return $.su.CHAR.WIRELESS.PASSWORD_SPACE_TIP;
+		}
+		if(!WPAPSK_key_invalid(val.toString()))
+		{
+			return $.su.CHAR.WIZARD.ERROR_TIP;
+		}
+		return true;
+	}	
+
+	$("button#wizard_wireless_next").button({
+		text: $.su.CHAR.OPERATION.SAVE,
+		cls: 'inline-block wizard-btn-next',
+		handler: function(){			
+			$('div#finish_security_2g_block').hide();
+			$('div#finish_security_5g_block').hide();
+			$('div#finish_security_5g2_block').hide();
+			$('div#finish_security_6g_block').hide();
+			
+			var enableLen2g = wirelessEnable2g.checkbox('getValue').length;
+			var enableLen5g = wirelessEnable5g.checkbox('getValue').length;
+			var enableLen5g2 = wirelessEnable5g2.checkbox('getValue').length;
+			var enableLen6g = wirelessEnable6g.checkbox('getValue').length;
+
+			if($.su.dutMode === 0){
+				if( enableLen2g==0 ){
+					$("div#errorMsg").msg('show');
+					return false;
+				}
+			}else if($.su.dutMode === 1){
+				if( enableLen2g==0 && enableLen5g==0 ){
+					$("div#errorMsg").msg('show');
+					return false;
+				}
+			}else if($.su.dutMode === 2){
+				if( enableLen2g==0 && enableLen5g==0  && enableLen5g2==0 ){
+					$("div#errorMsg").msg('show');
+					return false;
+				}
+			}else if($.su.dutMode === 3){
+				if( enableLen2g==0 && enableLen5g2==0 && enableLen6g==0 ){
+					$("div#errorMsg").msg('show');
+					return false;
+				}
+			}else if($.su.dutMode === 4){
+				if( enableLen2g==0 && enableLen5g==0 && enableLen5g2==0 && enableLen6g==0 ){
+					$("div#errorMsg").msg('show');
+					return false;
+				}
+			}
+			if (!checkBandEnableSettings()) {
+        
+				return false;
+			}
+
+			stepCode = 3;
+
+			var ssid_2g = $("input#wireless_ssid_2g").textbox('getValue');
+			var passwd_2g = $("input#wireless_password_2g").textbox('getValue');
+
+			if( "wireless_enable_2g" == $("input#wireless_enable_2g").checkbox('getValue') ){
+				$('#finish_2g_disable').hide();
+				$('#finish_2g').show();
+
+				if ("" == ssid_2g)
+					{
+						$("input#wireless_ssid_2g").textbox("setError", $.su.CHAR.BLANKTEXT);
+						return false;
+					}
+					else if ($.su.unicode.getUtf8Length(ssid_2g) > 32)
+					{
+						$("input#wireless_ssid_2g").textbox("setError", $.su.CHAR.INVALIDTEXT);
+						return false;
+					}
+					else if ("" == passwd_2g)
+					{
+						$("input#wireless_password_2g").textbox("setError", $.su.CHAR.BLANKTEXT);
+						return false;
+					}
+					else if (checkWlPwd(passwd_2g) !==true)
+					{
+						$("input#wireless_password_2g").textbox("setError", checkWlPwd(passwd_2g));
+						return false;
+					}					
+					$("input#finish_ssid_2g").textbox("setValue", ssid_2g);
+				//$("input#finish_password_2g").textbox("setValue", passwd_2g);
+				$('p#finish_password_2g').text(passwd_2g);
+			}else{
+				$('#finish_2g_disable').show();
+				$('#finish_2g').hide();
+			}
+
+			var ssid_5g = $("input#wireless_ssid_5g").textbox('getValue');
+			var passwd_5g = $("input#wireless_password_5g").textbox('getValue');
+			
+			var ssid_5g2 = $("input#wireless_ssid_5g2").textbox('getValue');
+			var passwd_5g2 = $("input#wireless_password_5g2").textbox('getValue');
+			
+			var ssid_6g = $("input#wireless_ssid_6g").textbox('getValue');
+			var passwd_6g = $("input#wireless_password_6g").textbox('getValue');
+
+			if($.su.dutMode===0){
+				$('#finish_5g_disable').hide();
+				$('#finish_5g2_disable').hide();
+				$('#finish_6g_disable').hide();
+				$('#finish_5g').hide();
+				$('#finish_5g2').hide();
+				$('#finish_6g').hide();
+			}else{
+				if("wireless_enable_5g"==$("input#wireless_enable_5g").checkbox('getValue')){
+					$('#finish_5g_disable').hide();
+					$('#finish_5g').show();
+
+					if ("" == ssid_5g)
+					{
+						$("input#wireless_ssid_5g").textbox("setError", $.su.CHAR.BLANKTEXT);
+						return false;
+					}
+					else if ($.su.unicode.getUtf8Length(ssid_5g) > 32)
+					{
+						$("input#wireless_ssid_5g").textbox("setError", $.su.CHAR.INVALIDTEXT);
+						return false;
+					}
+					else if ("" == passwd_5g)
+					{
+						$("input#wireless_password_5g").textbox("setError", $.su.CHAR.BLANKTEXT);
+						return false;
+					}
+					else if (checkWlPwd(passwd_5g) !==true)
+					{
+						$("input#wireless_password_5g").textbox("setError", checkWlPwd(passwd_5g));
+						return false;
+					}
+					$("input#finish_ssid_5g").textbox("setValue", ssid_5g);
+					// $("input#finish_password_5g").textbox("setValue", passwd_5g);	
+					$('p#finish_password_5g').text(passwd_5g);
+				}else{
+					$('#finish_5g_disable').show();
+					$('#finish_5g').hide();
+				}
+			}
+			if($.su.dutMode===2 || $.su.dutMode===4){
+				if("wireless_enable_5g2"==$("input#wireless_enable_5g2").checkbox('getValue')){
+					$('#finish_5g2_disable').hide();
+					$('#finish_5g2').show();
+
+					if ("" == ssid_5g2)
+					{
+						$("input#wireless_ssid_5g2").textbox("setError", $.su.CHAR.BLANKTEXT);
+						return false;
+					}
+					else if ($.su.unicode.getUtf8Length(ssid_5g2) > 32)
+					{
+						$("input#wireless_ssid_5g2").textbox("setError", $.su.CHAR.INVALIDTEXT);
+						return false;
+					}
+					else if ("" == passwd_5g2)
+					{
+						$("input#wireless_password_5g2").textbox("setError", $.su.CHAR.BLANKTEXT);
+						return false;
+					}
+					else if (checkWlPwd(passwd_5g2) !==true)
+					{
+						$("input#wireless_password_5g2").textbox("setError", checkWlPwd(passwd_5g2));
+						return false;
+					}
+					$("input#finish_ssid_5g2").textbox("setValue", ssid_5g2);
+					// $("input#finish_password_5g2").textbox("setValue", passwd_5g2);	
+					$('p#finish_password_5g2').text(passwd_5g2);
+				}else{
+					$('#finish_5g2_disable').show();
+					$('#finish_5g2').hide();
+				}
+			}else{
+				$('#finish_5g2_disable').hide();
+			}
+			if($.su.dutMode===3 || $.su.dutMode===4){
+				if("wireless_enable_6g"==$("input#wireless_enable_6g").checkbox('getValue')){
+					$('#finish_6g_disable').hide();
+					$('#finish_6g').show();
+
+					if ("" == ssid_6g)
+					{
+						$("input#wireless_ssid_6g").textbox("setError", $.su.CHAR.BLANKTEXT);
+						return false;
+					}
+					else if ($.su.unicode.getUtf8Length(ssid_6g) > 32)
+					{
+						$("input#wireless_ssid_6g").textbox("setError", $.su.CHAR.INVALIDTEXT);
+						return false;
+					}
+					else if ("" == passwd_6g)
+					{
+						$("input#wireless_password_6g").textbox("setError", $.su.CHAR.BLANKTEXT);
+						return false;
+					}
+					else if (checkWlPwd(passwd_6g) !==true)
+					{
+						$("input#wireless_password_6g").textbox("setError", checkWlPwd(passwd_6g));
+						return false;
+					}
+					$("input#finish_ssid_6g").textbox("setValue", ssid_6g);
+					// $("input#finish_password_6g").textbox("setValue", passwd_6g);	
+					$('p#finish_password_6g').text(passwd_6g);
+				}else{
+					$('#finish_6g_disable').show();
+					$('#finish_6g').hide();
+				}
+			}else{
+				$('#finish_6g_disable').hide();
+			}
+			
+
+			$('div#wizard_step_wireless').hide();
+			$('div#finish_password_2g_block').hide();
+			$('div#finish_password_5g_block').hide();
+			$('div#finish_password_5g2_block').hide();
+			$('div#finish_password_6g_block').hide();
+			
+			$('div#wizard_step_apply').show();
+			$('div#finish_password_2g_block').show();
+			$('div#finish_password_5g_block').show();
+			$('div#finish_password_5g2_block').show();
+			$('div#finish_password_6g_block').show();
+
+			applyingProBar.progressbar("animate", 0, 1, 30*1000, function(){
+	    		$('div#wizard_step_apply').hide();
+	    		$('div#wizard_step_finish').show();
+	     	});
+
+			var wlanData = [];
+			var wlanData2g = {
+				radioID: 0,
+				enable: $("input#wireless_enable_2g").checkbox('getValue').length>0?true:false,
+				ssid: $("input#wireless_ssid_2g").textbox('getValue'),
+				password: $("input#wireless_password_2g").textbox('getValue')
+			};
+			var wlanData5g = {
+				radioID: 1,
+				enable: $("input#wireless_enable_5g").checkbox('getValue').length>0?true:false,
+				ssid: $("input#wireless_ssid_5g").textbox('getValue'),
+				password: $("input#wireless_password_5g").textbox('getValue')
+			};
+			var wlanData5g2 = {
+				radioID: 2,
+				enable: $("input#wireless_enable_5g2").checkbox('getValue').length>0?true:false,
+				ssid: $("input#wireless_ssid_5g2").textbox('getValue'),
+				password: $("input#wireless_password_5g2").textbox('getValue')
+			};
+			var wlanData6g = {
+				radioID: 3,
+				enable: $("input#wireless_enable_6g").checkbox('getValue').length>0?true:false,
+				ssid: $("input#wireless_ssid_6g").textbox('getValue'),
+				password: $("input#wireless_password_6g").textbox('getValue')
+			};
+			if($.su.dutMode===0){
+				wlanData.push(wlanData2g);
+			}else if($.su.dutMode===1){
+				wlanData.push(wlanData2g);
+				wlanData.push(wlanData5g);
+			}else if($.su.dutMode===2){
+				wlanData.push(wlanData2g);
+				wlanData.push(wlanData5g);				
+				wlanData.push(wlanData5g2);				
+			}else if($.su.dutMode===3){
+				wlanData.push(wlanData2g);
+				wlanData.push(wlanData5g);				
+				wlanData.push(wlanData6g);				
+			}else if($.su.dutMode===4){
+				wlanData.push(wlanData2g);
+				wlanData.push(wlanData5g);				
+				wlanData.push(wlanData5g2);					
+				wlanData.push(wlanData6g);			
+			}
+
+			wizardProxy.write(
+			{
+				operation: 'set',
+				data: $.su.json.toJSONString({
+					account:{
+						newUserName: $("input#wizard_account_username").textbox('getValue'),
+						newPwd: md5($("input#wizard_account_password").password('getValue')).toUpperCase(),
+						confirmPwd: md5($("input#wizard_account_confirm").password('getValue')).toUpperCase()
+					},
+					wlan: wlanData,
+					privacyPolicy: getPrivacyPolicy(),
+					date: synPcClock()[0],
+					time: synPcClock()[1],
+					timeZone: synPcClock()[2]
+				})
+			}, function(){
+				// location.href = 'index.html';
+				applyingProBar.progressbar("stop");
+				applyingProBar.progressbar("animate", applyingProBar.progressbar("getValue"), 1, 3000, function(){
+		    		$('div#wizard_step_apply').hide();
+		    		$('div#wizard_step_finish').show();
+				});
+			});
+		}
+	});
+
+	var checkBandEnableSettings = function () {
+		if (!needConfirmBandSettings) {
+			needConfirmBandSettings = true;
+			return true;
+		}
+		var enableLen2g = wirelessEnable2g.checkbox('getValue').length;
+		var enableLen5g = wirelessEnable5g.checkbox('getValue').length;
+		var enableLen5g2 = wirelessEnable5g2.checkbox('getValue').length;
+		var enableLen6g = wirelessEnable6g.checkbox('getValue').length;
+
+		if($.su.dutMode === DUT_MODE.BAND_24G_5G_6G){
+			if( enableLen2g == 0 && enableLen5g2 == 0 && enableLen6g == 1 ){
+				$("#band_enable_confirm_msg").msg('show');
+				return false;
+			}
+		}else if($.su.dutMode === DUT_MODE.BAND_24G_5G1_5G2_6G){
+			if( enableLen2g == 0 && enableLen5g == 0 && enableLen5g2 == 0 && enableLen6g == 1 ){
+				$("#band_enable_confirm_msg").msg('show');
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+
+	$("button#wizard_wireless_skip").button({
+		text: $.su.CHAR.WIZARD.SKIP,
+		cls: 'inline-block wizard-btn-cancel wizard-wireless-skip',
+		handler: function(){			
+			handleClickSkip()
+		}
+	});
+
+	var handleClickSkip = function() {
+		stepCode = 3;
+
+		$('div#finish_2g').show();
+		if($.su.dutMode===1){
+			$('div#finish_5g').show();
+		}
+		if($.su.dutMode===2){
+			$('div#finish_5g').show();
+			$('div#finish_5g2').show();
+		}
+		if($.su.dutMode===3){
+			$('div#finish_5g').show();
+			$('div#finish_6g').show();
+		}
+		if($.su.dutMode===4){
+			$('div#finish_5g').show();
+			$('div#finish_5g2').show();
+			$('div#finish_6g').show();
+		}
+		
+		$('div#wizard_step_wireless').hide();
+		$('div#finish_password_2g_block').hide();
+		$('div#finish_password_5g_block').hide();
+		$('div#finish_password_5g2_block').hide();
+		$('div#finish_password_6g_block').hide();
+		$('#finish_2g_disable').hide();
+		$('#finish_5g_disable').hide();
+		$('#finish_5g2_disable').hide();
+		$('#finish_6g_disable').hide();
+		
+		$('div#wizard_step_apply').show();
+		$('div#finish_security_2g_block').show();
+		$('div#finish_security_5g_block').show();
+		$('div#finish_security_5g2_block').show();
+		$('div#finish_security_6g_block').show();
+
+		applyingProBar.progressbar("animate", 0, 1, 30*1000, function(){
+			$('div#wizard_step_apply').hide();
+			$('div#wizard_step_finish').show();
+		});
+
+		wizardProxy.write(
+			{
+				operation: 'skip',
+				data: $.su.json.toJSONString({
+					account:{
+						newUserName: $("input#wizard_account_username").textbox('getValue'),
+						newPwd: md5($("input#wizard_account_password").password('getValue')).toUpperCase(),
+						confirmPwd: md5($("input#wizard_account_confirm").password('getValue')).toUpperCase()
+					},
+					privacyPolicy: getPrivacyPolicy(),
+					date: synPcClock()[0],
+					time: synPcClock()[1],
+					timeZone: synPcClock()[2]
+				})
+			}, function(result){
+				// location.href = 'index.html';
+				applyingProBar.progressbar("stop");
+				applyingProBar.progressbar("animate", applyingProBar.progressbar("getValue"), 1, 3000, function(){
+		    		$('div#wizard_step_apply').hide();
+		    		$('div#wizard_step_finish').show();
+				});
+				
+				for(var i=0; i<result.length; i++){
+					if(result[i].radioID === 0){
+						$("input#finish_ssid_2g").textbox("setValue", result[i].ssid);
+					}else if(result[i].radioID === 1){
+						$("input#finish_ssid_5g").textbox("setValue", result[i].ssid);
+					}else if(result[i].radioID === 2){
+						$("input#finish_ssid_5g2").textbox("setValue", result[i].ssid);
+					}else if(result[i].radioID === 3){
+						$("input#finish_ssid_6g").textbox("setValue", result[i].ssid);
+					}
+					
+				}
+			});
+	}
+		
+	$("button#wizard_wireless_back").button({
+		text: $.su.CHAR.OPERATION.BACK,
+		cls: 'inline-block wizard-btn-cancel',
+		handler: function(){
+			$('div#wizard_step_wireless').hide();
+			$('div#wizard_step_account').show();
+			stepCode = 1;
+		}
+	});
+
+	$(document).bind("keyup", function(e) {
+
+	    if(e.keyCode != 13 && e.keyCode != "Enter"){
+            return;
+        }
+		switch(stepCode){
+			case 1:
+				$("button#wizard_account_next").click();
+				break;
+			case 2:				
+				$("button#wizard_wireless_next").click();
+				break;
+			case 3:
+				if($("input#confirm_conn").checkbox('getValue').length>0){
+					$("button#wizard_finish_button").click();
+				}				
+				break;
+		}
+	});
+
+/////////////////////////////////////////////////////////////
+	
+	$('p#text_applying').html($.su.CHAR.WIZARD.APPLYING);
+	
+	var applyingProBar  = $('input#wizard_applying_pro').progressbar({
+		fieldLabel: null,
+		cls: 'inline',
+		width: 540,
+		height: 4,
+		value: 0
+	});	
+
+
+/////////////////////////////////////////////////////////////
+	$('p#text_finish_success').html($.su.CHAR.WIZARD.SUCCESS);
+	$('p#text_finish_continue').html($.su.CHAR.WIZARD.CONNECT_AND_CONTINUE);
+	$('p#text_finish_2g').html($.su.CHAR.WIZARD.FINISH_2G_TITLE);
+	$('p#text_finish_5g').html($.su.CHAR.WIZARD.FINISH_5G_TITLE);
+	$('p#text_finish_5g2').html($.su.CHAR.WIZARD.FINISH_5G2_TITLE);
+	$('p#text_finish_6g').html($.su.CHAR.WIZARD.FINISH_6G_TITLE);
+	$('p#finish_2g_disable').html($.su.CHAR.WIZARD.FINISH_2G_DISABLE);
+	$('p#finish_5g2_disable').html($.su.CHAR.WIZARD.FINISH_5G2_DISABLE);
+	$('p#finish_6g_disable').html($.su.CHAR.WIZARD.FINISH_6G_DISABLE);
+
+	$("input#finish_ssid_2g").textbox({
+		fieldLabel: $.su.CHAR.WIZARD.SSID,
+		labelCls: 's',
+		readOnly: true,
+		labelCls: 's-65',
+		inputCls: 'xxxxl'
+	});
+
+	$('#finish_password_2g_label').html($.su.CHAR.WIZARD.PASSWORD+':');
+	$('#finish_security_2g_label').html($.su.CHAR.WIRELESS.WIRELESS_SSID_SEC+':');
+	$('#finish_security_2g').html($.su.CHAR.WIRELESS.WIRELESS_SEC_NONE);
+
+
+
+	
+	/*$("input#finish_password_2g").textbox({
+		fieldLabel: $.su.CHAR.WIZARD.PASSWORD,
+		labelCls: 's',
+		readOnly: true,
+		labelCls: 's-65',
+		inputCls: 'xxxxl'
+	});*/
+
+	$("input#finish_ssid_5g").textbox({
+		fieldLabel: $.su.CHAR.WIZARD.SSID,
+		labelCls: 's',
+		readOnly: true,
+		labelCls: 's-65',
+		inputCls: 'xxxxl'
+	});
+
+	$('#finish_password_5g_label').html($.su.CHAR.WIZARD.PASSWORD+':');
+	$('#finish_security_5g_label').html($.su.CHAR.WIRELESS.WIRELESS_SSID_SEC+':');
+	$('#finish_security_5g').html($.su.CHAR.WIRELESS.WIRELESS_SEC_NONE);
+
+	/*$("input#finish_password_5g").textbox({
+		fieldLabel: $.su.CHAR.WIZARD.PASSWORD,
+		labelCls: 's',
+		readOnly: true,
+		labelCls: 's-65',
+		inputCls: 'xxxxl'
+	});*/
+
+	$("input#finish_ssid_5g2").textbox({
+		fieldLabel: $.su.CHAR.WIZARD.SSID,
+		labelCls: 's',
+		readOnly: true,
+		labelCls: 's-65',
+		inputCls: 'xxxxl'
+	});
+
+	$('#finish_password_5g2_label').html($.su.CHAR.WIZARD.PASSWORD+':');
+	$('#finish_security_5g2_label').html($.su.CHAR.WIRELESS.WIRELESS_SSID_SEC+':');
+	$('#finish_security_5g2').html($.su.CHAR.WIRELESS.WIRELESS_SEC_NONE);
+	
+	$("input#finish_ssid_6g").textbox({
+		fieldLabel: $.su.CHAR.WIZARD.SSID,
+		labelCls: 's',
+		readOnly: true,
+		labelCls: 's-65',
+		inputCls: 'xxxxl'
+	});
+
+	$('#finish_password_6g_label').html($.su.CHAR.WIZARD.PASSWORD+':');
+	$('#finish_security_6g_label').html($.su.CHAR.WIRELESS.WIRELESS_SSID_SEC+':');
+	$('#finish_security_6g').html($.su.CHAR.WIRELESS.ENHANCED_OPEN);
+
+	$("input#confirm_conn").checkbox({
+		fieldLabel: null,
+		items: [
+			{boxlabel: $.su.CHAR.WIZARD.CONFIRM_CONN_NEW, inputValue: "on", uncheckedValue:"off", checked:false}
+		]
+	}).on('ev_change', function(e, oldValue, newValue){
+		if( newValue.length >0 ){
+			$("button#wizard_finish_button").button('enable');
+		}else{
+			$("button#wizard_finish_button").button('disable');
+		}
+	});
+
+	$("button#wizard_finish_button").button({
+		text: $.su.CHAR.OPERATION.FINISH,
+		disabled: true,
+		cls: 'wizard-btn-next',
+		handler: function(){
+			location.href = 'index.html';
+		}
+	});
+
+	$("button#wizard_finish_button").button('disable');
+
+/////////////////////////////////////////////////////////////
+
+	$('#frequencyErrorTip').html($.su.CHAR.WIZARD.ENABLE_ENSURE_TIP);
+	$('#band_enable_confirm_text').html($.su.CHAR.WIZARD.BAND_ENABLE_CONFIRM_TIP);
+
+	$("div#errorMsg").msg({
+		type: "alert",
+		cls: "m"
+	});
+
+	$("div#band_enable_confirm_msg").msg({
+		type: "confirm",
+		cls: 'm',
+		closeBtn: false,
+		_title: $.su.CHAR.WIZARD.BAND_ENABLE_CONFIRM_TITLE,
+		okHandler: function(e){
+			needConfirmBandSettings = false;
+			$("button#wizard_wireless_next").click();
+		}
+	});
+	
+	$.ajax({
+		type: "GET",
+		url: URL_SYSMODE,
+		timeout: 5000,
+		dataType: "json",
+		cache: false,
+		data: {"operation": "read"},
+		traditional: true,
+		success: function(data){
+			if(data.success && 0 == data.error)
+			{
+				$.su.dutMode = data.data.multiRadio;
+				$.su.isFestaAp = data.data.supportFesta;
+				if(data.data.multiRadio == 0){
+					$('div#wizard-step-wireless_5g').hide();
+				}
+				if(data.data.multiRadio === 2 || data.data.multiRadio === 4){
+					$("input#wireless_enable_5g").checkbox('setFieldLabel', $.su.CHAR.WIZARD.ENABLE_WIRELESS_5G1);
+					$('p#text_finish_5g').html($.su.CHAR.WIZARD.FINISH_5G1_TITLE);
+					$('div#wizard-step-wireless_5g2').show();
+				}
+				if(data.data.multiRadio === 3 || data.data.multiRadio === 4){
+					$('div#wizard-step-wireless_6g').show();
+				}
+			}			
+			$('p#finish_5g_disable').html(($.su.dutMode=='2'||$.su.dutMode=='4')?$.su.CHAR.WIZARD.FINISH_5G1_DISABLE:$.su.CHAR.WIZARD.FINISH_5G_DISABLE);
+		},
+		error: function(e, status){}
+	});
+
+});
+</script>
+
+</html>

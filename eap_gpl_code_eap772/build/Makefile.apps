@@ -1,0 +1,700 @@
+export APPS_INSTALL = $(INSTALL_ROOT)/usr/sbin
+export LIBS_INSTALL = $(INSTALL_ROOT)/lib
+export SBIN_INSTALL = $(INSTALL_ROOT)/sbin
+export CONFIG_INSTALL = $(INSTALL_ROOT)/etc
+
+#################################### main path ###############################################
+
+export APPS_PATH = $(TOPDIR)/apps
+export TOPDIR
+export SMB_PATH	= $(TOPDIR)/smb_priv
+##################################### safety check ###########################################
+
+ifeq ($(strip $(INSTALL_ROOT)),)
+$(error "INSTALL_ROOT must not empty!")
+else ifeq ($(strip $(INSTALL_ROOT)),/)
+$(error "INSTALL_ROOT must not be root dir!")
+endif
+
+##################################### defines ################################################
+
+ifeq ($(KERNELVER), 2.6.15)
+export IPTABLESVER = 1.3.7
+else
+export IPTABLESVER = 1.4.5
+endif
+
+export OPENSSL_VER = 1.0.2q
+export CURL_VER = 7.39.0
+export IPROUTE2_VER = 3.3.0
+
+# COUNTRY_SPEC is used for pppoe build
+export COUNTRY_SPEC	=	COUNTRY_UN
+
+HOTPLUG2_STATIC_WORKER = fork
+
+##################################### sub paths ##############################################
+
+export arp_path   = $(APPS_PATH)/arp
+export lltd_path  = $(APPS_PATH)/lltd/wr841n-linux
+export pppoe_path = $(APPS_PATH)/ppp-2.4.3/pppd
+export pptp_path  = $(APPS_PATH)/pptp-1.7.1
+export l2tp_path  = $(APPS_PATH)/xl2tpd-1.1.12
+export bpa_path   = $(APPS_PATH)/bpalogin-2.0.2
+export sar_path   = $(APPS_PATH)/sysstat-10.0.5
+export msglogd_path  = $(APPS_PATH)/msglogd
+export iperf_path    = $(APPS_PATH)/iperf-2.0.13
+export snmp_path     = $(APPS_PATH)/net-snmp-5.7.2
+export busybox_path  = $(APPS_PATH)/$(BUSYBOX)
+export openssl_path  = $(APPS_PATH)/openssl-$(OPENSSL_VER)
+export dropbear_path = $(APPS_PATH)/dropbear-2018.76
+export iptables_path = $(APPS_PATH)/iptables-$(IPTABLESVER)
+export wirelesstools_path = $(APPS_PATH)/$(WIRELESSTOOLS)
+export zlib_path     = $(APPS_PATH)/zlib-1.2.7
+export taskset_path  = $(APPS_PATH)/taskset
+export ipv6_tools_path = $(APPS_PATH)/ipv6_tools
+export nas_path        = $(APPS_PATH)/nas
+export hotplug2_path   = $(APPS_PATH)/hotplug2-201.test
+export ebtable_path	   = $(APPS_PATH)/ebtables-v2.0.9-2
+export libpcap_path = $(APPS_PATH)/libpcap-1.1.1
+export tcpdump_path = $(APPS_PATH)/tcpdump-4.2.1
+export strace_path = $(APPS_PATH)/strace-4.7
+export lzo_path     = $(APPS_PATH)/lzo-2.07
+export bridge-utils_path = $(APPS_PATH)/bridge-utils-1.5
+export mtd_path = $(APPS_PATH)/mtd
+export curl_path = $(APPS_PATH)/curl-$(CURL_VER)
+export i2c_tools_patch = $(APPS_PATH)/i2c-tools-3.1.2
+export ubi-mtd-utils_path   = $(APPS_PATH)/mtd-utils-2.1.1
+export iproute2_path = $(APPS_PATH)/iproute2-$(IPROUTE2_VER)
+export lldpd_path = $(APPS_PATH)/lldpd-1.0.4
+export libevent_path = $(APPS_PATH)/libevent
+export rtty_path = $(APPS_PATH)/rtty
+export libev_path = $(APPS_PATH)/libev-master
+
+################################### snmp private mibs config ################################
+export snmp_client_path = $(APPS_PATH)/net-snmp-5.7.2/agent/mibgroup/tplink-mib/clientMib
+
+ifndef GPL_BUILD
+SNMP_MIB_MODULES_INCLUDED = \
+	mibII/system_mib \
+	mibII/ip \
+	mibII/tcp \
+	mibII/udp \
+	mibII/icmp \
+	tplink-mib/clientMib/clientTable \
+	tplink-mib/clientMib/clientCount \
+	tplink-mib/clientMib/$(CHIP)/apiClientTable \
+	tplink-mib/systemTools/systemToolReboot
+else
+SNMP_MIB_MODULES_INCLUDED = \
+	mibII/system_mib \
+	mibII/ip \
+	mibII/tcp \
+	mibII/udp \
+	mibII/icmp
+endif
+
+SNMP_MIB_MODULES_EXCLUDED = \
+	agent_mibs \
+	agentx \
+	host \
+	ieee802dot11 \
+	notification \
+	mibII \
+	ucd_snmp \
+	utilities \
+	target
+
+SNMP_TRANSPORTS_INCLUDED = Callback UDP
+SNMP_TRANSPORTS_EXCLUDED = TCP TCPv6 UDPv6 Unix
+SNMP_ARCH?=mips-linux
+SNMP_PREFIX=/tmp/snmp
+
+SNMP_CONFIGURE_OPTIONS = \
+	--prefix=$(SNMP_PREFIX) \
+	--build=i686-linux \
+	--host=$${TOOLPREFIX%-} \
+	--target=$${TOOLPREFIX%-} \
+	--with-cc=$(TOOLPREFIX)gcc \
+	--with-ar=$(TOOLPREFIX)ar \
+	--enable-shared=no \
+	--enable-static=yes \
+	--enable-internal-md5 \
+	--enable-mini-agent \
+	--disable-applications \
+	--disable-debugging \
+	--disable-ipv6 \
+	--disable-manuals \
+	--disable-mib-loading \
+	--disable-mibs \
+	--disable-scripts \
+	--disable-ucd-snmp-compatibility \
+	--disable-privacy \
+	--disable-embedded-perl \
+	--disable-snmptrapd-subagent \
+	--with-default-snmp-version="1" \
+	--with-out-mib-modules="$(SNMP_MIB_MODULES_EXCLUDED)" \
+	--with-mib-modules="$(SNMP_MIB_MODULES_INCLUDED)" \
+	--with-out-transports="$(SNMP_TRANSPORTS_EXCLUDED)" \
+	--with-transports="$(SNMP_TRANSPORTS_INCLUDED)" \
+	--without-opaque-special-types \
+	--without-perl-modules \
+	--without-kmem-usage \
+	--without-openssl \
+	--without-libwrap \
+	--without-rpm \
+	--without-zlib \
+	--without-efence \
+	--without-rsaref \
+	--without-kmem-usage \
+	--without-dmalloc\
+	--with-sys-contact=root@localhost \
+	--with-sys-location=Unknown \
+	--with-logfile=/dev/null \
+	--with-persistent-directory=$(SNMP_PREFIX)/persist \
+	-sysconfdir=$(SNMP_PREFIX)
+
+#nvrammanager与BLE有依赖,开启CONFIG_BLE_SUPPORT时需要同时LD
+ifeq ($(CONFIG_BLE_SUPPORT), y)
+BLE_LIB=-L$(TOPDIR)/smb_priv/apps/ble_lib -lble_lib
+endif
+
+LLDP_SMB_OPTIONS = \
+	--with-smb-cflags="-I$(TOPDIR)/smb_priv/apps/uclite/modules/op_info -I$(TOPDIR)/smb_priv/apps/common -I$(TOPDIR)/smb_priv/apps/utility_lib/include -I$(TOPDIR)/smb_priv/apps/unix_sock/include"\
+	--with-smb-ldflags="-L$(TOPDIR)/smb_priv/apps/utility_lib/ -lutility_lib  -L$(TOPDIR)/smb_priv/apps/nvrammanager_lib/ -lnvrammanager -lm $(BLE_LIB)"
+
+########################################### targets #########################################
+ifeq ($(DEBUG_MODE), y)
+ifeq ($(KERNELARCH), mips)
+export CONFIG_APPS_ADDITIONAL += strace
+endif
+endif
+
+CONFIG_APPS_ADDITIONAL += libpcap tcpdump iperf
+
+#export CONFIG_APPS = busybox zlib openssl dropbear iptables iperf snmp $(CONFIG_APPS_ADDITIONAL)
+#export NOCONFIG_APPS = pppoe l2tp bpa tc lltd arp $(APPS_ADDITIONAL) hotplug2
+
+export CONFIG_APPS = zlib lzo openssl dropbear iptables snmp iproute2 libev $(CONFIG_APPS_ADDITIONAL)
+export NOCONFIG_APPS += arp ebtable rtty $(APPS_ADDITIONAL) hotplug2 i2ctools
+
+ifeq ($(CONFIG_GRE_SUPPORT), y)
+CONFIG_APPS += iproute2
+endif
+
+export APPS_TARGET = $(CONFIG_APPS) $(NOCONFIG_APPS)
+ifndef GPL_BUILD
+export APPS_TARGET+= msglogd
+endif
+######################################### lib && apps ########################################
+libev_config:
+	@cd $(libev_path) && \
+		./configure --build=i686-linux --host=$${TOOLPREFIX%-} --prefix=$(INSTALL_ROOT) \
+		--target=$${TOOLPREFIX%-} \
+		--enable-shared=yes
+
+libev_clean:
+	@$(call indir, $(libev_path), $(MAKE) clean);
+
+libev_build:
+	@$(call indir, $(libev_path), $(MAKE));
+	@make libev_install;
+ 
+libev_install:
+	@$(call indir, $(libev_path), $(MAKE) install);
+	@$(call indir, $(libev_path), cp -fr .libs/libev.* $(LIBS_INSTALL)/);
+	@$(call indir, $(libev_path), cp -fr ./ev.h $(INSTALL_ROOT)/include);
+	@$(call indir, $(libev_path), cp -fr ./ev++.h $(INSTALL_ROOT)/include);
+	@$(call indir, $(libev_path), cp -fr ./event.h $(INSTALL_ROOT)/include);
+
+rtty_clean:
+	@$(call indir, $(rtty_path), $(MAKE) clean);
+
+rtty_build:
+	@if [ -f $(TOOLCHAIN_INSTALL)/$(gcc_package)/lib/libdl.so ] ; then cp -f $(TOOLCHAIN_INSTALL)/$(gcc_package)/lib/libdl.so $(LIBS_INSTALL)/ ; fi
+	@if [ -f $(TOOLCHAIN_INSTALL)/$(gcc_package)/lib/libdl.so.0 ] ; then cp -f $(TOOLCHAIN_INSTALL)/$(gcc_package)/lib/libdl.so.0 $(LIBS_INSTALL)/ ; fi
+	@cd $(rtty_path) && rm CMakeCache.txt && \
+		cmake . -DCMAKE_C_COMPILER=$(TOOLPREFIX)gcc -DCMAKE_FIND_ROOT_PATH=$(LIBS_INSTALL) \
+		-DSSL_SUPPORT=ON -DUSE_OPENSSL=ON -DCMAKE_INSTALL_PREFIX=$(INSTALL_ROOT) -DOPENSSL_DIR=$(openssl_path) && make install
+
+rtty_install: rtty_build
+	@echo nothing to do.
+
+bridge-utils_config:
+	@cd $(bridge-utils_path) && autoconf -o configure configure.in && \
+		./configure --host=$${TOOLPREFIX%-} --prefix=$(INSTALL_ROOT) CC=$(TOOLPREFIX)gcc LD=$(TOOLPREFIX)ld  AR=$(TOOLPREFIX)ar
+		
+bridge-utils_build:
+	@$(call indir, $(bridge-utils_path), $(CROSSMAKE));
+
+bridge-utils_install:
+	@$(call indir, $(bridge-utils_path), cp brctl/brctl $(APPS_INSTALL)/);
+
+bridge-utils_clean:
+	@$(call indir, $(bridge-utils_path), $(CROSSMAKE) clean);
+	
+strace_config: 
+	@cd $(strace_path) && \
+		./configure --build=i686-linux --host=$${TOOLPREFIX%-} --prefix=$(INSTALL_ROOT) CC=$(TOOLPREFIX)gcc LD=$(TOOLPREFIX)ld  AR=$(TOOLPREFIX)ar
+
+strace_clean:
+	@$(call indir, $(strace_path), $(CROSSMAKE) clean);
+
+strace_build:strace_config
+	@$(call indir, $(strace_path), $(CROSSMAKE));
+
+strace_install:
+	@$(call indir, $(strace_path), $(TOOLPREFIX)strip strace);
+	@$(call indir, $(strace_path), cp strace $(APPS_INSTALL)/);
+
+libpcap_config:
+	@cd $(libpcap_path) && \
+		./configure --build=i686-linux --host=$${TOOLPREFIX%-} --prefix=$(INSTALL_ROOT) \
+		--target=$${TOOLPREFIX%-} \
+		--with-cc=$(TOOLPREFIX)gcc \
+		--with-ar=$(TOOLPREFIX)ar \
+		--with-endianness=big \
+		--with-pcap=linux --without-septel --without-dag --without-libnl
+
+libpcap_clean:
+	@$(call indir, $(libpcap_path), $(MAKE) clean);
+
+libpcap_build:libpcap_config
+	@$(call indir, $(libpcap_path), $(MAKE));
+
+libpcap_install:
+	@$(call indir, $(libpcap_path),  $(TOOLPREFIX)strip libpcap.so.1.1.1*);
+	@$(call indir, $(libpcap_path),  cp -f libpcap.so.1.1.1* $(LIBS_INSTALL));
+
+tcpdump_config: libpcap_config libpcap_build
+	@cd $(tcpdump_path) && \
+		./configure --build=i686-linux --host=$${TOOLPREFIX%-} --prefix=$(INSTALL_ROOT) \
+		--target=$${TOOLPREFIX%-} \
+		--with-cc=$(TOOLPREFIX)gcc \
+		--with-ar=$(TOOLPREFIX)ar \
+		--with-endianness=big \
+		--disable-nls \
+		--without-crypto
+
+tcpdump_clean:
+	@$(call indir, $(tcpdump_path), $(MAKE) clean);
+
+tcpdump_build:tcpdump_config
+	@$(call indir, $(tcpdump_path), $(MAKE));
+
+tcpdump_install:
+	@$(call indir, $(tcpdump_path), $(TOOLPREFIX)strip tcpdump);
+	@$(call indir, $(tcpdump_path), cp tcpdump $(APPS_INSTALL)/);
+
+zlib_config:
+	@$(call indir, $(zlib_path), ./configure --static);
+
+zlib_clean:
+	@$(call indir, $(zlib_path), $(CROSSMAKE) clean);
+
+zlib_build:
+	@$(call indir, $(zlib_path), $(CROSSMAKE));
+	@make zlib_install;
+
+zlib_install:
+	@$(call indir, $(zlib_path), cp -f libz.a $(LIBS_INSTALL));
+
+lzo_config:
+	@$(call indir, $(lzo_path), ./configure --enable-shared --host=$${TOOLPREFIX%-} \
+		CC=$(TOOLPREFIX)gcc AR=$(TOOLPREFIX)ar RANLIB=$(TOOLPREFIX)ranlib STRIP=$(TOOLPREFIX)strip);
+lzo_clean:
+	@$(call indir, $(lzo_path), if test -e Makefile; then make clean; fi);
+
+lzo_build:
+	@$(call indir, $(lzo_path), $(CROSSMAKE));
+	@make lzo_install;
+
+lzo_install:
+	@$(call indir, $(lzo_path), cp -af src/.libs/liblzo2.so src/.libs/liblzo2.so.2 src/.libs/liblzo2.so.2.0.0 $(LIBS_INSTALL));
+
+msglogd_clean:
+	@$(call indir, $(msglogd_path), $(CROSSMAKE) clean);
+
+msglogd_build:
+	@$(call indir, $(msglogd_path), $(CROSSMAKE));
+	@make msglogd_install;
+
+msglogd_install:
+	@$(call indir, $(msglogd_path), cp -f libmsglog.so $(LIBS_INSTALL));
+	@$(call indir, $(msglogd_path), cp -f *.h $(LIBC_PATH)/usr/include);
+
+arp_clean:
+	@$(call indir, $(arp_path), rm -f arp);
+
+arp_build:
+	@$(call indir, $(arp_path), $(TOOLPREFIX)gcc -o arp arp.c);
+
+arp_install:
+	@$(call indir, $(arp_path), cp -f arp $(APPS_INSTALL));
+
+mtd_clean:
+	@$(call indir, $(mtd_path), rm -f mtd);
+
+mtd_build:
+	@$(call indir, $(mtd_path), $(MAKE) CC=$(TOOLPREFIX)gcc LD=$(TOOLPREFIX)gcc);
+
+mtd_install:
+	@$(call indir, $(mtd_path), cp -f mtd $(APPS_INSTALL));
+
+ubi-mtd-utils_config:
+	@cd $(ubi-mtd-utils_path) && \
+		autoreconf -v -f -i -s; \
+		./configure --host=$${TOOLPREFIX%-} --prefix=$(INSTALL_ROOT) \
+		--host=$${TOOLPREFIX%-} \
+		--disable-tests \
+		--without-crypto \
+		--without-xattr \
+		--without-zstd \
+		--without-lzo \
+		--without-ubifs \
+		--without-jffs \
+		ZLIB_CFLAGS=-I/$(zlib_path)/ \
+		ZLIB_LIBS=-L/$(zlib_path)/ \
+		CC=$(TOOLPREFIX)gcc LD=$(TOOLPREFIX)ld  AR=$(TOOLPREFIX)ar
+
+ubi-mtd-utils_clean:
+	@$(call indir, $(ubi-mtd-utils_path), $(CROSSMAKE) clean);
+
+ubi-mtd-utils_build:
+	@$(call indir, $(ubi-mtd-utils_path), $(CROSSMAKE))
+
+ubi-mtd-utils_install:
+	$(call indir, $(ubi-mtd-utils_path)/,  cp -f ubiattach $(APPS_INSTALL));
+	$(call indir, $(ubi-mtd-utils_path)/,  cp -f ubiblock $(APPS_INSTALL));
+	$(call indir, $(ubi-mtd-utils_path)/,  cp -f ubicrc32 $(APPS_INSTALL));
+	$(call indir, $(ubi-mtd-utils_path)/,  cp -f ubidetach $(APPS_INSTALL));
+	$(call indir, $(ubi-mtd-utils_path)/,  cp -f ubiformat $(APPS_INSTALL));
+	$(call indir, $(ubi-mtd-utils_path)/,  cp -f ubimkvol $(APPS_INSTALL));
+	$(call indir, $(ubi-mtd-utils_path)/,  cp -f ubinfo $(APPS_INSTALL));
+
+lltd_clean:
+	@$(call indir, $(lltd_path), $(CROSSMAKE) clean);
+
+lltd_build:
+	@$(call indir, $(lltd_path), $(MAKE) CC=$(TOOLPREFIX)gcc LD=$(TOOLPREFIX)gcc);
+
+lltd_install:
+	@$(call indir, $(lltd_path), cp -f lld2d $(APPS_INSTALL));
+
+pppoe_clean:
+	@$(call indir, $(pppoe_path), $(CROSSMAKE) clean);
+
+pppoe_build:
+	@$(call indir, $(pppoe_path), $(CROSSMAKE));
+
+pppoe_install:
+	@$(call indir, $(pppoe_path), cp -f pppd $(APPS_INSTALL));
+
+pptp_clean:
+	@$(call indir, $(pptp_path), $(CROSSMAKE) clean);
+
+pptp_build:
+	@$(call indir, $(pptp_path), $(CROSSMAKE));
+
+pptp_install:
+	@$(call indir, $(pptp_path), cp -f pptp $(APPS_INSTALL));
+
+l2tp_clean:
+	@$(call indir, $(l2tp_path), $(CROSSMAKE) clean);
+
+l2tp_build:
+	@$(call indir, $(l2tp_path), $(CROSSMAKE));
+
+l2tp_install:
+	@$(call indir, $(l2tp_path), cp -f xl2tpd $(APPS_INSTALL));
+
+bpa_clean:
+	@$(call indir, $(bpa_path), $(CROSSMAKE) clean);
+
+bpa_build:
+	@$(call indir, $(bpa_path), $(CROSSMAKE));
+
+bpa_install:
+	@$(call indir, $(bpa_path), cp -f bpalogin $(APPS_INSTALL));
+
+sar_config:
+	@$(call indir, $(sar_path), ./configure --disable-nls);
+
+sar_clean:
+	@$(call indir, $(sar_path), $(CROSSMAKE) clean);
+
+sar_build:
+	@$(call indir, $(sar_path), $(CROSSMAKE) -lintl);
+
+sar_install:
+	@$(call indir, $(sar_path), cp -f sar sadc $(INSTALL_ROOT)/sbin);
+
+iperf_config:
+	@if test -e $(LIBC_PATH)/usr/include/bits/socket.h; then \
+		sed -i 's/\* __NTH (/\* /g'                    $(LIBC_PATH)/usr/include/bits/socket.h; \
+		sed -i 's/__cmsg)) __THROW/__cmsg) __THROW/g'  $(LIBC_PATH)/usr/include/bits/socket.h; \
+	fi;
+	@$(call indir, $(iperf_path), rm -f src/Makefile && ./configure --build=i386 --host=$${TOOLPREFIX%-});
+
+iperf_build:
+	@$(call indir, $(iperf_path), $(CROSSMAKE));
+
+iperf_clean:
+	@$(call indir, $(iperf_path), if test -e src/Makefile; then $(CROSSMAKE) clean; fi);
+
+iperf_install:
+	@$(call indir, $(iperf_path), cp -f src/iperf $(INSTALL_ROOT)/usr/bin);
+	@$(call indir, $(iperf_path), if test -e $(LIBC_PATH)/usr/mips-linux-uclibc/lib/libstdc++.so;\
+		then cp -rf $(LIBC_PATH)/usr/mips-linux-uclibc/lib/libstdc++.so* $(LIBS_INSTALL);\
+		elif test -e $(LIBC_PATH)/lib/libstdc++.so;\
+		then cp -rf $(LIBC_PATH)/lib/libstdc++.so* $(LIBS_INSTALL);fi);
+
+wirelesstools_clean:
+	@$(call indir, $(wirelesstools_path), $(MAKE) clean);
+
+wirelesstools_build:
+	@$(call indir, $(wirelesstools_path), $(MAKE));
+
+wirelesstools_install:
+	@$(call indir, $(wirelesstools_path), cp -af \
+		ifrename iwpriv iwconfig iwlist iwgetid iwspy iwevent  \
+		$(INSTALL_ROOT)/sbin/);
+	@$(call indir, $(wirelesstools_path), cp -f $(WIRELESSTOOLSLIB) $(LIBS_INSTALL));
+
+iptables_config:
+ifeq ($(strip $(IPTABLESVER)), 1.4.5)
+	if test -d $(LINUX_KERNEL_PATH)/user_headers; then \
+		cd $(iptables_path) && cp -rf ./configure.origin ./configure && (if test -e Makefile ; then make distclean ; fi && \
+			./configure --prefix=$(INSTALL_ROOT) \
+			--libdir=$(LIBC_PATH)/lib \
+			--build=i386 --host=$${TOOLPREFIX%-}  \
+			--disable-devel --disable-libipq \
+			--with-kernel=$(LINUX_KERNEL_PATH)/user_headers \
+			--disable-ipv6) \
+	else \
+		cd $(iptables_path) && cp -rf ./configure.origin ./configure && (if test -e Makefile ; then make distclean ; fi && \
+			./configure --prefix=$(INSTALL_ROOT) \
+			--libdir=$(LIBC_PATH)/lib \
+			--build=i386 --host=$${TOOLPREFIX%-}  \
+			--disable-devel --disable-libipq \
+			--disable-ipv6) \
+	fi;
+else
+	@echo nothing to do.
+endif
+
+iptables_clean:
+ifeq ($(strip $(IPTABLESVER)), 1.3.7)
+	@$(call indir, $(iptables_path), $(CROSSMAKE) clean);
+else ifeq ($(strip $(IPTABLESVER)), 1.4.5)
+	@cd $(iptables_path) && if test -e Makefile; then make clean; fi;
+endif
+
+iptables_build:
+ifeq ($(strip $(IPTABLESVER)), 1.3.7)
+	@$(call indir, $(iptables_path), $(CROSSMAKE) DO_IPV6=0 KERNEL_DIR=$(LINUX_KERNEL_PATH) LIBDIR=$(INSTALL_ROOT)/lib);
+else ifeq ($(strip $(IPTABLESVER)), 1.4.5)
+	@$(call indir, $(iptables_path), $(CROSSMAKE));
+endif
+
+iptables_install:
+ifeq ($(strip $(IPTABLESVER)), 1.3.7)
+	@cd $(iptables_path) && \
+		cp iptables $(INSTALL_ROOT)/sbin/ && \
+		cd extensions && \
+		test -d $(INSTALL_ROOT)/lib/iptables/ || mkdir -p $(INSTALL_ROOT)/lib/iptables/ && \
+		cp -f libipt_DNAT.so libipt_MASQUERADE.so libipt_SNAT.so libipt_TCPMSS.so libipt_TRIGGER.so \
+		libipt_comment.so libipt_icmp.so libipt_iprange.so libipt_mac.so \
+		libipt_multiport.so libipt_standard.so libipt_state.so libipt_string.so \
+		libipt_tcp.so libipt_time.so libipt_udp.so libipt_MARK.so libipt_multiurl.so libipt_wlanwarn.so \
+		$(INSTALL_ROOT)/lib/iptables/;
+else ifeq ($(strip $(IPTABLESVER)), 1.4.5)
+	@$(call indir, $(iptables_path), $(CROSSMAKE) install && ./rm_ext.sh);
+endif
+	@cd $(INSTALL_ROOT) && \
+		cp -rf libexec $(LIBS_INSTALL) && \
+		rm -rf share man lib/pkgconfig libexec;
+ifeq ($(strip $(IPTABLESVER)), 1.4.5)		
+	@cd $(iptables_path)/libiptc/.libs/ && \
+		cp -af libip4tc.so.0.0.0 libip4tc.so.0 libip4tc.so libiptc.so.0.0.0 libiptc.so.0 libiptc.so \
+		$(INSTALL_ROOT)/lib/;
+	@cd $(iptables_path)/.libs/ && \
+		cp -af libxtables.so.2.1.0 libxtables.so.2 libxtables.so \
+		$(INSTALL_ROOT)/lib/
+endif
+
+ipv6_tools_%:
+	@for i in automake openssl; do test -f /usr/bin/$$i || (echo $$i is missing && false); done
+ifeq ($(strip ${CONFIG_IPV6_SUPPORT}), y)
+	@$(call indir, $(ipv6_tools_path), $(CROSSMAKE) $* INSTALL_ROOT=$(INSTALL_ROOT));
+endif
+
+nas_%:
+	@for i in tclsh automake gperf; do test -f /usr/bin/$$i || (echo $$i is missing && false); done
+	@$(call indir, $(nas_path), $(CROSSMAKE) $* TP_INSTALL_DIR=$(INSTALL_ROOT));
+
+snmp_config:
+	@$(call indir, $(snmp_path), ./configure $(SNMP_CONFIGURE_OPTIONS));
+
+snmp_clean:
+	@$(call indir, $(snmp_path), $(MAKE) clean);
+
+snmp_build:
+	@$(call indir, $(snmp_path), $(MAKE) CONFIG_MAX_STA_PER_RADIO=$(CONFIG_MAX_STA_PER_RADIO));
+
+snmp_install:
+	@$(call indir, $(snmp_path), $(TOOLPREFIX)strip agent/snmpd);	
+	@$(call indir, $(snmp_path), cp agent/snmpd $(APPS_INSTALL)/);
+
+dropbear_config:
+	@$(call indir, $(dropbear_path), ./configure --disable-zlib --disable-harden --disable-lastlog --disable-wtmp --host=$${TOOLPREFIX%-} \
+		CC=$(TOOLPREFIX)gcc AR=$(TOOLPREFIX)ar RANLIB=$(TOOLPREFIX)ranlib STRIP=$(TOOLPREFIX)strip);
+
+dropbear_clean:
+	@$(call indir, $(dropbear_path), if test -e Makefile; then make clean; fi);
+
+dropbear_build:
+ifneq ($(findstring y,$(DEBUG_MODE) $(CONFIG_SUPPORT_T40_SUT)),)
+	@$(call indir, $(dropbear_path), \
+		chmod +x ./ifndef_wrapper.sh && \
+		(echo "#define USER_ROOT_PERMISSION" > permission.h) && \
+		make PROGRAMS="dropbear dbclient scp dropbearkey dropbearconvert" MULTI=1 && make scp);
+else
+	@$(call indir, $(dropbear_path), \
+		chmod +x ./ifndef_wrapper.sh && \
+		(echo "#undef USER_ROOT_PERMISSION" > permission.h) && \
+		make PROGRAMS="dropbear dbclient scp dropbearkey dropbearconvert" MULTI=1 && make scp);
+endif
+
+dropbear_install:
+	@$(call indir, $(dropbear_path), \
+		cp -f createKeys.sh $(INSTALL_ROOT)/etc/ && \
+		cp -f dropbearmulti $(INSTALL_ROOT)/usr/local/sbin/dropbear && \
+		ln -sf ../sbin/dropbear $(INSTALL_ROOT)/usr/local/sbin/dropbearkey && \
+		ln -sf ../local/sbin/dropbear $(INSTALL_ROOT)/usr/bin/dropbearconvert && \
+		chmod +x $(INSTALL_ROOT)/etc/createKeys.sh && \
+		chmod +x $(INSTALL_ROOT)/usr/local/sbin/dropbearkey && \
+		chmod +x $(INSTALL_ROOT)/usr/local/sbin/dropbear)
+
+openssl_config:
+	@$(call indir, $(openssl_path), CC=$(TOOLPREFIX)gcc AR=$(TOOLPREFIX)ar RANLIB=$(TOOLPREFIX)ranlib ./Configure eap-linux-elf no-asm shared || exit 0);
+
+openssl_build:
+	@$(call indir, $(openssl_path), make);
+	@make openssl_install;
+
+openssl_install:
+	@$(call indir, $(openssl_path), cp -d libssl.so* libcrypto.so* $(LIBS_INSTALL));
+
+openssl_clean:
+	@$(call indir, $(openssl_path), if test -e Makefile; then make clean; fi);
+
+busybox_menuconfig:
+	@$(call indir, $(busybox_path), make menuconfig && cp .config $(CONFIGDIR)/busybox.config);
+
+busybox_config:
+	@echo "update busybox config from $(CONFIGDIR)/busybox.config";
+	@$(call indir, $(busybox_path), if test -e $(CONFIGDIR)/busybox.config; then cp -f $(CONFIGDIR)/busybox.config .config; fi);
+
+busybox_clean:
+	@$(call indir, $(busybox_path), $(MAKE) clean);
+
+busybox_build:
+	@$(call indir, $(busybox_path), $(MAKE) SMB_PATH=$(SMB_PATH));
+
+busybox_install:
+	@$(call indir, $(busybox_path),$(MAKE) SMB_PATH=$(SMB_PATH) PREFIX=$(INSTALL_ROOT) CONFIG_PREFIX=$(INSTALL_ROOT) install);
+
+taskset_clean:
+	@$(call indir, $(taskset_path), $(CROSSMAKE) clean);
+
+taskset_build:
+	@$(call indir, $(taskset_path), $(CROSSMAKE));
+
+taskset_install:
+	@$(call indir, $(taskset_path), cp -f taskset $(APPS_INSTALL));
+
+hotplug2_clean:
+	@$(call indir, $(hotplug2_path), $(CROSSMAKE) clean);
+
+hotplug2_build:
+	@$(call indir, $(hotplug2_path), $(CROSSMAKE) STATIC_WORKER=$(HOTPLUG2_STATIC_WORKER));
+
+hotplug2_install:
+	@$(call indir, $(hotplug2_path), cp -f hotplug2 $(SBIN_INSTALL));
+	@$(call indir, $(hotplug2_path), cp -f docs/rules/hotplug2.rules $(CONFIG_INSTALL));
+
+ebtable_clean:
+	@$(call indir, $(ebtable_path), $(CROSSMAKE) clean);
+
+EBTABLE_EXT_CONFIG=CONFIG_USERSPACE_64BIT=$(CONFIG_USERSPACE_64BIT) \
+				   CONFIG_USERSPACE_32BIT=$(CONFIG_USERSPACE_32BIT) \
+				   CONFIG_KERNEL_64BIT=$(CONFIG_KERNEL_64BIT) 		\
+				   CONFIG_KERNEL_32BIT=$(CONFIG_KERNEL_32BIT)
+ebtable_build:
+	@$(call indir, $(ebtable_path), LIBDIR=$(LIBS_INSTALL) BINDIR=$(APPS_INSTALL) $(CROSSMAKE) static $(EBTABLE_EXT_CONFIG));
+
+ebtable_install:
+	@$(call indir, $(ebtable_path), LIBDIR=$(LIBS_INSTALL) BINDIR=$(APPS_INSTALL) $(CROSSMAKE) install);
+
+i2ctools_clean:
+	@$(call indir, $(i2c_tools_patch), $(CROSSMAKE) clean);
+
+i2ctools_build:
+	@$(call indir, $(i2c_tools_patch), $(CROSSMAKE));
+
+i2ctools_install:
+	@$(call indir, $(i2c_tools_patch)/tools, cp -f i2cdetect i2cdump i2cset i2cget $(SBIN_INSTALL));
+
+IPROUTE2_MAKE_FLAGS += \
+	EXTRA_CCOPTS="-DHAVE_SETNS -I../include" 
+
+iproute2_config:
+	@$(call indir, $(iproute2_path), ./configure);
+
+iproute2_build:
+	@$(call indir, $(iproute2_path), CC=$(TOOLPREFIX)gcc AR=$(TOOLPREFIX)ar LIBDIR=$(INSTALL_ROOT)/lib ${IPROUTE2_MAKE_FLAGS} $(CROSSMAKE));
+	@make iproute2_install;
+
+iproute2_install:
+	@$(call indir, $(iproute2_path), cp ./lib/libnetlink.a $(LIBS_INSTALL) && cp ./ip/ip $(APPS_INSTALL));
+
+iproute2_clean:
+	@$(call indir, $(iproute2_path), if test -e Makefile; then make clean; fi);
+libevent_config:
+	@$(call indir, $(libevent_path), ./configure --build=i686-linux --prefix=$(INSTALL_ROOT) --host=$${TOOLPREFIX%-} \
+		CC=$(TOOLPREFIX)gcc AR=$(TOOLPREFIX)ar RANLIB=$(TOOLPREFIX)ranlib STRIP=$(TOOLPREFIX)strip);
+
+libevent_clean:
+	@$(call indir, $(libevent_path), $(CROSSMAKE) clean);
+
+libevent_build:
+	@$(call indir, $(libevent_path), $(CROSSMAKE));
+
+libevent_install:
+	@$(call indir, $(libevent_path), cp -af .libs/libevent-2.0.so.5 .libs/libevent-2.0.so.5.1.9 $(LIBS_INSTALL));
+
+lldpd_config:libevent_config libevent_build
+	@$(call indir, $(lldpd_path), ./autogen.sh && ./configure --build=i686-linux --disable-nls  --enable-privsep=no --with-readline=no --localstatedir=/var --prefix=/usr --host=$${TOOLPREFIX%-} $(LLDP_SMB_OPTIONS)\
+		CC=$(TOOLPREFIX)gcc AR=$(TOOLPREFIX)ar RANLIB=$(TOOLPREFIX)ranlib STRIP=$(TOOLPREFIX)strip);
+
+lldpd_clean:
+	@$(call indir, $(lldpd_path), $(CROSSMAKE) clean);
+
+lldpd_build:lldpd_config
+	@$(call indir, $(lldpd_path), $(CROSSMAKE) CFLAGS=-std=c99);
+
+lldpd_install:libevent_install
+	@$(call indir, $(lldpd_path), cp -af src/lib/.libs/liblldpctl.so src/lib/.libs/liblldpctl.so.4 src/lib/.libs/liblldpctl.so.4.8.0 $(LIBS_INSTALL));
+	@$(call indir, $(lldpd_path), cp -af src/daemon/.libs/lldpd src/client/.libs/lldpcli $(APPS_INSTALL)/);
+	
+##############################################################################################
+apps_prep:
+	@[ -d $(APPS_INSTALL) ] || mkdir -p $(APPS_INSTALL)
+	@[ -d $(LIBS_INSTALL) ] || mkdir -p $(LIBS_INSTALL)
+
+apps_%: $(addsuffix _%, $(filter-out $(APPS_EXCLUDE), $(APPS_TARGET))) apps_prep
+	@echo make $@ at `date`;
+
+apps_config: $(addsuffix _config, $(filter-out $(APPS_EXCLUDE), $(CONFIG_APPS)))
+	@echo make $@ at `date`;

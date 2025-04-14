@@ -1,0 +1,802 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>MAC Filtering</title>
+<style type="text/css">
+	div#maclist_cfg{
+		float: left;
+		width: 400px;
+	}
+	div#mac_addr_grid{
+		float: right;
+		width: 470px;
+	}
+	div.arrow{
+		/*height: 100%;
+		padding-top: 100px;
+		display: inline-block;
+		position: absolute;*/
+		left:457px;
+	}
+	div.arrow-wrap-1{
+		padding-top: 100px;
+		/*left:457px;*/
+	}
+	div#empty_add{
+		width:124px;
+		margin-left: 40%;
+		cursor:pointer;
+		display: none;
+	}
+	div#rule{
+		position: relative;
+	}
+</style>
+</head>
+
+<body>
+<div class="func-container">
+	<div id="set">
+		<form id="set_form">
+			<input type="checkbox" id="mac-filtering-enable" name="status" type="text"/>
+		</form>
+		<br>
+	</div>
+
+	<div id="rule" class="hidden">
+		<div id="empty_add" onClick="addMacList()" >
+			<span class="empty_add"></span>
+			<span class="text" id="text_create" style="color:#4acbd6"></span>
+		</div>
+
+		<div id="maclist_cfg" name="maclist_cfg"></div>
+
+		<div class="arrow">
+			<div class="arrow-wrap-1" id="arrow">
+				<div class="arrow-wrap-2">
+					<span class="arrow-right" ></span>
+				</div>
+			</div>
+		</div>
+
+		<div id="mac_addr_grid" name="mac_addr_grid"></div>
+
+		<div class="clear"></div>
+
+	<div id="association" style="margin-top:40px" class="hidden">
+		<form id="assoc_form">
+			<div id="assoc_entry" name="assoc_entry"></div>
+			<div class="note">
+				<h5 class="title" id="text_note"></h5>
+				<p class="content" id="text_deny"></p> 
+				<p class="content" id="text_allow"></p>
+			</div>
+		
+			<button id="total_save"></button>
+		</form>
+
+		<div id="config_loading">
+			<!-- <span class="icon" ></span> -->
+		</div>
+	</div>
+
+<div id="mac_addr_set">
+	<input type="text" class="hidden" id="listName" name="listName" />
+	<input type="text" id="mac_addr" name="mac_addr" />
+</div>
+
+<div id="maclist_edit">
+	<input type="text" id="maclistName_editor" name="maclistName" />
+</div>
+	</div>
+		
+</div>
+
+
+			
+
+<div id="mac_add_alert">
+	<div class="grid-warning-msg warning">
+		<h4 class="title">
+		<span class="icon"></span>
+		<span class="text" id="cancel_add"></span>
+		</h4>
+	</div>
+</div>
+
+<script type="text/javascript">
+
+function addMacList(){
+	$("div#maclist_cfg").show();
+	$("div#arrow").show();
+	$("div#mac_addr_grid").show();
+	$("div#empty_add").hide();
+}
+
+$(document).ready(function(e){
+
+/////////////////////////////////////////////////////////////////////////////
+
+	var gItem = [];
+	var curIdx = -1;
+	var curMacIdx = -1;
+	var listName = null;
+	var MACFILTER_SET_URL = "./data/macFiltering.set.json";
+	var MACFILTER_MACLIST_URL = "./data/macFiltering.maclist.json";
+	var MACFILTER_RULE_URL = "./data/macFiltering.rule.json";
+	var MACFILTER_ASSOCIATION_URL = "./data/macFiltering.association.json";
+	var ssid_asso_commit = null;
+	var listName_commit = [];
+
+	var DUT_MODE = {
+		BAND_24G: 0,
+		BAND_24G_5G: 1,
+		BAND_24G_5G1_5G2: 2,
+		BAND_24G_5G_6G: 3,
+		BAND_24G_5G1_5G2_6G: 4
+	};
+	
+	$('div.func-container').page({
+		title: $.su.CHAR.MAC_FILTERING.TITLE,
+		help: ""	//可能是个调用的id 也可能是个url
+	});
+	
+	$('div#set').panel({
+		title: $.su.CHAR.MAC_FILTERING.SET,
+		collapsible: false
+	});
+
+	$('div#rule').panel({
+		title: $.su.CHAR.MAC_FILTERING.MAC_LIST,
+		collapsible: false
+	});
+	$('div#association').panel({
+		title: $.su.CHAR.MAC_FILTERING.ASSOCIATION,
+		collapsible: false
+	});
+	
+	$('#set_form').form({
+		proxy: {
+			url: MACFILTER_SET_URL,
+			timeout:180000
+		},
+		fields: [
+			{name: "status", mapping: "status"}
+		],
+		autoLoad:true,
+		submitBtn: "default"
+	});
+	
+	$('input#mac-filtering-enable').checkbox({
+		fieldLabel: $.su.CHAR.MAC_FILTERING.STATUS,
+		items:[
+			{boxlabel: $.su.CHAR.MAC_FILTERING.ENABLE, inputValue:"on", uncheckedValue:"off", checked:false}
+		]
+	}).on("ev_change", function(e, oldValue, newValue){
+		if( newValue.length==0 || newValue[0] =='off' || newValue[0] ==false || newValue[0] ==0){
+			$('div#rule').hide();
+			$('div#association').hide();
+		}else{
+			$('div#rule').show();
+			$('div#association').show();
+		}
+	});
+
+	//  Get Mac Address of Mac List  
+	function getMacAddrFunc(listName){
+		/*$.ajax({
+			url: MACFILTER_RULE_URL+"?listName="+listName,
+			type: 'GET',
+			data: {},
+			dataType: 'json',
+			cache: false,
+			error: function(){
+				// alert("Get Rule Error!");
+				return false;
+			},
+			success: function(result){
+				$('div#mac_addr_grid').grid("getStore").loadData(result.data, false, null);
+
+				return true;
+			}
+		});*/
+		$('div#mac_addr_grid').grid("getStore").load({"listName":listName});
+	}
+	// Get Mac List  
+	getMacListFunc();
+
+	function getMacListFunc(){
+		$.ajax({
+			url: MACFILTER_MACLIST_URL,
+			type: 'GET',
+			data: {
+			},
+			dataType: 'json',
+			async:false,
+			cache:false,
+			error: function(){
+				// alert("error");
+				return false;
+			},
+			success: function(result){
+				var index = 0;
+				var data = result.data;
+				
+				gItem = [];
+				if (data.length > 0)
+				{			
+					for (index = 0; index < data.length; index++)
+					{
+						var tmp = {};
+						tmp.value = data[index].listName;
+						tmp.name  = data[index].listName;
+						gItem.push(tmp);		
+						listName_commit[index]=data[index].listName;
+					}
+				}
+				var temp = {};
+				temp.value = "++++";
+				temp.name  = "None";
+				gItem.unshift(temp);
+			}
+		});
+	}
+
+	$('input#listName').textbox({
+		name:"listName"
+	})
+	$('input#listName').textbox("getContainer").hide();
+	$('input#mac_addr').textbox({
+		fieldLabel:$.su.CHAR.MAC_FILTERING.MAC_ADDR,
+		labelCls:"xs",
+		hint:$.su.CHAR.OPERATION.MAC_HINT,
+		isMac: true,
+		vtype: {
+			vtype: "mac",
+			allowAllZeroFlag: false
+		},
+		allowBlank:false
+	});
+	
+	$('input#maclistName_editor').textbox({
+		fieldLabel:$.su.CHAR.MAC_FILTERING.MAC_GROUP,
+		labelCls:"xs",
+		lengthText:$.su.CHAR.MAC_FILTERING.LENERROR,
+		minLength:"1",
+		maxLength:"31",
+		hint:$.su.CHAR.MAC_FILTERING.LIST_NAME,
+		vtype:"string_strict_strict",
+		allowBlank:false
+	});
+
+	var maclist_cfg = $("div#maclist_cfg").grid({
+		store:{
+			proxy:{
+				url: MACFILTER_MACLIST_URL
+			},
+			fields:[
+				{name:"listName"}
+			],
+			updateMode:"complete",
+			autoLoad: true
+		},
+		editor: {
+			content:"#maclist_edit",
+			validator:function(){
+				var value = $("input#maclistName_editor").textbox("getValue");
+
+				/*
+				if (0x0000 <= utf8Code && utf8Code <= 0x007F)
+				{
+					len = len + 1;
+				}
+				else if (0x0080 <= utf8Code && utf8Code <= 0x07FF)
+				{
+					len = len + 2;
+				}
+				else if (0x0800 <= utf8Code && utf8Code <= 0xFFFF)
+				{
+					len = len + 3;
+				}
+				else if (0x10000 <= utf8Code && utf8Code <= 0x1FFFFF)
+				{
+					len = len + 4;
+				}
+				else if (0x200000 <= utf8Code && utf8Code <= 0x3FFFFFF)
+				{
+					len = len + 5;
+				}
+				else if (0x4000000 <= utf8Code && utf8Code <= 0x7FFFFFFF)
+				{
+					len = len + 6;
+				}
+				*/
+
+				/*
+				if (value.length >= 32)
+				{
+					$("input#maclistName_editor").textbox("setError", $.su.CHAR.MAC_FILTERING.LENERROR);
+					return false;
+				}
+				*/
+				// 重复性检查
+				var store = $('div#maclist_cfg').grid("getStore");
+				var data = store.data;
+				var index = 0;
+				var num = data.length;
+				
+				for (index = 0; index < num; index++)
+				{
+					if (value == data[index].listName && index != curIdx)
+					{
+						$("input#maclistName_editor").textbox("setError", $.su.CHAR.MAC_FILTERING.DUPERROR);
+						return false;
+					}
+				}
+
+				return true;
+			},
+			fields:[
+				{name:"maclistName"}
+			]
+		},
+		paging:{
+
+		},
+		columns:[
+			{
+				text:$.su.CHAR.MAC_FILTERING.MAC_GROUPNAME,
+				dataIndex:"listName",
+				width:320
+			},
+			{
+				xtype:"settings"
+				// width:50
+			}
+		],
+		operation:"add-lm"
+	}).on("ev_load", function(e, data, start, len){
+
+		curIdx = -1;
+		if (data.length == 0)
+		{
+			$("div#mac_addr_grid").grid("getStore").loadData(null, false, null);
+			$("div#maclist_cfg").hide();
+			$("div#arrow").hide();
+			$("div#mac_addr_grid").hide();
+			$("div#empty_add").show();
+		}
+		else
+		{
+			for (index = 0; index < data.length; index++)
+			{
+				listName_commit[index]=data[index].listName;
+			}
+			$("div#maclist_cfg .grid-content-container table tr:first").trigger("click");
+			$("div#empty_add").hide();
+		}
+	});
+	
+	$("div#maclist_cfg").delegate(".grid-content-container table tr",
+	"mouseenter mouseleave", function(){
+		$(this).toggleClass("hover");
+	});
+	
+	$("div#maclist_cfg").delegate(".grid-content-container table tr",
+	"click", function(){
+		var maclist = null;
+		var tr = $(this);
+		
+		tr.closest("table").find("tr").removeClass("selected");
+		
+		setTimeout(function(){
+				tr.addClass("selected");
+			}, 200);
+		
+		$(this).find("td").each(function(i){
+			if ($(this).attr("name") == "settings-column")
+			{
+				var html = $(this).find(".btn-edit");
+				var index = html.attr("data-index");
+				var height = index * 50 + 100;
+				var hh = height + "px";
+
+				document.getElementById("arrow").style.paddingTop = hh;
+			}
+			if ($(this).attr("name") == "listName")
+			{
+				//maclist  = $(this).find(".content").text();
+				//listName = encodeURI(maclist  , "utf-8");
+				var index = $(this).closest("tr").index();
+				listName=listName_commit[index];
+				//listName = maclist;
+				
+				// alert(listName);
+				// 使用$.会有问题，返回的数据正常，但不能加载到grid里面，所以此处使用ajax发送请求。
+				// $.post(MACFILTER_RULE_URL, {operation:"read", listName:maclist}, function(result){
+				// 	alert(result.data.length);
+				// 	$("div#mac_addr_grid").grid("getStore").loadData(result.data, false, null);
+				// });
+				getMacAddrFunc(listName);
+			}
+		});
+	});
+
+	// 在对maclist做了修改之后，刷新association表。
+	$("div#maclist_cfg").delegate("button.btn-submit", "mouseup", function(){		
+		setTimeout(getMacListFunc, 1000);
+		setTimeout(getAssociationFunc, 1100);
+	});
+	$("div#maclist_cfg").delegate(".btn-delete", "mouseup", function(){
+		setTimeout(getMacListFunc, 1500);
+		setTimeout(getAssociationFunc, 1600);
+	});
+	$("div#maclist_cfg").delegate("a.btn-edit", "click", function(){
+		var store = $("div#maclist_cfg").grid("getStore");
+		var btn = $(this);
+		var index = btn.attr("data-index");
+		var data = store.getDataByIndex(index);
+
+		curIdx = index;
+		$("input#maclistName_editor").textbox("setValue", data.listName);
+	});
+	$("div#maclist_cfg").delegate("button.btn-cancel", "mouseup", function(){
+		curIdx = -1;
+	});
+
+	function getAssociationFunc(){
+		$.ajax({
+			url: MACFILTER_ASSOCIATION_URL,
+			type: 'GET',
+			data: {
+			},
+			dataType: 'json',
+			async:false,
+			cache:false,
+			error: function(){
+				alert("error");
+				return false;
+			},
+			success: function(result){
+				var index = 0;
+				var data = result.data;
+
+				$("div#assoc_entry").grid("getStore").loadData(data, false, null);
+			}
+		});
+	}
+
+	var o = $("div#mac_addr_grid").grid({
+		maxRulesMsgText: $.su.CHAR.OPERATION.GRID_MAX_GROUPS,
+		store:{
+			proxy: {
+				url: MACFILTER_RULE_URL
+			},
+			fields: [
+				{name: "mac"}
+			],
+			updateMode:"complete",
+			autoLoad: true
+		},
+		beforeStartAdd:function(){
+			var store = $("div#maclist_cfg").grid("getStore");
+			var data = store.data;
+
+			if (data.length == 0)
+			{
+				$("#mac_add_alert").msg("show");
+				return false;
+			}
+
+			return true;
+		},
+		editor: {
+			content:"#mac_addr_set",
+			validator:function(){
+				var listName = $("input#listName").textbox("getValue");
+				var value = $("input#mac_addr").textbox("getValue");
+
+				if (listName == null || listName.length == 0)
+				{
+					$("input#mac_addr").textbox("setError", $.su.CHAR.MAC_FILTERING.LISTEMPTY);
+					return false;
+				}
+
+				var store = $("div#mac_addr_grid").grid("getStore");
+				var data  = store.data;
+				var index = 0;
+				var num   = data.length;
+	        	
+				for (index = 0; index < num; index++)
+				{
+					if (value == data[index].mac && index != curMacIdx)
+					{
+						$("input#mac_addr").textbox("setError", $.su.CHAR.MAC_FILTERING.MACDUPERROR);
+						return false;
+					}
+
+					if (value.toLocaleUpperCase() == data[index].mac && index != curMacIdx)
+					{
+						$("input#mac_addr").textbox("setError", $.su.CHAR.MAC_FILTERING.MACDUPERROR);
+						return false;
+					}
+				}
+
+				return true;
+			},
+			fields:[
+				{name:"listName"},
+				{name:"mac_addr"}
+			]
+		},
+		paging: {
+		},
+		columns: [
+			{
+				text: $.su.CHAR.MAC_FILTERING.ID, 
+				xtype: "rownumberer",
+				width:60
+			},{
+				text: $.su.CHAR.MAC_FILTERING.MAC_ADDR,
+				dataIndex: "mac",
+				width:340
+			},{
+				text: $.su.CHAR.GRID.MODIFY,
+				dataIndex: 'key',
+				renderer: function(val, index, data){
+					var key = val;
+					var  inHTML = 		"<a href=\"javascript:void(0);\" data-index=\""+index+"\" data-key=\""+key+"\" class=\"grid-content-btn grid-content-btn-edit btn-edit\">";
+						inHTML +=			"<span class=\"icon\" title=\"Edit\"></span>";
+						inHTML += 			"<span class=\"text\">"+$.su.CHAR.OPERATION.EDIT+"</span>";
+						inHTML += 		"</a>";
+						inHTML += 		"<a href=\"javascript:void(0);\" data-index=\""+index+"\" data-key=\""+key+"\" class=\"grid-content-btn grid-content-btn-remove btn-delete\">";
+						inHTML +=			"<span class=\"icon\" title=\"Remove\"> </span>";
+						inHTML += 			"<span class=\"text\">"+$.su.CHAR.OPERATION.REMOVE+"</span>";
+						inHTML += 		"</a>";
+						
+					return inHTML;
+					
+				}
+			}
+		],
+		operation:"add-rm"
+	}).on("ev_load", function(e, data, start, len){
+
+		curMacIdx = -1;
+	});
+
+	$("#mac_add_alert").msg({
+		type:"alert",
+		cls:"grid-popup-msg"
+	});
+
+	$("#cancel_add").html($.su.CHAR.MAC_FILTERING.NOMACLIST);
+
+	$("div#mac_addr_grid").delegate("button.btn-submit", "mouseup", function(){
+
+		$('input#listName').textbox("setValue", listName);
+	});
+	$("div#mac_addr_grid").delegate("a.btn-edit", "click", function(){
+		var store = $("div#mac_addr_grid").grid("getStore");
+		var btn = $(this);
+		var index = btn.attr("data-index");
+		var data = store.getDataByIndex(index);
+
+		curMacIdx = index;
+		$("input#mac_addr").textbox("setValue", data.mac);
+	});
+	$("div#mac_addr_grid").delegate("a.grid-content-btn-remove", "click", function(e){
+		var store = $("div#mac_addr_grid").grid("getStore");
+		var btn = $(this);
+		var index = btn.attr("data-index");
+		var data = store.getDataByIndex(index);
+
+		store.remove([data.key], {listName: listName});
+	});
+	$("div#mac_addr_grid").delegate("button.btn-cancel", "mouseup", function(){
+		curMacIdx = -1;
+	});
+	/*           END           */
+
+	/*           ASSOCIATION          */
+	$('#assoc_form').form({
+		fields: [
+			{name: "ssid_name", mapping: "ssid_name"},
+			{name: "list_name", mapping: "list_name"},
+			{name: "action",	mapping: "action"	}
+		],
+		autoLoad:true,
+		submitBtn:false
+	});
+	
+	var assoc = $("div#assoc_entry").grid({
+		store:{
+			proxy: {
+				url: MACFILTER_ASSOCIATION_URL
+			},
+			fields: [
+				{name: "ssid"},
+				{name:"band"},
+				{name: "maclist"},
+				{name: "action"},
+				{name: "ml"}
+			],
+			updateMode:"complete",
+			autoLoad: true
+		},
+		editor: {
+		},
+		paging: {
+		},
+		columns: [
+			{
+				text: $.su.CHAR.MAC_FILTERING.ID, 
+				xtype: "rownumberer",
+				width:60
+			},{
+				text: $.su.CHAR.MAC_FILTERING.SSID_NAME,
+				dataIndex: "ssid",
+				width:240
+			},{
+				text: $.su.CHAR.MAC_FILTERING.BAND,
+				dataIndex: "band",
+				width:70,
+				renderer: function(val, index, row){
+					if (!row.ml) {
+						return val
+					} else {
+						var mlBitMap = row.ml.toString(2).split('')
+						var bands = []
+						$.each(mlBitMap, function (index, item) {
+							if (item == 1) {
+								var band = mlBitMap.length - 1 - index
+								if(band==0){
+									bands.unshift($.su.CHAR.VLAN.GHZ_24);
+								}else if(band==1){
+									var str = ($.su.dutMode === DUT_MODE.BAND_24G_5G1_5G2 || $.su.dutMode === DUT_MODE.BAND_24G_5G1_5G2_6G)?$.su.CHAR.VLAN.GHZ_5G1:$.su.CHAR.VLAN.GHZ_5;
+									bands.unshift(str);
+								}else if(band==2){
+									bands.unshift($.su.CHAR.VLAN.GHZ_5G2);
+								}else if(band==3){
+									bands.unshift($.su.CHAR.VLAN.GHZ_6);
+								}
+							}
+						})
+
+						return '<span class="band-wrap" ml="' + row.ml + '">' + bands.join(',<br>') + '</span>' 
+					}
+				}
+			},{
+				text: $.su.CHAR.MAC_FILTERING.LIST_NAME,
+				dataIndex: "maclist",
+				xtype:"actioncolumn",
+				items:[
+					{
+						xtype:"combobox",
+						name:"maclist",
+						inputCls:"xxl",
+						items:gItem
+					}
+				],
+				width:350
+			},{
+				text: $.su.CHAR.MAC_FILTERING.ACTION,
+				dataIndex: "action",
+				xtype:"actioncolumn",
+				items:[
+					{
+						xtype:"combobox",
+						name:"action",
+						items:[
+							{"name":"Allow", "value":"1"},
+							{"name":"Deny", "value":"0"}
+						]
+					}
+				]
+				// width:120
+			}
+		]
+	}).on("ev_load", function(e, data, start, len){
+		var maclist_arr = $("div#assoc_entry input.actioncolumn-input[name=maclist]");
+		var num = maclist_arr.length;
+		var index = 0;
+		ssid_asso_commit=[]; 
+		for (index = 0; index < num; index++)
+		{
+			$(maclist_arr[index]).combobox("loadData", gItem);
+			$(maclist_arr[index]).combobox("setValue", data[index].maclist);
+			ssid_asso_commit.push(data[index].ssid);
+		}
+	});	
+
+ function    HTMLDeCode(str)  
+  {  
+        var    s    =    "";  
+        if    (str.length    ==    0)    return    "";  
+        s    =    str.replace(/&amp;/g,    "&");  
+        s    =    s.replace(/&lt;/g,        "<");  
+        s    =    s.replace(/&gt;/g,        ">");  
+        s    =    s.replace(/'/g,      "\'");  
+        s    =    s.replace(/&quot;/g,      "\"");  
+        s 	 = 	  s.replace(/&nbsp;/g, " ");
+        //s    =    s.replace(/ <br>/g,      "\n"); 
+        return    s;  
+  }  
+	$("#total_save").button({
+		text: $.su.CHAR.MAC_FILTERING.SAVE,
+		cls:"submit",
+		handler:function(){
+			var ssid_arr = $("div#assoc_entry td[name=ssid] span");
+			var band_arr = $("div#assoc_entry td[name=band] span").not(".band-wrap");
+			var list_arr = $("div#assoc_entry input.actioncolumn-input[name=maclist]");
+			var action_arr = $("div#assoc_entry input.actioncolumn-input[name=action]");
+			var num = list_arr.length;
+			var index = 0;
+			var param = {};
+			var ssid  = [];
+			var band  = [];
+			var ml = [];
+			var list  = [];
+			var action = [];
+
+			document.getElementById("config_loading").style.display = "inline-block";
+			// $("#total_save").button("disable");
+			setTimeout(function(){
+			$("#total_save").button("disable");
+			}, 0);
+
+			for (index; index < num; index++)
+			{
+				ssid.push(HTMLDeCode(ssid_arr[index].innerHTML));
+				var bandDom = $(band_arr[index]).find(".band-wrap")
+				band.push((bandDom && bandDom[0]) ? "0" : HTMLDeCode(band_arr[index].innerHTML));
+				ml.push((bandDom && bandDom[0]) ? bandDom[0].getAttribute('ml') : 0);
+				list.push($(list_arr[index]).combobox("getValue"));
+				action.push($(action_arr[index]).combobox("getValue"));
+			}
+
+			param.operation = "save";
+			param.ssidName  = ssid_asso_commit.join("\n");
+			param.band      = band.join("\n");
+			param.ml      = ml.join("\n");
+			param.listName  = list.join("\n");
+			param.action 	= action.join("\n");
+
+			// 用$.post方式提交后，返回的数据不能正确加载到grid里面，故采用ajax来完成
+			// $.post(MACFILTER_ASSOCIATION_URL, param, function(result){
+			// 	$("div#assoc_entry").grid("getStore").loadData(result.data, false, null);
+			$.ajax({
+				url: MACFILTER_ASSOCIATION_URL,
+				type: 'POST',
+				data:param,
+				dataType: 'json',
+				timeout: 180000,
+				success: function(result){
+					$("div#assoc_entry").grid("getStore").loadData(result.data);
+					document.getElementById("config_loading").style.display = "none";
+					$("#total_save").button("enable");
+					$("form#assoc_form").form("prompt", true, $.su.CHAR.MAC_FILTERING.SAVE_SUCC);
+				},
+				error:function(){
+					document.getElementById("config_loading").style.display = "none";
+					$("#total_save").button("enable");
+				}
+			});
+		}
+	});
+
+	/*                END				*/
+	$("#title").html($.su.CHAR.MAC_FILTERING.ACCESS_DEVICE);
+	$("#text_create").html($.su.CHAR.MAC_FILTERING.CREATE_GROUP);
+	$("#text_note").html($.su.CHAR.MAC_FILTERING.NOTE);
+	$("#text_deny").html($.su.CHAR.MAC_FILTERING.DENY);
+	$("#text_allow").html($.su.CHAR.MAC_FILTERING.ALLOW);
+
+	
+});
+
+</script>
+</body>
+
+</html>

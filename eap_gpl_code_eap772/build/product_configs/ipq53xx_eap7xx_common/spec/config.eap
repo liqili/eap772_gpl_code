@@ -1,0 +1,16 @@
+
+#declare igmp proxy support
+export CONFIG_TP_IGMP_SNOOPING=y
+
+#turn on 3/4 address auto detection
+export CONFIG_WLAN_STA_ADDRTYPE=1
+
+#ccq
+#export ATH_SUPPORT_TXCCQ=1
+
+#func def for eap
+export CONFIG_EAP_SUPPORT=1
+export CONFIG_TP_QCA_SDK_VERSION_CODE=0xC0200
+export CONFIG_FLASH_SIZE=128
+
+export CONFIG_UPGRADE_FAIL_SAFE_CHECK=1

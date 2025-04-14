@@ -1,0 +1,239 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Device</title>
+</head>
+
+<body>
+	<div class="func-container">
+		<div id="device">
+			<form id="device_setting" class="natSeries">
+				<input type="text"  id="device_name" name="deviceName" value="" />
+				<input type="text"  id="device_model" name="deviceModel" value="" />
+				<input type="text"  id="device_firmware" name="firmwareVersion" value="" />
+				<input type="text"  id="device_hardware" name="hardwareVersion" value="" />
+				<input type="text"  id="device_mac" name="mac" value="" />
+				<input type="text"  id="device_ip" name="ip" value="" />
+				<input type="text"  id="device_mask" name="subnetMask" value="" />
+				<div class="lan_info">
+					<!-- <input type="text"  id="device_port" name="port" value="" /> -->
+				</div>
+				<input type="text"  id="device_time" name="time" value="" />
+				<input type="text"  id="device_uptime" name="uptime" value="" />
+
+				<input type="text"  id="power-mode" value="" />
+				<div id="power-limit-help" class="help-item-content hidden">
+					<div class="help-item-icon"></div>
+					<div class="help-item-container">
+						<div class="help-item-delta-container">
+							<span class="help-item-delta"></span>
+						</div>
+						<div class="help-item-text-container">
+							<p id="power-limit-text" class="help-item-text"></p>
+						</div>
+					</div>
+				</div>
+
+				<input type="text"  id="device_cpu" name="cpu" value="" />
+
+				<input type="text"  id="device_memory" name="memory" value="" />
+				
+			</form>
+		</div>
+	</div>
+	
+<script type="text/javascript">
+
+$(document).ready(function(e){
+
+	$("div.func-container").page({
+		title: $.su.CHAR.STATUS_DEVICE.TITLE,
+		help: ""	//可能是个调用的id 也可能是个url
+	});
+
+	$('div#device').panel({
+		title: $.su.CHAR.STATUS_DEVICE.TITLE,
+		collapsible: false
+	});
+	
+	$("input#device_name").textbox({
+		fieldLabel: $.su.CHAR.STATUS_DEVICE.DEVICE_NAME,
+		inputCls: 'xxxl',
+		readOnly: true,
+		ellipsis: true
+		// tips:$.su.CHAR.STATUS_DEVICE.SSH_RANGE,
+	});
+	
+	$("input#device_model").textbox({
+		fieldLabel: $.su.CHAR.STATUS_DEVICE.DEVICE_MODEL,
+		inputCls: 'xxxl',
+		readOnly: true
+	});
+	
+	$("input#device_firmware").textbox({
+		fieldLabel: $.su.CHAR.STATUS_DEVICE.FIRMWARE_VERSION,
+		inputCls: 'xxxl',
+		readOnly: true
+	});
+	
+	$("input#device_hardware").textbox({
+		fieldLabel: $.su.CHAR.STATUS_DEVICE.HARDWARE_VERSION,
+		inputCls: 'xxxl',
+		readOnly: true
+	});
+	
+	$("input#device_mac").textbox({
+		fieldLabel: $.su.CHAR.STATUS_DEVICE.MAC_ADDRESS,
+		inputCls: 'xxxl',
+		readOnly: true
+	});
+	
+	$("input#device_ip").textbox({
+		fieldLabel: $.su.CHAR.STATUS_DEVICE.IP_ADDRESS,
+		inputCls: 'xxxl',
+		readOnly: true
+	});
+	
+	$("input#device_mask").textbox({
+		fieldLabel: $.su.CHAR.STATUS_DEVICE.SUBNET_MASK,
+		inputCls: 'xxxl',
+		readOnly: true
+	});
+	
+	/*$("input#device_port").textbox({
+		fieldLabel: $.su.CHAR.STATUS_DEVICE.LAN_PORT_INFO,
+		inputCls: 'xxxl',
+		readOnly: true
+	});*/
+	
+	$("input#device_time").textbox({
+		fieldLabel: $.su.CHAR.STATUS_DEVICE.SYSTEM_TIME,
+		inputCls: 'xxxl',
+		readOnly: true
+	});
+	
+	$("input#device_uptime").textbox({
+		fieldLabel: $.su.CHAR.STATUS_DEVICE.UPTIME,
+		inputCls: 'xxxl',
+		readOnly: true
+	});
+
+	$("input#device_cpu").progressbar({
+		text: "",
+		fieldLabel: $.su.CHAR.STATUS_DEVICE.CPU_UTILIZATION,
+		cls: 'status-device-probar',
+		unit: "%",
+		expression: "percentage*1",
+		value: 0.1,
+		isProgressbar: true,
+		showPercentage: true,
+		width: 210,
+		height: 6
+	});
+
+	$("input#device_memory").progressbar({
+		text: "",
+		fieldLabel: $.su.CHAR.STATUS_DEVICE.MEMORY_UTILIZATION,
+		cls: 'status-device-probar',
+		unit: "%",
+		expression: "percentage*1",
+		value: 0.1,
+		isProgressbar: true,
+		showPercentage: true,
+		width: 210,
+		height: 6
+	});
+	
+
+	///////////////////////////////////////////////////////////////////////////////////////
+
+	var deviceProxy = new $.su.Proxy({
+		type: 'GET',
+		url: "./data/status.device.json"
+	});
+
+	$("form#device_setting").form({
+		proxy: deviceProxy,
+		fields: [
+			{name: "deviceName", mapping: "deviceName"},
+			{name: "deviceModel", mapping: "deviceModel"},
+			{name: "firmwareVersion", mapping: "firmwareVersion"},
+			{name: "hardwareVersion", mapping: "hardwareVersion"},
+			{name: "mac", mapping: "mac"},
+			{name: "ip", mapping: "ip"},
+			{name: "subnetMask", mapping: "subnetMask"},
+			{name: "lan_port_list", mapping: "lan_port_list"},
+			{name: "time", mapping: "time"},
+			{name: "uptime", mapping: "uptime"},
+			{name: "cpu", mapping: "cpu"},
+			{name: "memory", mapping: "memory"}			
+		],
+		autoLoad: true,
+		submitBtn: null
+	});
+
+	deviceProxy.read({}, function(data){
+		for (var i = 0, len = data.lan_port_list.length; i < len; i++) {
+			var info = data.lan_port_list[i];
+			var id = 'device_port' + i;
+			$('div.lan_info').append('<input type="text" id="'+ id +'" name="'+ id +'" />');
+			$("input#" + id).textbox({
+				fieldLabel: info.name,
+				inputCls: "xl lan_info",
+				readOnly: true
+			});
+			$("input#" + id).textbox("setValue", info.status);
+		}
+	});
+
+	$.su.loop = setInterval(function(){
+		deviceProxy.read({}, function(data){
+			$("input#device_cpu").progressbar('setValue', data.cpu);
+		});
+	}, 3000);
+
+
+	//////////////////////////////////// power mode /////////////////////////////
+	var BAND_POWER_MODE = {
+		NORMAL: 0,
+		POWER_LIMIT: 1,
+		BAND_CLOSE: 2
+	}
+
+	var showModeProxy = new $.su.Proxy({
+		url: "./data/showMode.config.json"
+	});
+
+	$('#power-limit-text').html($.su.CHAR.STATUS_DEVICE.INSUFFICIENT_POWER_TIP);
+
+	$("input#power-mode").textbox({
+		fieldLabel: $.su.CHAR.STATUS_DEVICE.POWER_MODE,
+		inputCls: 'm',
+		readOnly: true,
+		cls: 'inline-block'
+	});
+
+	if ($.su.supportPowerDetect) {
+		showModeProxy.read({}, function (data) {
+			powerArray = data.powerArray || []
+
+			for (var i = 0; i < powerArray.length; i++) {
+				if (powerArray[i].status !== BAND_POWER_MODE.NORMAL) {
+
+					$("input#power-mode").textbox("setValue", $.su.CHAR.STATUS_DEVICE.POWER_LIMIT)
+					$("#power-limit-help").removeClass("hidden")
+					return 
+				}
+			}
+			
+			$("input#power-mode").textbox("setValue", $.su.CHAR.STATUS_DEVICE.NORMAL)
+			$("#power-limit-help").addClass("hidden")
+		})
+	} else {
+		$("input#power-mode").textbox("getContainer").hide()
+	}
+});
+</script>
+</body>
+</html>

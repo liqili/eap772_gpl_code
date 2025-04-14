@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# Guest account from SSH cannot reboot dut, so echo stop to watchdog
+# Driver will run machine_restart or stop feed dog
+
+echo stop > /proc/tplink_gpio/watchdog

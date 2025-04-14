@@ -1,0 +1,181 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>SNMP Agent</title>
+</head>
+
+<body>
+	<div class="func-container">
+		<div id="snmp">
+			<form id="snmp_setting" class="natSeries">
+				<!--<p id="note" class="note"></p>-->
+				<input type="checkbox"  id="snmpEnable" name="snmpEnable" value="" />
+				<input type="text"  id="sysContact" name="sysContact" value="" />
+				<input type="text"  id="sysName" name="sysName" value="" />
+				<input type="text"  id="sysLocation" name="sysLocation" value="" />
+				<input type="password"  id="getCommunity" name="getCommunity" value="Public" />
+				<input type="text"  id="getSource" name="getSource" value="0.0.0.0" />
+				<input type="password"  id="setCommunity" name="setCommunity" value="Private" />
+				<input type="text"  id="setSource" name="setSource" value="0.0.0.0" />
+				<input type="text"  id="remoteEnable" name="remoteEnable" value="false" class="hidden"/>
+			</form>
+		</div>
+	</div>
+	
+<script type="text/javascript">
+//<![CDATA[
+$(document).ready(function(e){
+
+  function setEn(isEn)
+  {
+  	 if(isEn)
+  	 {
+  	 		$("input#sysContact").textbox("enable");
+				$("input#sysName").textbox("enable");
+				$("input#sysLocation").textbox("enable");
+				$("input#getCommunity").password("enable");
+				$("input#getSource").textbox("enable");
+				$("input#setCommunity").password("enable");
+				$("input#setSource").textbox("enable");
+		 }
+		 else
+		 {
+  	 		$("input#sysContact").textbox("disable");
+				$("input#sysName").textbox("disable");
+				$("input#sysLocation").textbox("disable");
+				$("input#getCommunity").password("disable");
+				$("input#getSource").textbox("disable");
+				$("input#setCommunity").password("disable");
+				$("input#setSource").textbox("disable");
+		 }
+  }
+
+	$("div.func-container").page({
+		title: $.su.CHAR.SNMP.TITLE,
+		help: ""	//可能是个调用的id 也可能是个url
+	});
+
+	$('div#snmp').panel({
+		title: $.su.CHAR.SNMP.TITLE,
+		collapsible: false
+	});
+
+	$("input#snmpEnable").checkbox({
+		fieldLabel: $.su.CHAR.SNMP.TITLE,
+		items: [
+			{boxlabel: $.su.CHAR.SNMP.SNMP_ENABLE, inputValue: "true", uncheckedValue: "false", checked:true}
+		]
+	}).on("ev_change", function(e, oldValue, newValue){
+		var val = (newValue[0]=="snmpEnable" || newValue[0]=="on") ? "true" : "false";
+		switch(val)
+		{
+			case 'false':
+			  setEn(false);
+				break;
+			case 'true':
+				setEn(true);
+				break;
+		}
+	});
+
+	$("input#sysContact").textbox({
+		fieldLabel: $.su.CHAR.SNMP.SYS_CONTACT,
+		tips:"",
+   	//vtype: "string",
+   	//tips:"",
+   	maxLength: 64,
+    minLength: 0
+	});
+
+	$("input#sysName").textbox({
+		fieldLabel: $.su.CHAR.SNMP.SYS_NAME,
+		//vtype: "string",
+		//tips:"",
+   	maxLength: 64,
+    minLength: 0
+	});
+
+	$("input#sysLocation").textbox({
+		fieldLabel: $.su.CHAR.SNMP.SYS_LOCATION,
+		//vtype: "string",
+		//tips:"",
+   	maxLength: 64,
+    minLength: 0
+	});
+
+	$("input#getCommunity").password({
+		fieldLabel: $.su.CHAR.SNMP.GET_COMMUNITY,
+		//vtype: "string",
+		//tips:"",
+	   	maxLength: 64,
+	    minLength: 0,
+	    allowBlank: false,
+			allowVisible: true,
+			allowVisibleWhenDisable: false
+	});
+
+	$("input#getSource").textbox({
+		fieldLabel: $.su.CHAR.SNMP.GET_SOURCE,
+		tips:"",
+		hint:$.su.CHAR.OPERATION.IP_HINT,
+		vtype:"ip_or_subnetmask"
+	});
+	
+	$("input#setCommunity").password({
+		fieldLabel: $.su.CHAR.SNMP.SET_COMMUNITY,
+		//vtype: "string",
+		//tips:"",
+	   	maxLength: 64,
+	    minLength: 0,
+	    allowBlank: false,
+			allowVisible: true,
+			allowVisibleWhenDisable: false
+	});
+
+	$("input#setSource").textbox({
+		fieldLabel: $.su.CHAR.SNMP.SET_SOURCE,
+		tips:"",
+		hint:$.su.CHAR.OPERATION.IP_HINT,
+		vtype:"ip_or_subnetmask"
+	});
+
+	var snmpProxy = new $.su.Proxy({
+		url: "./data/snmp.json"
+	});
+
+
+	$("form#snmp_setting").form({
+		proxy: snmpProxy,
+		fields: [
+      {name: "snmpEnable", mapping: "snmpEnable"},
+			{name: "sysContact", mapping: "sysContact"},
+			{name: "sysName", mapping: "sysName"},
+			{name: "sysLocation", mapping: "sysLocation"},
+			{name: "getCommunity", mapping: "getCommunity"},
+			{name: "getSource", mapping: "getSource"},
+			{name: "setCommunity", mapping: "setCommunity"},
+			{name: "setSource", mapping: "setSource"}
+		],
+		autoLoad: true,
+		submitBtn: "default"
+	}).on("ev_loadData", function(e, data){
+		
+		if(data.snmpEnable == true)
+		{
+			 setEn(true);
+		}
+		else
+		{
+			 setEn(false);
+		}
+
+		$("input#getCommunity").password("levelCheck");
+		$("input#setCommunity").password("levelCheck");
+
+	});
+
+});
+</script>
+</body>
+</html>

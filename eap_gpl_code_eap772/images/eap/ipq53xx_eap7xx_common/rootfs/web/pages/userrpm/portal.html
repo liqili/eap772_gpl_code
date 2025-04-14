@@ -1,0 +1,1160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Web Server</title>
+</head>
+
+<body>
+	<div class="func-container">
+		<div id="portal_cfg">
+			<form id="portal_basic" class="natSeries">
+				<input type="text"     id="ssidName" name="ssid" value=""/>
+				<input type="text"   id="ssidNameHidden" class="hidden" name="ssidname" value=""/>
+				<input id="authType" name="authType" value=""/>
+				<input type="text"     id="username" name="username" value="" class="hidden"/>
+				<input type="text"     id="password" name="password" value=""/>
+				<input type="text"     id="radiusServerIp" name="radiusServerIp" value=""/>
+				<input type="text"     id="radiusPort" name="radiusPort" value=""/>
+				<input type="text"     id="radiusPwd" name="radiusPwd" value=""/>
+
+				<input type="text"     id="nasId" name="nasId" value=""/>
+				<input id="radiusAccounting" name="radiusAccounting" value=""/>
+				<input type="text"     id="acctRadiusIp" name="acctRadiusIp" value=""/>
+				<input type="text"     id="acctRadiusPort" name="acctRadiusPort" value=""/>
+				<input type="text"     id="acctRadiusPwd" name="acctRadiusPwd" value=""/>
+				<input id="interimUpdate" name="interimUpdate" value=""/>
+				<input type="text"     id="interimInterval" name="interimInterval" value=""/>
+
+				<input id="authTimeout" name="authTimeout" value=""/>
+				<div id="portal_customTime">
+					<input type="text"  id="portal_day"  name="portal_day"  value=""/>
+					<span id="t_portal_day"></span>
+					
+					<input type="text"  id="portal_hour" name="portal_hour" value=""/>
+					<span id="t_portal_hour"></span>
+					
+					<input type="text"  id="portal_min"  name="portal_min"  value=""/>
+					<span id="t_portal_min"></span>
+				</div>
+				
+				<input type="checkbox" id="redir" name="redir" value=""/>
+				<input type="text"  id="redirUrl"  name="redirUrl"  value=""/>
+				
+				<input id="serverType" name="serverType" value=""/>
+				<input type="text"  id="rmtPortalUrl"  name="rmtPortalUrl"  value=""/>
+				<div id="portal_localPage">
+					<textarea type="text"  id="portal_title"  name="portal_title"  value=""/>
+					<input type="text"  id="portal_usernameShow"  name="portal_usernameShow"  value=""/>
+					<input type="text"  id="portal_pwdShow"  name="portal_pwdShow"  value=""/>
+					<textarea type="text"  id="portal_useTerm"  name="portal_useTerm"  value=""/>
+					<input type="checkbox" id="portal_accept" name="portal_accept" value=""/>
+					<button type="button" id="portal_loginBtn" name="portal_loginBtn"/>
+				</div>
+			</form>
+		</div>
+		
+		<div id="portal_accessCtrl">
+			<div id="portal_accessCtrl_grid"></div>
+			
+			<div id="portal_accessCtrl_editor">
+				<input type="text" id="portal_policyName" name="portal_policyName" value=""/>
+				<div class="container widget-container text-container ">					
+					<input type="text" id="portal_sIp" name="portal_sIp" value=""/>
+					<span>/</span>
+					<input type="text" id="portal_sMask" name="portal_sMask" value=""/>
+					<span id="sMask_option"></span>
+				</div>
+				<div class="container widget-container text-container ">
+					<input type="text" id="portal_dIp" name="portal_dIp" value=""/>
+					<span>/</span>
+					<input type="text" id="portal_dMask" name="portal_dMask" value=""/>
+					<span id="dMask_option"></span>
+				</div>
+				<input type="text" id="portal_sMac" name="portal_sMac" value=""/>
+				<input type="text" id="portal_port" name="portal_port" value=""/>
+				<input id="portal_status" name="portal_status" value="true"/>
+			</div>
+			
+		</div>
+	</div>
+	
+<script type="text/javascript">
+//<![CDATA[
+$(document).ready(function(e){
+	$("div.func-container").page({
+		title: $.su.CHAR.PORTAL.TITLE,
+		help: ""	//可能是个调用的id 也可能是个url
+	});
+
+	// ----------------------------- portal configuration ---------------------------- //
+	var PORTAL_BASIC_URL = new $.su.Proxy({
+		url: "./data/portal_basic.json",
+		timeout: 120000
+	});
+	
+	var curPolicyIndex = -1;//用来避免添加重复的PolicyName
+	var ssidList = [];
+	
+	$('div#portal_cfg').panel({
+		title: $.su.CHAR.PORTAL.TITLE_CFG,
+		collapsible: false
+	});
+	
+	/*$("input#username").textbox({
+		fieldLabel: $.su.CHAR.PORTAL.USERNAME,
+		allowBlank: false,
+		//vtype: "string_strict",
+		maxLength: 31
+	});*/
+	
+	$("input#password").textbox({
+		fieldLabel: $.su.CHAR.PORTAL.PWD,
+		allowBlank: false,
+		//vtype: "string_strict",
+		vtype: "ascii_visible",
+		maxLength: 31,
+		inputCls: "xl"
+	});
+
+	$("input#ssidName").combobox({
+		fieldLabel: $.su.CHAR.PORTAL.SSID,
+		multiSelect: true,
+		inputCls: "xl",
+		allowBlank: true
+	}).on('ev_change', function(e, oldValue, newValue){
+		var comboDiv = $(e.currentTarget).parents('.combobox-container');
+
+		var valueStr = '';
+		for(var i=0; i<newValue.length; i++){
+			var input = comboDiv.find('input[value='+newValue[i]+']');
+			var index = input[0].getAttribute('index');
+
+			if( index!='false' ){
+				index = index.replace(/\+/g, ',');
+				index += ',';
+				valueStr += index;
+			}else{
+				valueStr += newValue[i] + ',';
+			}
+		}
+		valueStr = valueStr.slice(0, valueStr.length-1);
+		$('#ssidNameHidden').val(valueStr);
+	});
+
+
+	$("input#ssidNameHidden").textbox({
+		fieldLabel: '',
+		cls: 'hidden'
+	});
+
+	$.ajax({
+		url: './data/portal.ssid.json',
+		type: 'GET',
+		// data:para,
+		async: false,
+		dataType: 'json',
+		timeout: 10000,
+		success: function(result){
+			var nameList = [];
+			var pureList = [];
+			var oriData = result.data;
+			ssidList = oriData;
+			for(var i=0; i<oriData.length; i++){
+				nameList.push( { name:oriData[i].name, value:oriData[i].apId } );
+			}
+
+			for(var i=0; i<nameList.length; i++){
+				var flag = true;
+				for(var m=0; m<pureList.length; m++){
+					if( pureList[m].name ==  nameList[i].name){
+						if (!pureList[m].index) {
+							pureList[m].index = pureList[m].value + '+' + nameList[i].value;
+						} else {
+							pureList[m].index += '+' + nameList[i].value;
+						}
+						flag = false;
+					}
+				}
+				flag?pureList.push(nameList[i]):1;
+			}
+
+			$("input#ssidName").combobox('loadData', pureList);
+
+			/*if(pureList.length>0){
+				$("input#ssidName").combobox('setValue', pureList[0].value);
+			}*/
+		},
+		error: function(xhr, s, et){}
+	});
+	
+	$("input#radiusServerIp").textbox({
+		fieldLabel: $.su.CHAR.PORTAL.RADIUS_SERVER_IP,
+		allowBlank: false,
+		vtype: "ip",
+		inputCls: "xl"
+	});
+	
+	$("input#radiusPort").textbox({
+		fieldLabel: $.su.CHAR.PORTAL.RADIUS_PORT,
+		allowBlank: false,
+		vtype: "number",
+		tips: "(1-65535)",
+		invalidText:$.su.CHAR.PORTAL.ERR_PORT,
+		validator:function(val){
+			if((val >= 1) && (val <= 65535))
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		},
+		inputCls: "xl"
+	});
+	
+	$("input#radiusPwd").textbox({
+		fieldLabel: $.su.CHAR.PORTAL.RADIUS_PWD,
+		allowBlank: false,
+		//vtype: "string_strict",
+		vtype: "ascii_visible",
+		maxLength: 128,
+		inputCls: "xl"
+	});
+	
+	function handleServerType(newValue)
+	{
+		if ("0" == newValue[0])
+		{
+			$("div#portal_localPage").css({
+					"display": "inline-block"
+				});
+				
+			$("textarea#portal_title").textarea("enable");
+			$("textarea#portal_useTerm").textarea("enable");				
+				
+			$("input#rmtPortalUrl").textbox("hide");
+			$("input#rmtPortalUrl").textbox("disable");
+		}
+		else
+		{
+			$("div#portal_localPage").css({
+					"display": "none"
+				});
+				
+			$("textarea#portal_title").textarea("disable");
+			$("textarea#portal_useTerm").textarea("disable");
+				
+			$("input#rmtPortalUrl").textbox("show");
+			$("input#rmtPortalUrl").textbox("enable");
+		}
+	}
+	
+	function handleAuthType(newValue)
+	{
+		if ('0' == newValue[0])
+		{
+		    $("input#portal_usernameShow").textbox("hide");
+			$("input#portal_pwdShow").textbox("hide");
+			
+			$("input#serverType").combobox("loadData", [{name: $.su.CHAR.PORTAL.LOCAL_PORTAL,  value: '0', selected:true}]);
+		}
+		else
+		{			
+			$("input#portal_usernameShow").textbox("show");
+			$("input#portal_pwdShow").textbox("show");
+			if ('1' == newValue[0])
+			{
+				$("input#portal_usernameShow").textbox("hide");
+			}
+		}
+		
+		if ('1' == newValue[0])
+		{
+		    $("input#username").textbox("show");
+			$("input#username").textbox("enable");
+			$("input#password").textbox("show");
+			$("input#password").textbox("enable");
+			
+			$("input#serverType").combobox("loadData", [{name: $.su.CHAR.PORTAL.LOCAL_PORTAL,  value: '0', selected:true}]);
+		}
+		else
+		{
+			$("input#username").textbox("hide");
+			$("input#username").textbox("disable");
+			$("input#password").textbox("hide");
+			$("input#password").textbox("disable");
+		}
+		
+		if ('2' == newValue[0])
+		{
+			$("input#radiusServerIp").textbox("show");
+			$("input#radiusServerIp").textbox("enable");
+			$("input#radiusPort").textbox("show");
+			$("input#radiusPort").textbox("enable");
+			$("input#radiusPwd").textbox("show");
+			$("input#radiusPwd").textbox("enable");
+
+			$("input#nasId").textbox("show");
+            $("input#nasId").textbox("enable");
+
+            $("input#radiusAccounting").checkbox("show");
+
+            if ($("input#radiusAccounting").checkbox("getValue") == "radiusAccounting") {
+                $("input#acctRadiusIp").textbox("show");
+                $("input#acctRadiusIp").textbox("enable");
+                $("input#acctRadiusPort").textbox("show");
+                $("input#acctRadiusPort").textbox("enable");
+                $("input#acctRadiusPwd").textbox("show");
+                $("input#acctRadiusPwd").textbox("enable");
+                $("input#interimUpdate").checkbox("show");
+                $("input#interimInterval").textbox("show");
+				if($("input#interimUpdate").checkbox("getValue") == "interimUpdate") {
+					$("input#interimInterval").textbox("enable");
+				}
+			}
+
+			$("input#serverType").combobox("loadData", [{name: $.su.CHAR.PORTAL.LOCAL_PORTAL,  value: '0', selected:true}, {name: $.su.CHAR.PORTAL.EXTERNAL_PORTAL,  value: '1'}]);
+		}
+		else
+		{
+			$("input#radiusServerIp").textbox("hide");
+			$("input#radiusServerIp").textbox("disable");
+			$("input#radiusPort").textbox("hide");
+			$("input#radiusPort").textbox("disable");
+			$("input#radiusPwd").textbox("hide");
+			$("input#radiusPwd").textbox("disable");
+
+            $("input#nasId").textbox("hide");
+            $("input#nasId").textbox("disable");
+
+            $("input#radiusAccounting").checkbox("hide");
+
+            $("input#acctRadiusIp").textbox("hide");
+            $("input#acctRadiusIp").textbox("disable");
+            $("input#acctRadiusPort").textbox("hide");
+            $("input#acctRadiusPort").textbox("disable");
+            $("input#acctRadiusPwd").textbox("hide");
+            $("input#acctRadiusPwd").textbox("disable");
+            $("input#interimUpdate").checkbox("hide");
+            $("input#interimInterval").textbox("hide");
+            $("input#interimInterval").textbox("disable");
+		}
+		
+		handleServerType($("input#serverType").combobox('getValue'));
+	}
+	
+	$("input#authType").combobox({
+		fieldLabel: $.su.CHAR.PORTAL.AUTH_TYPE,
+		//cls: 'inline',
+		inputCls: "xl",
+		items:[
+			{name: $.su.CHAR.PORTAL.NO_AUTHENTICATION, value: '0'},
+			{name: $.su.CHAR.PORTAL.LOCAL_PASSWORD, value: '1', selected:true},
+			{name: $.su.CHAR.PORTAL.EXTERNAL_SERVER, value: '2'}
+		]
+	}).on("ev_change", function(e, oldValue, newValue){
+		handleAuthType(newValue);
+	});
+
+
+    $("input#nasId").textbox({
+        fieldLabel: $.su.CHAR.PORTAL.NAS_ID,
+        allowBlank: true,
+        //vtype: "ascii_visible",
+        maxLength: 64,
+        inputCls: "xl",
+        invalidText:$.su.CHAR.VTYPETEXT.STRING_VISIBLE,
+        validator:function(val){
+            if(!$.su.vtype.types.ascii_visible.regex.test(val))
+            {
+                $("#nasId").textbox("setError", $.su.CHAR.VTYPETEXT.STRING_VISIBLE);
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+    });
+
+    $("input#radiusAccounting").checkbox({
+        fieldLabel: $.su.CHAR.PORTAL.RADIUS_ACCOUNTING,
+        inputCls: "xl",
+        items: [
+            {boxlabel: $.su.CHAR.PORTAL.ENABLE, inputValue: "true", uncheckedValue: "false", checked:false}
+        ]
+    }).on("ev_change", function(e, oldVal, newVal){
+        if ($("input#authType").combobox("getValue") == "2") {
+            if (newVal.length==0 || newVal[0] =='false' || newVal[0] ==false || newVal[0] ==0)
+            {
+                $("input#acctRadiusIp").textbox("disable");
+                $("input#acctRadiusIp").textbox("hide");
+                $("input#acctRadiusPort").textbox("hide");
+                $("input#acctRadiusPort").textbox("disable");
+                $("input#acctRadiusPwd").textbox("hide");
+                $("input#acctRadiusPwd").textbox("disable");
+                $("input#interimUpdate").checkbox("hide");
+                $("input#interimInterval").textbox("hide");
+                $("input#interimInterval").textbox("disable");
+            }
+            else
+            {
+                $("input#acctRadiusIp").textbox("show");
+                $("input#acctRadiusIp").textbox("enable");
+                $("input#acctRadiusPort").textbox("show");
+                $("input#acctRadiusPort").textbox("enable");
+                $("input#acctRadiusPwd").textbox("show");
+                $("input#acctRadiusPwd").textbox("enable");
+                $("input#interimUpdate").checkbox("show");
+                $("input#interimInterval").textbox("show");
+				if($("input#interimUpdate").checkbox("getValue") == "interimUpdate") {
+					$("input#interimInterval").textbox("enable");
+				}
+            }
+		}
+    });
+
+    $("input#acctRadiusIp").textbox({
+        fieldLabel: $.su.CHAR.PORTAL.ACCOUNT_SERVER_IP,
+        allowBlank: false,
+        vtype: "ip",
+        inputCls: "xl"
+    });
+
+    $("input#acctRadiusPort").textbox({
+        fieldLabel: $.su.CHAR.PORTAL.ACCOUNT_SERVER_PORT,
+        allowBlank: false,
+        vtype: "number",
+        tips: "(1-65535)",
+        invalidText:$.su.CHAR.PORTAL.ERR_PORT,
+        validator:function(val){
+            if((val >= 1) && (val <= 65535))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        },
+        inputCls: "xl"
+    });
+
+    $("input#acctRadiusPwd").textbox({
+        fieldLabel: $.su.CHAR.PORTAL.ACCOUNT_SERVER_PWD,
+        allowBlank: false,
+        vtype: "ascii_visible",
+        maxLength: 128,
+        inputCls: "xl"
+    });
+
+    $("input#interimUpdate").checkbox({
+        fieldLabel: $.su.CHAR.PORTAL.INTERIM_UPDATE,
+        inputCls: "xl",
+        items: [
+            {boxlabel: $.su.CHAR.PORTAL.ENABLE, inputValue: "true", uncheckedValue: "false", checked:false}
+        ]
+    }).on("ev_change", function(e, oldVal, newVal){
+		if (newVal.length==0 || newVal[0] =='false' || newVal[0] ==false || newVal[0] ==0)
+        {
+            //$("input#interimInterval").textbox("hide");
+            $("input#interimInterval").textbox("disable");
+        }
+        else
+        {
+            //$("input#interimInterval").textbox("show");
+            $("input#interimInterval").textbox("enable");
+			if($("input#interimInterval").textbox("getValue") == ""
+				|| $("input#interimInterval").textbox("getValue") == null
+				|| $("input#interimInterval").textbox("getValue") == undefined)
+			{
+				$("input#interimInterval").textbox("setValue", 600);
+			}
+        }
+    });
+
+    $("input#interimInterval").textbox({
+        fieldLabel: $.su.CHAR.PORTAL.INTERIM_INTERVAL,
+        allowBlank: false,
+        vtype: "number",
+        invalidText:$.su.CHAR.PORTAL.ERR_INTERVAL,
+        tips: $.su.CHAR.PORTAL.INTERIM_INTERVAL_TIP,
+        validator:function(val){
+            if((val >= 60) && (val <= 86400))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        },
+        inputCls: "xl"
+    });
+
+	$("input#portal_day").textbox({
+		fieldLabel: null,
+		cls: 'inline-block',
+		allowBlank: false,
+		vtype: "number",
+		invalidText:$.su.CHAR.PORTAL.ERR_DAY,
+		validator:function(val){
+			if((val >= 0) && (val <= 29))
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}		
+	});
+	
+	$("span#t_portal_day").html($.su.CHAR.PORTAL.DAY);
+	
+	$("input#portal_hour").textbox({
+		fieldLabel: null,
+		cls: 'inline-block',
+		allowBlank: false,
+		vtype: "number",
+		invalidText:$.su.CHAR.PORTAL.ERR_HOUR,
+		validator:function(val){
+			if((val >= 0) && (val <= 23))
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+	});
+	
+	$("span#t_portal_hour").html($.su.CHAR.PORTAL.HOUR);
+
+	$("input#portal_min").textbox({
+		fieldLabel: null,
+		cls: 'inline-block',
+		allowBlank: false,
+		vtype: "number",
+		invalidText:$.su.CHAR.PORTAL.ERR_MIN,
+		validator:function(val){
+			if((val >= 0) && (val <= 59))
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+	});
+	
+	$("span#t_portal_min").html($.su.CHAR.PORTAL.MIN);
+	
+	function handleAuthTimeout(newValue)
+	{
+		if ("4" == newValue[0])
+		{
+			$("input#portal_day").textbox("enable");
+			$("input#portal_hour").textbox("enable");
+			$("input#portal_min").textbox("enable");
+		}
+		else
+		{
+			$("input#portal_day").textbox("setNormal");
+			$("input#portal_hour").textbox("setNormal");
+			$("input#portal_min").textbox("setNormal");
+			$("input#portal_day").textbox("disable");
+			$("input#portal_hour").textbox("disable");
+			$("input#portal_min").textbox("disable");
+		}
+	}
+	
+	$("input#authTimeout").combobox({
+		fieldLabel: $.su.CHAR.PORTAL.AUTH_TIMEOUT,
+		//cls: 'inline',
+		inputCls: "xl",
+		items:[
+			{name: $.su.CHAR.PORTAL.HOUR_1,  value: '0'},
+			{name: $.su.CHAR.PORTAL.HOUR_8,  value: '1', selected:true},
+			{name: $.su.CHAR.PORTAL.HOUR_24, value: '2'},
+			{name: $.su.CHAR.PORTAL.DAY_7,   value: '3'},
+			{name: $.su.CHAR.PORTAL.CUSTOM,   value: '4'}
+		]
+	}).on("ev_change", function(e, oldValue, newValue){
+		handleAuthTimeout(newValue);
+	});
+	
+	$("input#redir").checkbox({
+		fieldLabel: $.su.CHAR.PORTAL.REDIR,
+		inputCls: "xl",
+		items: [
+			{boxlabel: $.su.CHAR.PORTAL.ENABLE, inputValue: "true", uncheckedValue: "false", checked:false}
+		]
+	}).on("ev_change", function(){
+		if ("redir" == $("input#redir").checkbox("getValue"))
+		{
+			$("input#redirUrl").textbox("enable");
+		}
+		else
+		{
+			$("input#redirUrl").textbox("disable");
+			$("input#redirUrl").textbox("setNormal");
+		}
+	});
+	
+	$("input#redirUrl").textbox({
+		fieldLabel: $.su.CHAR.PORTAL.REDIR_URL,
+		invalidText:$.su.CHAR.PORTAL.ERR_URL,
+		allowBlank: false,
+		inputCls: "xl",
+		validator: function(val){
+			var url = "";
+			
+			var is_http_header = val.slice(0,7);
+			if ("HTTP://" == is_http_header.toUpperCase())
+			{
+				url = val.slice(7);
+			}
+			else
+			{
+				var is_https_header = val.slice(0,8);
+				if ("HTTPS://" == is_https_header.toUpperCase())
+				{
+					url = val.slice(8);
+				}
+			}
+			
+			if ("" != url)
+			{
+				if ("0.0.0.0" == url.slice(0,7) || "255.255.255.255" == url.slice(0,15))
+				{
+					return false;
+				}
+			}
+			else
+			{
+				return false;
+			}
+			
+			var patternDomain = /^([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,18}$/
+          	var patternIp = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5]|0\d\d)(\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5]|0\d\d)){3}$/
+
+			var ret = patternIp.test(url) || patternDomain.test(url)
+			if (ret)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+	});
+	
+	$("input#rmtPortalUrl").textbox({
+		fieldLabel: $.su.CHAR.PORTAL.RMT_PORTAL_URL,
+		invalidText:$.su.CHAR.PORTAL.ERR_URL,
+		allowBlank: false,
+		inputCls: "xl",
+		validator: function(val){
+			var url = "";
+			
+			var is_http_header = val.slice(0,7);
+			if ("HTTP://" == is_http_header.toUpperCase())
+			{
+				url = val.slice(7);
+			}
+			else
+			{
+				var is_https_header = val.slice(0,8);
+				if ("HTTPS://" == is_https_header.toUpperCase())
+				{
+					url = val.slice(8);
+				}
+			}
+			
+			if ("" != url)
+			{
+				if ("0.0.0.0" == url.slice(0,7) || "255.255.255.255" == url.slice(0,15))
+				{
+					return false;
+				}
+			}
+			else
+			{
+				return false;
+			}
+		
+			/*var reg = /^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])(\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])){3}|([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,6})$/;*/
+			var reg = /^(((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])(\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])){3}|([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,6})(:([1-9]\d{0,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?(\/?[0-9a-zA-Z\/\_\!\~\*\'\(\)\.\;\?\:\@\&\=\+\$\,\%\#\-]{1,200})?)$/;
+
+			var ret = reg.test(url);
+			if (ret)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+	});
+	
+	$("input#serverType").combobox({
+		fieldLabel: $.su.CHAR.PORTAL.SERVER_TYPE,
+		//cls: 'inline',
+		inputCls: "xl",
+		items:[
+			{name: $.su.CHAR.PORTAL.LOCAL_PORTAL,  value: '0', selected:true},
+			{name: $.su.CHAR.PORTAL.EXTERNAL_PORTAL,  value: '1'}
+		]
+	}).on("ev_change", function(e, oldValue, newValue){
+		handleServerType(newValue);
+	});
+	
+	$("textarea#portal_title").textarea({
+		fieldLabel: null,
+		//vtype: "string_strict",
+		allowBlank: false,
+		lengthText:$.su.CHAR.PORTAL.TITLE_LENERROR,
+		maxLength: "31",
+		cls: "portal_title"
+	});
+	
+	$("input#portal_usernameShow").textbox({
+		fieldLabel: $.su.CHAR.PORTAL.USERNAME,
+		labelCls: "xxs",
+		cls: "portal"
+	});
+	$("input#portal_usernameShow").textbox("disable");
+	
+	$("input#portal_pwdShow").textbox({
+		fieldLabel: $.su.CHAR.PORTAL.PWD,
+		labelCls: "xxs",
+		cls: "portal"
+	});
+	$("input#portal_pwdShow").textbox("disable");
+	
+	$("textarea#portal_useTerm").textarea({
+		fieldLabel: $.su.CHAR.PORTAL.USE_TERM,
+		//vtype: "string_strict",
+		lengthText: $.su.CHAR.PORTAL.USERITEM_LENERROR,
+		allowBlank: false,
+		maxLength: 1023,
+		cls: "useTerm"
+	});
+	
+	$("input#portal_accept").checkbox({
+		fieldLabel: null,
+		items: [
+			{boxlabel: $.su.CHAR.PORTAL.ACCEPT, inputValue: "true", uncheckedValue: "false", checked:true}
+		]
+	});
+	
+	$("button#portal_loginBtn").button({
+  		fieldLabel: null,
+		text: $.su.CHAR.PORTAL.LOGIN
+	});	
+	$("button#portal_loginBtn").button("disable");
+	
+	//init
+	handleAuthType($("input#authType").combobox('getValue')); 
+	handleAuthTimeout($("input#authTimeout").combobox('getValue'));
+	handleServerType($("input#serverType").combobox('getValue'));
+	
+	$("form#portal_basic").form({
+		proxy: PORTAL_BASIC_URL,
+		fields: [
+			{name: "ssidname",       mapping: "ssidname"},
+			{name: "authType",       mapping: "authType"},
+			{name: "username",       mapping: "username"},
+			{name: "password",       mapping: "password"},
+			{name: "radiusServerIp", mapping: "radiusServerIp"},	
+			{name: "radiusPort",     mapping: "radiusPort"},
+			{name: "radiusPwd",      mapping: "radiusPwd"},
+            {name: "nasId",      mapping: "nasId"},
+            {name: "radiusAccounting",      mapping: "radiusAccounting"},
+            {name: "acctRadiusIp",      mapping: "acctRadiusIp"},
+            {name: "acctRadiusPort",      mapping: "acctRadiusPort"},
+            {name: "acctRadiusPwd",      mapping: "acctRadiusPwd"},
+            {name: "interimUpdate",      mapping: "interimUpdate"},
+            {name: "interimInterval",      mapping: "interimInterval"},
+			{name: "authTimeout",    mapping: "authTimeout"},
+			{name: "portal_day",     mapping: "portal_day"},
+			{name: "portal_hour",    mapping: "portal_hour"},
+			{name: "portal_min",     mapping: "portal_min"},
+			{name: "redir",          mapping: "redir"},
+			{name: "redirUrl",       mapping: "redirUrl"},
+			{name: "serverType",     mapping: "serverType"},
+			{name: "rmtPortalUrl",   mapping: "rmtPortalUrl"},			
+			{name: "portal_title",   mapping: "portal_title"},
+			{name: "portal_useTerm", mapping: "portal_useTerm"},
+			{name: "portal_accept",  mapping: "portal_accept"}
+		],
+		autoLoad: true,
+		submitBtn: "default",
+		validator:function(){
+			/*if( $('input#ssidName').combobox('getValue').length ==0 ){
+				$('input#ssidName').combobox('setError', $.su.CHAR.VTYPETEXT.BLANKTEXT);
+				return false;
+			}*/
+			var option = $("input#authTimeout").combobox('getValue')[0];
+			var dayVal = $("input#portal_day").textbox('getValue');
+			var hourVal = $("input#portal_hour").textbox('getValue');
+			var minVal = $("input#portal_min").textbox('getValue');
+			if(  option==4 && dayVal==0 && hourVal==0 && minVal==0){
+				$("input#portal_min").textbox('setError', $.su.CHAR.VTYPETEXT.AUTH_TIME_0);
+				return false;
+			}
+			return true;
+		}
+	}).on('ev_loadData', function(e, data){
+		 // setTimeout(function(){
+		 	$('input#ssidName').combobox('setValue', data.ssidname);
+
+			if($("input#interimInterval").textbox("getValue") == ""
+				|| $("input#interimInterval").textbox("getValue") == null
+				|| $("input#interimInterval").textbox("getValue") == undefined)
+			{
+				$("input#interimInterval").textbox("setValue", 600);
+			}
+			
+			if($("input#radiusPort").textbox("getValue") == ""
+				|| $("input#radiusPort").textbox("getValue") == null
+				|| $("input#radiusPort").textbox("getValue") == undefined)
+			{
+				$("input#radiusPort").textbox("setValue", 1812);
+			}
+
+			if($("input#acctRadiusPort").textbox("getValue") == ""
+				|| $("input#acctRadiusPort").textbox("getValue") == null
+				|| $("input#acctRadiusPort").textbox("getValue") == undefined)
+			{
+				$("input#acctRadiusPort").textbox("setValue", 1813);
+			}
+
+		 // }, 200);
+	});
+
+	// ------------------------------ access control ------------------------------ //
+	var PORTAL_ACCESS_CTRL_URL = new $.su.Proxy({
+		url: "./data/portal_accessCtrl.json"
+	});
+	
+	$('div#portal_accessCtrl').panel({
+		title: $.su.CHAR.PORTAL.TITLE_ACCESS_CTRL,
+		collapsible: false
+	});
+	
+	//editor
+	$("input#portal_policyName").textbox({
+		fieldLabel: $.su.CHAR.PORTAL.ACCESS_CTRL_POLICY_NAME,
+		allowBlank: false,
+		//vtype: "string_strict",
+		maxLength: 31
+	});
+	
+	$("input#portal_sIp").textbox({
+		hint: "0.0.0.0",
+		fieldLabel: $.su.CHAR.PORTAL.ACCESS_CTRL_SIP,
+		allowBlank: true,
+		cls: "inline-block",
+		vtype:{
+			vtype: "ip",
+			allowAllZeroFlag: true
+		}
+	});
+	
+	$("input#portal_sMask").textbox({
+		fieldLabel: null,
+		cls: "inline-block",
+		allowBlank: true,
+		vtype: "number",
+		invalidText:$.su.CHAR.PORTAL.ERR_MASK,
+		validator:function(val){
+			if((val >= 0) && (val <= 32))
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+	});
+
+	$("span#sMask_option").html($.su.CHAR.PORTAL.OPTION);
+	
+	$("input#portal_dIp").textbox({
+		hint: "0.0.0.0",
+		fieldLabel: $.su.CHAR.PORTAL.ACCESS_CTRL_DIP,
+		allowBlank: true,
+		cls: "inline-block",
+		vtype:{
+			vtype: "ip",
+			allowAllZeroFlag: true
+		}
+	});
+	
+	$("input#portal_dMask").textbox({
+		fieldLabel: null,
+		cls: "inline-block",
+		allowBlank: true,
+		vtype: "number",
+		invalidText:$.su.CHAR.PORTAL.ERR_MASK,
+		validator:function(val){
+			if((val >= 0) && (val <= 32))
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+	});
+
+	$("span#dMask_option").html($.su.CHAR.PORTAL.OPTION);
+	
+	$("input#portal_sMac").textbox({
+		hint: "00-00-00-00-00-00",
+		fieldLabel: $.su.CHAR.PORTAL.ACCESS_CTRL_SMAC,
+		allowBlank: true,
+		tips: $.su.CHAR.PORTAL.OPTION,
+		isMac: true,
+		vtype: "mac"
+	});
+	
+	$("input#portal_port").textbox({
+		fieldLabel: $.su.CHAR.PORTAL.ACCESS_CTRL_PORT,
+		tips: $.su.CHAR.PORTAL.OPTION,
+		allowBlank: true,
+		vtype: "number",
+		invalidText:$.su.CHAR.PORTAL.ERR_PORT,
+		validator:function(val){
+			if((val >= 1) && (val <= 65535))
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+	});
+	
+	$("input#portal_status").checkbox({
+		fieldLabel: $.su.CHAR.PORTAL.ACCESS_CTRL_STATUS,
+		items: [
+			{boxlabel: $.su.CHAR.PORTAL.ENABLE, inputValue: "true", uncheckedValue: "false", checked:true}
+		]
+	});
+	
+	var o = $("div#portal_accessCtrl_grid").grid({
+		store:{
+			proxy: PORTAL_ACCESS_CTRL_URL,
+			fields: [
+				{name: "key"},
+				{name: "portal_policyName"},
+				{name: "portal_sIp"},
+				{name: "portal_sMask"},
+				{name: "portal_dIp"},
+				{name: "portal_dMask"},
+				{name: "portal_sMac"},
+				{name: "portal_port"},
+				{name: "portal_status"}
+			],
+			keyProperty: "key",
+			updateMode: "complete",
+			autoLoad: true
+		},
+		minLines: 0,
+		editor: {
+			content: "#portal_accessCtrl_editor",
+			validator:function(){
+				var value = $("input#portal_policyName").textbox("getValue");
+				// 重复性检查
+				var store = $('div#portal_accessCtrl_grid').grid("getStore");
+				var data = store.data;
+				var index = 0;
+				var num = data.length;
+				var idx = curPolicyIndex;
+				
+				for (index = 0; index < num; index++)
+				{
+					if (value == data[index].portal_policyName && index != idx)
+					{
+						$("input#portal_policyName").textbox("setError", $.su.CHAR.PORTAL.POLICY_NAME_EXIST);
+						return false;
+					}
+				}
+
+				var portal_sIp = $("input#portal_sIp").textbox("getValue");
+				var portal_sMask = $("input#portal_sMask").textbox("getValue");
+				if (portal_sIp.replace(/(^s*)|(s*$)/g,"").length != 0 )
+				{
+					if (portal_sMask.replace(/(^s*)|(s*$)/g,"").length == 0)
+					{
+						$("input#portal_sMask").textbox("setError", $.su.CHAR.PORTAL.SOURCE_IP_MASK_EMPTY);
+						return false;
+					}
+					if ((!typeof(portal_sMask === 'string')) || parseInt(portal_sMask) < 0 || 32 < parseInt(portal_sMask))
+					{
+						$("input#portal_sMask").textbox("setError", $.su.CHAR.PORTAL.SOURCE_IP_MASK_ERROR);
+						return false;
+					}
+				}
+
+				var portal_dIp = $("input#portal_dIp").textbox("getValue");
+				var portal_dMask = $("input#portal_dMask").textbox("getValue");
+				if (portal_dIp.replace(/(^s*)|(s*$)/g,"").length != 0 )
+				{
+					if (portal_dMask.replace(/(^s*)|(s*$)/g,"").length == 0)
+					{
+						$("input#portal_dMask").textbox("setError", $.su.CHAR.PORTAL.DESTINATION_IP_MASK_EMPTY);
+						return false;
+					}
+					if (  (!typeof(portal_dMask === 'string')) || parseInt(portal_dMask) < 0  || 32 <parseInt(portal_dMask))
+					{
+						$("input#portal_dMask").textbox("setError", $.su.CHAR.PORTAL.DESTINATION_IP_MASK_ERROR);
+						return false;
+					}
+				}
+
+				curPolicyIndex = -1;
+				return true;
+			},
+			fields: [
+				{name: "portal_policyName"},
+				{name: "portal_sIp"},
+				{name: "portal_sMask"},
+				{name: "portal_dIp"},
+				{name: "portal_dMask"},
+				{name: "portal_sMac"},
+				{name: "portal_port"},
+				{name: "portal_status"}
+			]
+		},
+		paging: {
+		},
+		columns: [
+			{
+				text: $.su.CHAR.PORTAL.ACCESS_CTRL_ID, 
+				width:40,
+				xtype: "rownumberer"
+			},
+			{
+				text: $.su.CHAR.PORTAL.ACCESS_CTRL_POLICY_NAME, 
+				width:200,
+				dataIndex: "portal_policyName"			
+			},
+			{
+				text: $.su.CHAR.PORTAL.ACCESS_CTRL_SIP,
+				width:160,
+				dataIndex: "portal_sIp",
+				renderer:function(val, index, data)
+				{
+					if(val == "")
+					{
+						return "--";
+					}
+					else
+					{
+						return val + '/' + data.portal_sMask;
+					}
+				}
+			},
+			{
+				text: $.su.CHAR.PORTAL.ACCESS_CTRL_DIP,
+				width:160,
+				dataIndex: "portal_dIp",
+				renderer:function(val, index, data)
+				{
+					if(val == "")
+					{
+						return "--";
+					}
+					else
+					{
+						return val + '/' + data.portal_dMask;
+					}
+				}
+			},
+			{
+				text: $.su.CHAR.PORTAL.ACCESS_CTRL_SMAC,
+				width:140,
+				dataIndex: "portal_sMac",
+				renderer:function(val)
+				{
+					if(val == "")
+					{
+						return "--";
+					}
+					else
+					{
+						return val;
+					}
+				}
+			},
+			{
+				text: $.su.CHAR.PORTAL.ACCESS_CTRL_PORT,
+				width:100,
+				dataIndex: "portal_port",
+				renderer:function(val)
+				{
+					if(val == "")
+					{
+						return "--";
+					}
+					else
+					{
+						return val;
+					}
+				}
+			},
+			{
+				text: $.su.CHAR.PORTAL.ACCESS_CTRL_STATUS,
+				width:60,
+				dataIndex: "portal_status",
+				//xtype: "statuscolumn"
+
+				renderer:function(val)
+				{
+					if(val == true)
+					{
+						return $.su.CHAR.PORTAL.ENABLE;
+					}
+					else
+					{
+						return $.su.CHAR.PORTAL.DISABLE;
+					}
+				}
+
+			},
+			{
+				text:  "Settings",
+				name:  "index",
+				xtype: "settings"
+			}
+		],
+		operation: "prompt|add"
+	});
+	
+	$("div#portal_accessCtrl_grid").delegate("a.grid-content-btn.grid-content-btn-edit","click",function(e){
+		e.preventDefault();
+		
+		var btn = $(this);
+		curPolicyIndex = btn.attr("data-index");		
+		
+	});
+	$("div#portal_accessCtrl_grid").delegate("button.btn-cancel", "mouseup", function(){
+		curPolicyIndex = -1;
+	});
+});
+</script>
+</body>
+</html>

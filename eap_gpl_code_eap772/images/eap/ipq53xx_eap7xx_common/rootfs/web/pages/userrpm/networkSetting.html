@@ -1,0 +1,324 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Network</title>
+</head>
+
+<body>
+<div class="func-container">
+	
+	<div id="ipsetting">
+		<div class="inside-panel">
+			<input type="text"  id="connType" name="connType" value="" />
+			<div id="ipsetting_dynamic" class="eapditor-container">
+				<input type="text"  id="isUseFallback" name="isUseFallback" value="" />
+				<div id = "fallback">
+					<input type="text"  id="fallbackIp" name="fallbackIp" value="" />
+					<input type="text"  id="fallbackMask" name="fallbackMask" value="" />
+					<input type="text"  id="fallbackGateway" name="fallbackGateway" value="" />
+				</div>
+			</div>
+			<div id="ipsetting_static" class="eapditor-container">
+				<div id = "lan_ip_setting">
+					<input type="text"  id="ipAddress" name="ipAddress" value="" />
+					<input type="text"  id="netMask" name="netMask" value="" />
+					<input type="text"  id="gateWay" name="gateWay" value="" />
+	<!--add on 2017011301 -->
+					<input type="text"	id="dnsServerA" name="dnsServerA" value="" />
+					<input type="text"	id="dnsServerB" name="dnsServerB" value="" />
+				</div>
+			</div>
+			
+			<div class="button-container submit form-submit">
+				<button type="button"  id="submit_ipsetting" name="submit_ipsetting" value="" />
+			</div>
+		</div>
+
+	</div>
+
+	
+</div>
+<script type="text/javascript">
+$(document).ready(function(e){
+
+
+//ip settings
+	$("div#ipsetting").panel({
+		title: $.su.CHAR.NETWORK.IP_SETTINGS,
+		collapsible: false
+	});
+
+	$("input#isUseFallback").checkbox({
+		fieldLabel: $.su.CHAR.NETWORK.FALLBACK_IP,
+		// cls: "inline",
+		items: [
+			{boxlabel: $.su.CHAR.NETWORK.ENABLE, uncheckedValue:"false", inputValue: "true", id: "chk_enable_lb_5g"}
+		]
+	}).on("ev_change", function(e, oldValue, newValue){
+		if (newValue == "isUseFallback" || newValue == "true"){
+			$("input#fallbackIp").textbox('enable');
+			$("input#fallbackMask").textbox('enable');
+			$("input#fallbackGateway").textbox('enable');
+		}else{
+			$("input#fallbackIp").textbox('disable');
+			$("input#fallbackMask").textbox('disable');
+			$("input#fallbackGateway").textbox('disable');
+		}
+	}).checkbox("setValue", "true");
+
+	$("input#fallbackIp").textbox({
+		fieldLabel: $.su.CHAR.NETWORK.DHCP_FALLBACK_IP,
+		inputCls:'m',
+		allowBlank:false,
+		vtype:'ip'
+	});
+
+	$("input#fallbackMask").textbox({
+		fieldLabel: $.su.CHAR.NETWORK.DHCP_FALLBACK_IP_MASK,
+		inputCls:'m',
+		allowBlank:false,
+		vtype:'netmask'
+	});
+
+	$("input#fallbackGateway").textbox({
+		fieldLabel: $.su.CHAR.NETWORK.DHCP_FALLBACK_GATE_WAY,
+		inputCls:'m',
+		allowBlank:true,
+		vtype:'ip'
+	});
+
+	$("input#ipAddress").textbox({
+		fieldLabel: $.su.CHAR.NETWORK.IP_ADDRESS,
+		inputCls:'m',
+		allowBlank:false,
+		vtype:'ip',
+		hint:'0.0.0.0'
+	});
+
+	$("input#netMask").textbox({
+		fieldLabel: $.su.CHAR.NETWORK.IP_MASK,
+		inputCls:'m',
+		allowBlank:false,
+		vtype:'netmask'
+	});
+
+	$("input#gateWay").textbox({
+		fieldLabel: $.su.CHAR.NETWORK.GATEWAY,
+		hint:'0.0.0.0',
+		inputCls:'m',
+		vtype:'ip'
+	});
+
+/*add on 20170113*/
+	$("input#dnsServerA").textbox({
+		fieldLabel: $.su.CHAR.NETWORK.PRIMARY_DNS,
+		hint:'0.0.0.0',
+		inputCls:'m',
+		allowBlank:false,
+		vtype:'ip'
+	});
+
+	$("input#dnsServerB").textbox({
+		fieldLabel: $.su.CHAR.NETWORK.SECONDARY_DNS,
+		hint:'0.0.0.0',
+		inputCls:'m',
+		vtype:'ip',
+		tips: $.su.CHAR.NETWORK.OPTIONAL
+	});
+//add end
+
+	$("input#connType").radio({
+		fieldLabel: "",
+		labelCls: "s",
+		columns:3,
+		items:[
+			{
+				boxlabel: $.su.CHAR.NETWORK.DYNAMIC, 
+				inputValue: 'dynamic', 
+				checked:true
+			},
+			{
+				boxlabel: $.su.CHAR.NETWORK.STATIC, 
+				inputValue: 'static'
+			}
+		]
+	}).on('ev_change', function(e, oldValue, newValue){
+		if(newValue == 'dynamic'){
+       		$("div#ipsetting_static").hide();
+			$("div#ipsetting_dynamic").show();
+			$("input#isUseFallback").checkbox('enableAll');
+			var chkUfb = $("input#isUseFallback").checkbox('getValue');
+			if (chkUfb == "isUseFallback" || chkUfb == "on"){
+				$("input#fallbackIp").textbox('enable');
+				$("input#fallbackMask").textbox('enable');
+				$("input#fallbackGateway").textbox('enable');
+			}
+			$("input#ipAddress").textbox('disable');
+			$("input#netMask").textbox('disable');
+			$("input#gateWay").textbox('disable');
+//add on 20170113
+			$("input#dnsServerA").textbox('disable');
+			$("input#dnsServerB").textbox('disable');
+
+			$("input#fallbackIp").textbox('setNormal');
+			$("input#fallbackMask").textbox('setNormal');
+			$("input#fallbackGateway").textbox('setNormal');
+		}else  if(newValue == 'static'){
+			$("div#ipsetting_dynamic").hide();
+			$("div#ipsetting_static").show();
+			$("input#isUseFallback").checkbox('disableAll');
+			$("input#ipAddress").textbox('enable');
+			$("input#netMask").textbox('enable');
+			$("input#gateWay").textbox('enable');
+//add on 20170113
+			$("input#dnsServerA").textbox('enable');
+			$("input#dnsServerB").textbox('enable');
+
+			$("input#fallbackIp").textbox('disable');
+			$("input#fallbackMask").textbox('disable');
+			$("input#fallbackGateway").textbox('disable');
+
+			$("input#ipAddress").textbox('setNormal');
+			$("input#netMask").textbox('setNormal');
+			$("input#gateWay").textbox('setNormal');
+//add on 20170113
+			$("input#dnsServerA").textbox('setNormal');
+			$("input#dnsServerB").textbox('setNormal');
+
+		}
+	}).radio("setValue","static");
+
+	var ipSettingProxy = new $.su.Proxy({
+		url: "./data/lan.json"
+	});
+
+	function goToIp()
+	{
+		 var index = top.location.href.lastIndexOf("//");
+		 var head = top.location.href.substring(0, index);
+		 top.location.href = head + "//" + $("input#ipAddress").textbox("getValue");
+	}
+
+	/*$(ipSettingProxy).on("ev_write", function(e, result, status, xhr){
+		setTimeout(goToIp, 1000);
+	});*/
+
+	var ipSettingform = $("div#ipsetting").form({
+		proxy: ipSettingProxy,
+		fields: [
+			{name: "connType", mapping: "connType"},
+			{name: "ipAddress", mapping: "ipAddress"},
+			{name: "netMask", mapping: "netMask"},
+			{name: "isUseFallback", mapping: "isUseFallback"},
+			{name: "fallbackIp", mapping: "fallbackIp"},
+			{name: "fallbackMask", mapping: "fallbackMask"},
+			{name: "fallbackGateway", mapping: "fallbackGateway"},
+			{name: "gateWay", mapping: "gateWay"},
+//add on 20170113
+			{name: "dnsServerA", mapping: "dnsServerA"},
+			{name: "dnsServerB", mapping: "dnsServerB"}
+		],
+		autoLoad:false,
+		submitBtn: null,
+		validator:function(me){
+			var type = $("input#connType").radio("getValue");
+			if (type == 'dynamic'){
+				var chkUfb = $("input#isUseFallback").checkbox('getValue');
+				if (chkUfb == "isUseFallback" || chkUfb == "on"){
+					var ip = $("input#fallbackIp").textbox('getValue');
+					var mask = $("input#fallbackMask").textbox('getValue');
+					
+					if (isNetIp(ip, ip, mask)){
+						$("input#fallbackIp").textbox("setError", $.su.CHAR.VTYPETEXT.IP_NO_NET_IP);
+						return false;
+					}
+					if (isBroadcastIp(ip, ip, mask)){
+						$("input#fallbackIp").textbox("setError", $.su.CHAR.VTYPETEXT.IP_NO_BOARDCAST_IP);
+						return false;
+					}
+					if (getNetIp(ip,mask) == 0){
+						$("input#fallbackIp").textbox("setError", $.su.CHAR.VTYPETEXT.IP_NO_NET_ZERO);
+						return false;
+					}
+				}
+			}else{
+				var ip = $("input#ipAddress").textbox('getValue');
+				var mask = $("input#netMask").textbox('getValue');
+				if (isNetIp(ip, ip, mask)){
+					$("input#ipAddress").textbox("setError", $.su.CHAR.VTYPETEXT.IP_NO_NET_IP);
+					return false;
+				}
+				if (isBroadcastIp(ip, ip, mask)){
+					$("input#ipAddress").textbox("setError", $.su.CHAR.VTYPETEXT.IP_NO_BOARDCAST_IP);
+					return false;
+				}
+				if (getNetIp(ip,mask) == 0){
+					$("input#ipAddress").textbox("setError", $.su.CHAR.VTYPETEXT.IP_NO_NET_ZERO);
+					return false;
+				}
+			}
+			return true;
+		}
+	});
+
+
+	function validateStaticParam()
+	{
+		var ip = $("input#ipAddress").textbox('getValue');
+		var mask = $("input#netMask").textbox('getValue');
+		var gw = $("input#gateWay").textbox('getValue');
+		var dnsServerA = $("input#dnsServerA").textbox('getValue');/*add by Sun Jincheng 16Jan17*/
+		var dnsServerB = $("input#dnsServerB").textbox('getValue');
+		if ((gw.length != 0) && (!ipVerify(gw))
+			|| (dnsServerA.length != 0) && (!ipVerify(dnsServerA))
+			|| (dnsServerA.length == 0)
+			|| (dnsServerB.length != 0) && (!ipVerify(dnsServerB))
+		    || (!ipVerify(ip))
+		    || (!maskVerify(mask))
+		    || isNetIp(ip, ip, mask)
+		    || isBroadcastIp(ip, ip, mask)
+		    || (getNetIp(ip,mask) == 0)){
+		        return false;
+		}
+		return true;
+	}
+	
+	$('button#submit_ipsetting').button({
+		fieldLabel: null,
+		text: $.su.CHAR.NETWORK.SAVE,
+		cls: 'inline part-seperate',
+		handler:function(){
+			//$(ipSettingform).form('submit');
+			var type = $("input#connType").radio("getValue");
+			if (type == "static"){
+				$(ipSettingform).form("submit", null, null, null, function(){
+					$(ipSettingform).form("prompt", true, $.su.CHAR.NETWORK.OPERATION_FINISHED);
+				});
+				if (validateStaticParam()){
+					setTimeout(goToIp, 1000);
+				}
+			}else{
+				$(ipSettingform).form('submit');
+			}
+		}
+	});
+
+	$.ajax({
+		url: "./data/lan.json",
+		type: 'GET',
+		cache:false,
+		data: {
+		},
+		dataType: 'json',
+		error: function(){return false;},
+		success: function(response){
+			$("div#ipsetting").form("loadData", response.data);
+		}
+	});
+
+});
+</script>
+</body>
+</html>
+

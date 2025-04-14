@@ -1,0 +1,233 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>monitor ssid</title>
+<!--<style type="text/css">
+	div.widget-container.pad{
+		margin-right: 300px;
+	}
+</style>-->
+</head>
+
+<body>
+<div class="func-container">
+
+	 <div id="folder">
+	 	<div id="folderGrid">  		
+		</div>
+	 </div>
+
+</div>
+
+<script type="text/javascript">
+$(document).ready(function(e){
+	
+	var SSID_LIST_URL = "./data/monitor.ssid.json";
+
+	function num2Str(num)
+	{
+		var str = "";
+		if(num <= 1000)
+		{
+			str += num;
+		}
+		else
+		{
+			str += Math.floor(num/1000) + "k";
+		}
+
+		return str;
+	}
+
+	$("div.func-container").page({
+		title: $.su.CHAR.MONITOR_SSID.TITLE,
+		help: ""	//可能是个调用的id 也可能是个url
+	});
+
+	$("div#folder").panel({
+		title: $.su.CHAR.MONITOR_SSID.TBL_HDR,
+		collapsible: false
+	});
+
+	var storeLog = new $.su.Store({
+		proxy: {
+			url: SSID_LIST_URL
+		},
+		fields: [
+			{name: "ssidKey"},
+			{name: "ssidName"},
+			{name: "ssidVlan"},
+			{name: "clientNum"},
+			{name: "brdCaseEn"},
+			{name: "ssiBand"},
+			{name: "securiy"},
+			{name: "portalEn"},
+			{name: "macFilterEn"},
+			{name: "isolation"},
+			{name: "downTh"},
+			{name: "upTh"}
+		],
+		autoLoad: true
+	});
+
+	$("div#folderGrid").grid({
+		store:storeLog,
+		minLines:0,
+		paging: {numPerPage: 8},
+		columns: [
+			{
+				xtype: "rownumberer",
+				width:40
+			},
+			{
+				text: $.su.CHAR.MONITOR_SSID.NAME, 
+				width:130,
+				dataIndex: "ssidName"
+			},
+			{
+				text: $.su.CHAR.MONITOR_SSID.VLAN_ID, 
+				width:60,
+				dataIndex: "ssidVlan"
+			},
+			{
+				text: $.su.CHAR.MONITOR_SSID.CLIENT_NUM, 
+				width:50,
+				dataIndex: "clientNum"
+			},
+			{
+				text: $.su.CHAR.MONITOR_SSID.SSID_BRDCAST, 
+				width:80,
+				dataIndex: "brdCaseEn",
+				renderer:function(val, index){
+					if(val == true)
+					{
+						  return $.su.CHAR.MONITOR_SSID.ENABLE;
+					}
+					else
+					{
+							return $.su.CHAR.MONITOR_SSID.DISABLE;
+					}
+				}
+			},
+			{
+				text: $.su.CHAR.MONITOR_SSID.BAND, 
+				width:70,
+				dataIndex: "ssiBand",
+        renderer:function(val, index){
+					if(val == 0)
+					{
+						  return $.su.CHAR.MONITOR_SSID.BAND_24G;
+					}
+					else if(val == 1)
+					{
+							return $.su.CHAR.MONITOR_SSID.BAND_5G;
+					}
+					else
+					{
+							return "";
+					}
+				}
+			},
+			{
+				text: $.su.CHAR.MONITOR_SSID.SECURITY, 
+				width:120,
+				dataIndex: "securiy",
+				renderer:function(val, index){
+					if(val == 0)
+					{
+						  return $.su.CHAR.MONITOR_SSID.SECURITY_NONE;
+					}
+					else if(val == 1)
+					{
+							return $.su.CHAR.MONITOR_SSID.SECURITY_WEP;
+					}
+					else if(val == 2)
+					{
+							return $.su.CHAR.MONITOR_SSID.SECURITY_WPA_ENTERPRISE;
+					}
+					else if(val == 3)
+					{
+							return  $.su.CHAR.MONITOR_SSID.SECURITY_WPA_PSK;
+					}
+					else
+					{
+							return "";
+					}
+				}
+			},
+			{
+				text: $.su.CHAR.MONITOR_SSID.PORTAL, 
+				width:70,
+				dataIndex: "portalEn",
+				renderer:function(val, index){
+					if(val == true)
+					{
+						  return $.su.CHAR.MONITOR_SSID.ENABLE;
+					}
+					else
+					{
+							return $.su.CHAR.MONITOR_SSID.DISABLE;
+					}
+				}
+			},
+			{
+				text: $.su.CHAR.MONITOR_SSID.MAC_FILTER,
+				width:70,
+				dataIndex: "macFilterEn",
+				renderer:function(val, index){
+					if(val == true)
+					{
+						  return $.su.CHAR.MONITOR_SSID.ENABLE;
+					}
+					else
+					{
+							return $.su.CHAR.MONITOR_SSID.DISABLE;
+					}
+				}
+			},
+			{
+				text: $.su.CHAR.MONITOR_SSID.ISOLATIONG, 
+				width:70,
+				dataIndex: "isolation",
+				renderer:function(val, index){
+					if(val == true)
+					{
+						  return $.su.CHAR.MONITOR_SSID.ENABLE;
+					}
+					else
+					{
+							return $.su.CHAR.MONITOR_SSID.DISABLE;
+					}
+				}
+			},
+			{
+				text: $.su.CHAR.MONITOR_SSID.DOWN, 
+				width:90,
+				dataIndex: "downTh",
+				renderer:function(val, index){
+					return num2Str(val);
+				}				
+				
+			},
+			{
+				text: $.su.CHAR.MONITOR_SSID.UP, 
+				//width:70,
+				dataIndex: "upTh",
+				renderer:function(val, index){
+					return num2Str(val);
+				}	
+			}
+		],
+		operation: [
+			"refresh"
+		]
+
+	});
+
+	
+});
+</script>
+</body>
+
+</html>

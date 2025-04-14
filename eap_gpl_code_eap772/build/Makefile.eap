@@ -1,0 +1,23 @@
+#############################################################################################
+eap_%: everything_%
+	@echo make $@ done.
+
+eap_help:
+	@cat compile_howto.txt 
+
+eap_debug:
+	@make STRIP_EVERY_THING?=n CHECK_STOP?=1 TP_MEM_ROOTFS?=y TDB_ENABLE?=y DEBUG_MODE?=y eap_build eap_install eap_image
+
+eap_release:
+	@make STRIP_EVERY_THING?=y CHECK_STOP?=1 TP_MEM_ROOTFS?=y TDB_ENABLE?=n DEBUG_MODE?=n eap_build eap_install eap_image
+
+eap_develop:
+	@make STRIP_EVERY_THING?=n CHECK_STOP?=1 TP_MEM_ROOTFS?=y TDB_ENABLE?=n DEBUG_MODE?=n eap_build eap_install eap_image
+	@echo Done.
+	
+eap_skipbuild:
+	@make STRIP_EVERY_THING?=n CHECK_STOP?=1 TP_MEM_ROOTFS?=y TDB_ENABLE?=n DEBUG_MODE?=n eap_install eap_image
+	@echo Done.
+
+eap: eap_release
+	@echo Done. 

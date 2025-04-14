@@ -1,0 +1,8 @@
+version: '3.5'
+
+services:
+  ubuntu:
+    build: .
+    # restart: always
+    volumes:
+      - ./eap_gpl_code_eap772:/build

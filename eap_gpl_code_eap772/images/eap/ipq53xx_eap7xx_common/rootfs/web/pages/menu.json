@@ -1,0 +1,218 @@
+[
+
+    {
+		"name": "status",
+		"text": "STATUS",
+		"lite": true,
+		"managedByController": true,
+		"children" :[
+			{
+				"name": "device",
+				"text": "DEVICE",
+				"url" : "status.device.html",
+				"lite": true,
+				"managedByController": true
+			},		
+			{
+				"name": "status_wireless",
+				"text": "WIRELESS",
+				"url" : "status.wireless.html",
+				"lite": true,
+				"managedByController": true
+			},
+			{
+				"name": "status_client",
+				"text": "CLIENT",
+				"url" : "status.client.html",
+				"lite": true,
+				"managedByController": true
+			}
+		]
+	},
+	{
+		"name": "management_adopted",
+		"text": "MANAGEMENT",
+		"url" : "management_adopted.html",
+		"managedByController": true,
+		"lite": true
+	},
+	{
+		"name" : "wireless",
+		"text" : "WIRELESS",
+		"lite": true,
+		"children" :[
+			{
+				"name": "wirelessseting",
+				"text": "WIRELESS_SETTINGS",
+				"url" : "wirelessSettings_access.html",
+				"lite": true
+			},			
+			{
+				"name": "portal",
+				"text": "PORTAL",
+				"url" : "portal.html",
+				"lite": true
+			},
+			{
+                "name": "vlan", 
+                "text": "VLAN", 
+                "url": "wireless.vlan.html"
+            },  
+            {
+				"name": "macfilter",
+				"text": "MACFILTERING",
+				"url" : "macFiltering.html"
+			},			
+			{
+				"name":"scheduler",
+				"text":"SCHEDULER",
+				"lite": true,
+				"url":"scheduler.html"
+			},
+			{
+				"name": "bandSteering", 
+				"text": "BAND_STEERING", 
+				"lite": true,
+				"url": "bandSteering.html",
+				"privilege": ["supportBandSteering"]
+			}, 
+			{
+				"name": "qos",
+				"text": "QOS",
+				"lite": true,
+				"url" : "qosSettings.html"
+			},
+			{
+				"name": "rogueapdetection",
+				"text": "ROGUEAPDETECTION",
+				"lite": true,
+				"url" : "rogueApDetection.html"
+			},
+			{
+				"name": "antenna",
+				"text": "ANTENNA",
+				"lite": true,
+				"url" : "intellectualAntenna.html",
+				"privilege": ["supportSmartAntenna"]
+			}
+		]
+	},
+	{
+		"name":"management",
+		"text":"MANAGEMENT",
+		"lite": true,
+		"children" :[
+			{
+                "name": "network", 
+		        "text": "NETWORK", 
+		        "url": "networkSetting.html"
+            }, 
+            {
+				"name": "syslog",
+				"text": "SYSTEM_LOG",
+				"lite": true,
+				"url" : "systemLog_standalone.html"
+			},
+			{
+				"name": "webserver",
+				"text": "WEB_SERVER",
+				"lite": true,
+				"url" : "webserver.html"
+			},			
+			{
+				"name": "mac",
+				"text": "MAC",
+				"lite": true,
+				"url" : "mac.html"
+			},
+			{
+				"name": "trunk",
+				"text": "TRUNK",
+				"lite": true,
+				"url" : "trunking.html",
+				"privilege": ["supportTrunk"]
+			},	
+			{
+				"name": "ledctl",
+				"text": "LED_ON_OFF",
+				"url" : "ledctrl.html",
+				"lite": true
+			},	
+			{
+				"name": "poeout",
+				"text": "LAN_PORT_CONFIG",
+				"url" : "poeout.html",
+				"lite": true,
+				"privilege": ["supportPoeOut", "supportBindVlan"]
+			},	
+			{
+				"name": "wifiLed",
+				"text": "WIFI_LED_ON_OFF",
+				"url" : "wifiLed.html",
+				"lite": true,
+				"privilege": ["supportWifiLed"]
+			},	
+			{
+				"name": "ssh",
+				"text": "SSH",
+				"url" : "ssh.html",
+				"lite": true
+			},
+			{
+				"name": "snmp",
+				"text": "SNMP",
+				"url" : "snmp.html",
+				"lite": true
+			},
+			{
+				"name": "energySave",
+				"text": "ENERGY_SAVE",
+				"url" : "energySave.html",
+				"privilege": ["supportEnergySave"]
+			}
+		]		
+	},
+	 {
+		"name":"system-tools",
+		"text": "SYSTEM",
+		"lite": true,
+		"children" :[
+			{
+				"name": "account",
+				"text": "ACCOUNT",
+				"url" : "account.html",
+				"lite": true
+			},
+			{
+				"name": "controller",
+				"text": "CONTROLLER",
+				"url" : "controller_settings.html",
+				"lite": true
+			},
+			{
+				"name": "timeseting",
+				"text": "TIME_SETTINGS",
+				"url" : "timeSettings.html",
+				"lite": true
+			},			
+			{
+				"name": "reboot",
+				"text": "REBOOT_RESET",
+				"url" : "rebootReset_standalone.html",
+				"lite": true
+			},
+			{
+				"name": "backuprestore",
+				"text": "BACKUP_RESTORE",
+				"url" : "backupRestore.html",
+				"lite": true
+			},	
+			{
+				"name": "firmwareup",
+				"text": "FIRMWARE_UPGRADE",
+				"url" : "firmwareUpgrade_standalone.html",
+				"lite": true
+			}				
+		]	
+	 }
+]

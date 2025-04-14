@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Band Steering</title>
+</head>
+
+<body>
+	<div class="func-container">
+		<div id="band_steering">
+			<form id="band_steering_form" class="natSeries">
+				<input type="text"  id="band_enable" name="mode" value="1" />
+
+				<div>
+			    	<p id="bandsteering_warn" class="note-warn-label" />
+			    	<p id="bandsteering_note" />
+			    </div>
+			</form>
+		</div>
+	</div>
+	
+<script type="text/javascript">
+//<![CDATA[
+$(document).ready(function(e){
+
+	$("p#bandsteering_warn").html($.su.CHAR.BAND_STEERING.WARNING);  
+	$("p#bandsteering_note").html($.su.CHAR.BAND_STEERING.NOTE);  
+
+	$("div.func-container").page({
+		title: $.su.CHAR.BAND_STEERING.BAND_STEERING,
+		help: ""	//可能是个调用的id 也可能是个url
+	});
+
+	$('div#band_steering').panel({
+		title: $.su.CHAR.BAND_STEERING.BAND_STEERING,
+		collapsible: false
+	});
+	
+	$("input#band_enable").combobox({
+		fieldLabel: $.su.CHAR.BAND_STEERING.BAND_STEERING,
+    	inputCls: "xl",
+    	items: [
+			{name: $.su.CHAR.BAND_STEERING.DISABLE, value:0, selected:true},
+			{name: $.su.CHAR.BAND_STEERING.PREFER, value:1},
+			{name: $.su.CHAR.BAND_STEERING.BALANCE, value:2}
+		]
+	});
+	
+	var sshProxy = new $.su.Proxy({
+		url: "./data/bandSteering.json"
+	});
+
+
+	$("form#band_steering_form").form({
+		proxy: sshProxy,
+		fields: [
+			{name: "mode"}		
+		],
+		autoLoad: true,
+		submitBtn: "default"
+	}).on('ev_loadData', function(e, data){
+		console.log(data)
+	})
+
+});
+</script>
+</body>
+</html>

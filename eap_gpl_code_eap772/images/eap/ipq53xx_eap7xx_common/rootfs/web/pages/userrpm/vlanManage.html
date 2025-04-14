@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Management VLAN</title>
+</head>
+
+<body>
+	<div class="func-container">
+		<div id="vlan_manage">
+			<form id="vlan_manage_setting" class="natSeries">
+				<!--<p id="note" class="note"></p>-->
+				<input type="checkbox"  id="ManagementVlanEnable" name="ManagementVlanEnable" value="" />
+				<input type="text"  id="ManagementVlanID" name="ManagementVlanID" value="" />
+				<button type="button" id="submitButton" name="submitButton" value=""></button>
+				<!--<span id="error_str" class="error"></span>-->
+			</form>
+		</div>
+	</div>
+	
+<script type="text/javascript">
+//<![CDATA[
+$(document).ready(function(e){
+
+	$("div.func-container").page({
+		title: $.su.CHAR.VLANMANAGE.TITLE,
+		help: ""	//可能是个调用的id 也可能是个url
+	});
+
+	$('div#vlan_manage').panel({
+		title: $.su.CHAR.VLANMANAGE.TITLE,
+		collapsible: false
+	});
+
+	$("input#ManagementVlanEnable").checkbox({
+		fieldLabel: $.su.CHAR.VLANMANAGE.TITLE,
+		items: [
+			{boxlabel: $.su.CHAR.VLANMANAGE.VLANMANAGE_ENABLE, inputValue: "true", uncheckedValue: "false", checked:true}
+		]
+	});
+
+	$("input#ManagementVlanID").textbox({
+		fieldLabel: $.su.CHAR.VLANMANAGE.VLANMANAGE_ID,
+		vtype: "number",
+		tips:$.su.CHAR.VLANMANAGE.VLANMANAGE_RANGE,
+    max: 4094,
+    min: 1
+    
+	});
+
+
+
+	$("button#submitButton").button({
+		text: $.su.CHAR.VLANMANAGE.VLANMANAGE_SAVE,
+		handler: function(ev){
+
+			if($("div#vlan_manage_setting").form('validate') !== true){
+				return false;
+			}
+			
+			var curPort = parseInt($("input#ManagementVlanID").textbox("getValue"), 10);
+			if(!$.isNumeric(curPort) || (curPort < 1) || (curPort > 4094))
+			{
+				$("#ManagementVlanID").textbox("setError", $.su.CHAR.VLANMANAGE.VLANMANAGE_ID_INVALIB);
+				return false;
+			}
+
+			var enVal = "false";
+			if("ManagementVlanEnable" == $("input#ManagementVlanEnable").checkbox("getValue") || "true" == $("input#ManagementVlanEnable").checkbox("getValue"))
+			{
+				enVal = "true";
+			}
+
+			var data = {};
+			data = $.extend({
+				"operation": "write",
+				"ManagementVlanID": $("input#ManagementVlanID").textbox("getValue"),
+				"ManagementVlanEnable": enVal
+			}, data);
+
+			$.ajax({
+				url: "./data/vlanManage.json",
+				type: 'POST',
+				data: data,
+				dataType: 'json',
+				cache:false,
+				error: function(){return false;},
+				success: function(result){
+					$("#ManagementVlanID").textbox("setValid");
+					$("#ManagementVlanID").textbox("setNormal");
+					$("#vlan_manage_setting").form("prompt", true);
+				}
+			});
+		},
+		cls:"submit"
+	});
+
+	var vlanManageProxy = new $.su.Proxy({
+		url: "./data/vlanManage.json"
+	});
+
+
+	$("form#vlan_manage_setting").form({
+		proxy: vlanManageProxy,
+		fields: [
+			{name: "ManagementVlanEnable", mapping: "ManagementVlanEnable"},
+			{name: "ManagementVlanID", mapping: "ManagementVlanID"}			
+		],
+
+		autoLoad: true,
+		//submitBtn: "default"
+		submitBtn: null
+	});
+
+});
+</script>
+</body>
+</html>

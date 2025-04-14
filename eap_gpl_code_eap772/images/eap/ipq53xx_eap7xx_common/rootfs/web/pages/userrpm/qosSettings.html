@@ -1,0 +1,1311 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>QoS</title>
+<style type="text/css">
+
+    div#qos-setting div.warning_tip{
+        height: 25px;
+        line-height: 22px;
+        background-color: rgb(255, 255, 214);
+        border: 1px solid rgb(204, 216, 226);
+    }
+    div#qos-setting div.warning_tip span.warning_text{
+        color: rgb(191, 105, 70);
+        font-size: 12px;
+        padding-left: 7px;
+        position: relative;
+        text-align: left;
+        vertical-align: middle;
+        top: 2px;
+    }
+
+	div.wireless-freq{
+		margin-left: 13px;
+	}
+
+    div#qos-setting div.qos_edca{
+        margin: 18px 0 20px;
+    }
+
+    div#qos-setting div.edca_wrp{
+        vertical-align: top;
+        position: relative;
+    }
+    div#qos-setting div.edca_wrp h4.edca_title{
+		margin: 20px 0 20px -27px;
+        padding-bottom: 10px;
+        font-size: 15px;
+        font-weight: bold;
+        border-bottom: 1px solid #d8d8d8;
+    }
+
+    div#qos-setting table.header_edca tr.header_edca_tr{
+        border-left: 1px solid #d9d9d9;
+        border-top: 1px solid #d9d9d9;
+    }
+    div#qos-setting table.header_edca tr.header_edca_tr th.header_edca_th{
+		font-weight: bold;
+        height: 55px;
+        border-right: 1px solid #d9d9d9;
+    }
+    div#qos-setting table.header_edca tr.header_edca_tr th.header_edca_queue{
+        width: 155px;
+    }
+    div#qos-setting table.header_edca tr.header_edca_tr th.header_edca_aifs{
+        width: 175px;
+    }
+    div#qos-setting table.header_edca tr.header_edca_tr th.header_edca_cwmin{
+        width: 175px;
+    }
+    div#qos-setting table.header_edca tr.header_edca_tr th.header_edca_cwmax{
+        width: 175px;
+    }
+    div#qos-setting table.header_edca tr.header_edca_tr th.header_edca_maxBurst{
+        width: 175px;
+    }
+    div#qos-setting table.header_edca tr.header_edca_tr th.header_edca_txopLimit{
+        width: 175px;
+    }
+
+	div#qos-setting table.content_edca{
+		border-bottom: 1px solid #d9d9d9;
+	}
+    div#qos-setting table.content_edca tr.content_edca_tr{
+        border-left: 1px solid #d9d9d9;
+        border-top: 1px solid #d9d9d9;
+    }
+    div#qos-setting table.content_edca tr.content_edca_tr td.content_edca_td{
+        height: 42px;
+        border-right: 1px solid #d9d9d9;
+    }
+    div#qos-setting table.content_edca tr.content_edca_tr td.content_edca_queue{
+        width: 155px;
+    }
+    div#qos-setting table.content_edca tr.content_edca_tr td.content_edca_aifs{
+        width: 175px;
+    }
+    div#qos-setting table.content_edca tr.content_edca_tr td.content_edca_cwmin{
+        width: 175px;
+    }
+    div#qos-setting table.content_edca tr.content_edca_tr td.content_edca_cwmax{
+        width: 175px;
+    }
+    div#qos-setting table.content_edca tr.content_edca_tr td.content_edca_maxBurst{
+        width: 175px;
+    }
+    div#qos-setting table.content_edca tr.content_edca_tr td.content_edca_txopLimit{
+        width: 175px;
+    }
+	div.widget-container.checkbox-group-container div.widget-fieldlabel-wrap.xxl{
+		width: 315px;
+	}
+
+</style>
+</head>
+
+<body>
+<div class="func-container">
+
+	<div id="wireless-freq" class="wireless-freq">
+		<div class="mode-change">
+			<span id="show-2g" class="first-mode mode-select"></span>
+			<span> | </span>
+			<span id="show-5g" class="second-mode"></span>
+			<span> | </span>
+			<span id="show-5g2" class="second-mode"></span>
+			<span> | </span>
+			<span id="show-6g" class="second-mode third-mode"></span>
+		</div>
+	</div>
+
+    <div id="qos-setting">
+
+        <form id="qos_setting_2g">
+
+            <input type="text"  class="hidden" id="qos_setting_2g_radio" name="radioID" value="0"/>
+
+            <input type="text" id="wmm_status_2g" class="wmm_status hidden" name="wmm_enable"   value="on" />
+
+			<div class="warning_tip hidden">
+				<span class="warning_text"></span>
+			</div>
+
+            <div class="qos_edca" id="edca_ap_2g">
+                <h4>
+                    <span class="title_edca_ap"></span>
+                </h4>
+
+                <table class="header_edca">
+                <tbody>
+                    <tr>
+                        <th class="header_edca_queue"><span class="header_queue"></span></th>
+                        <th class="header_edca_aifs"><span class="header_aifs"></span></th>
+                        <th class="header_edca_cwmin"><span class="header_cwmin"></span></th>
+                        <th class="header_edca_cwmax"><span class="header_cwmax"></span></th>
+                        <th class="header_edca_maxBurst"><span class="header_maxBurst"></span></th>
+                    </tr>
+                </tbody>
+                </table>
+
+                <table class="content_edca">
+                <tbody>
+                    <tr>
+                        <td class="content_edca_queue"><span class="label_vo"></span></th>
+                        <td class="content_edca_aifs"><input type="text"  id="ap_vo_aifs_2g"      class="edca_aifs"      name="ap_vo_aifs"      value="" /></th>
+                        <td class="content_edca_cwmin"><input type="text"  id="ap_vo_cwmin_2g"     class="edca_cwmin"     name="ap_vo_cwmin"     value="" /></th>
+                        <td class="content_edca_cwmax"><input type="text"  id="ap_vo_cwmax_2g"     class="edca_cwmax"     name="ap_vo_cwmax"     value="" /></th>
+                        <td class="content_edca_maxBurst"><input type="text"  id="ap_vo_maxBurst_2g"  class="edca_maxBurst"  name="ap_vo_maxBurst"  value="" /></th>
+                    </tr>
+                    <tr>
+                        <td class="content_edca_queue"><span class="label_vi"></span></th>
+                        <td class="content_edca_aifs"><input type="text"  id="ap_vi_aifs_2g"      class="edca_aifs"      name="ap_vi_aifs"      value="" /></th>
+                        <td class="content_edca_cwmin"><input type="text"  id="ap_vi_cwmin_2g"     class="edca_cwmin"     name="ap_vi_cwmin"     value="" /></th>
+                        <td class="content_edca_cwmax"><input type="text"  id="ap_vi_cwmax_2g"     class="edca_cwmax"     name="ap_vi_cwmax"     value="" /></th>
+                        <td class="content_edca_maxBurst"><input type="text"  id="ap_vi_maxBurst_2g"  class="edca_maxBurst"  name="ap_vi_maxBurst"  value="" /></th>
+                    </tr>
+                    <tr>
+                        <td class="content_edca_queue"><span class="label_be"></span></th>
+                        <td class="content_edca_aifs"><input type="text"  id="ap_be_aifs_2g"      class="edca_aifs"      name="ap_be_aifs"      value="" /></th>
+                        <td class="content_edca_cwmin"><input type="text"  id="ap_be_cwmin_2g"     class="edca_cwmin"     name="ap_be_cwmin"     value="" /></th>
+                        <td class="content_edca_cwmax"><input type="text"  id="ap_be_cwmax_2g"     class="edca_cwmax"     name="ap_be_cwmax"     value="" /></th>
+                        <td class="content_edca_maxBurst"><input type="text"  id="ap_be_maxBurst_2g"  class="edca_maxBurst"  name="ap_be_maxBurst"  value="" /></th>
+                    </tr>
+                    <tr>
+                        <td class="content_edca_queue"><span class="label_bk"></span></th>
+                        <td class="content_edca_aifs"><input type="text"  id="ap_bk_aifs_2g"      class="edca_aifs"      name="ap_bk_aifs"      value="" /></th>
+                        <td class="content_edca_cwmin"><input type="text"  id="ap_bk_cwmin_2g"     class="edca_cwmin"     name="ap_bk_cwmin"     value="" /></th>
+                        <td class="content_edca_cwmax"><input type="text"  id="ap_bk_cwmax_2g"     class="edca_cwmax"     name="ap_bk_cwmax"     value="" /></th>
+                        <td class="content_edca_maxBurst"><input type="text"  id="ap_bk_maxBurst_2g"  class="edca_maxBurst"  name="ap_bk_maxBurst"  value="" /></th>
+                    </tr>
+                </tbody>
+                </table>
+            </div>
+
+            <div class="qos_edca" id="edca_sta_2g">
+                <h4>
+                    <span class="title_edca_sta"></span>
+                </h4>
+
+                <table class="header_edca">
+                <tbody>
+                    <tr>
+                        <th class="header_edca_queue"><span class="header_queue"></span></th>
+                        <th class="header_edca_aifs"><span class="header_aifs"></span></th>
+                        <th class="header_edca_cwmin"><span class="header_cwmin"></span></th>
+                        <th class="header_edca_cwmax"><span class="header_cwmax"></span></th>
+                        <th class="header_edca_txopLimit"><span class="header_txopLimit"></span></th>
+                    </tr>
+                </tbody>
+                </table>
+
+                <table class="content_edca">
+                <tbody>
+                    <tr>
+                        <td class="content_edca_queue"><span class="label_vo"></span></th>
+                        <td class="content_edca_aifs"><input type="text"  id="sta_vo_aifs_2g"      class="edca_aifs"      name="sta_vo_aifs"      value="" /></th>
+                        <td class="content_edca_cwmin"><input type="text"  id="sta_vo_cwmin_2g"     class="edca_cwmin"     name="sta_vo_cwmin"     value="" /></th>
+                        <td class="content_edca_cwmax"><input type="text"  id="sta_vo_cwmax_2g"     class="edca_cwmax"     name="sta_vo_cwmax"     value="" /></th>
+                        <td class="content_edca_txopLimit"><input type="text"  id="sta_vo_txopLimit_2g" class="edca_txopLimit" name="sta_vo_txopLimit" value="" /></th>
+                    </tr>
+                    <tr>
+                        <td class="content_edca_queue"><span class="label_vi"></span></th>
+                        <td class="content_edca_aifs"><input type="text"  id="sta_vi_aifs_2g"      class="edca_aifs"      name="sta_vi_aifs"      value="" /></th>
+                        <td class="content_edca_cwmin"><input type="text"  id="sta_vi_cwmin_2g"     class="edca_cwmin"     name="sta_vi_cwmin"     value="" /></th>
+                        <td class="content_edca_cwmax"><input type="text"  id="sta_vi_cwmax_2g"     class="edca_cwmax"     name="sta_vi_cwmax"     value="" /></th>
+                        <td class="content_edca_txopLimit"><input type="text"  id="sta_vi_txopLimit_2g" class="edca_txopLimit" name="sta_vi_txopLimit" value="" /></th>
+                    </tr>
+                    <tr>
+                        <td class="content_edca_queue"><span class="label_be"></span></th>
+                        <td class="content_edca_aifs"><input type="text"  id="sta_be_aifs_2g"      class="edca_aifs"      name="sta_be_aifs"      value="" /></th>
+                        <td class="content_edca_cwmin"><input type="text"  id="sta_be_cwmin_2g"     class="edca_cwmin"     name="sta_be_cwmin"     value="" /></th>
+                        <td class="content_edca_cwmax"><input type="text"  id="sta_be_cwmax_2g"     class="edca_cwmax"     name="sta_be_cwmax"     value="" /></th>
+                        <td class="content_edca_txopLimit"><input type="text"  id="sta_be_txopLimit_2g" class="edca_txopLimit" name="sta_be_txopLimit" value="" /></th>
+                    </tr>
+                    <tr>
+                        <td class="content_edca_queue"><span class="label_bk"></span></th>
+                        <td class="content_edca_aifs"><input type="text"  id="sta_bk_aifs_2g"      class="edca_aifs"      name="sta_bk_aifs"      value="" /></th>
+                        <td class="content_edca_cwmin"><input type="text"  id="sta_bk_cwmin_2g"     class="edca_cwmin"     name="sta_bk_cwmin"     value="" /></th>
+                        <td class="content_edca_cwmax"><input type="text"  id="sta_bk_cwmax_2g"     class="edca_cwmax"     name="sta_bk_cwmax"     value="" /></th>
+                        <td class="content_edca_txopLimit"><input type="text"  id="sta_bk_txopLimit_2g" class="edca_txopLimit" name="sta_bk_txopLimit" value="" /></th>
+                    </tr>
+                </tbody>
+                </table>
+            </div>
+
+            <input type="text" id="noAck_status_2g" class="noAck_status" name="noAck_enable" value="" />
+            <input type="text" id="uapsd_status_2g" class="uapsd_status" name="uapsd_enable" value="" />
+        </form>
+
+        <form id="qos_setting_5g" class="hidden">
+
+            <input type="text"  class="hidden" id="qos_setting_5g_radio" name="radioID" value="1"/>
+
+            <input type="text" id="wmm_status_5g" class="wmm_status hidden" name="wmm_enable"   value="on" />
+
+            <div class="qos_edca" id="edca_ap_5g">
+                <h4>
+                    <span class="title_edca_ap"></span>
+                </h4>
+
+                <table class="header_edca">
+                <tbody>
+                    <tr>
+                        <th class="header_edca_queue"><span class="header_queue"></span></th>
+                        <th class="header_edca_aifs"><span class="header_aifs"></span></th>
+                        <th class="header_edca_cwmin"><span class="header_cwmin"></span></th>
+                        <th class="header_edca_cwmax"><span class="header_cwmax"></span></th>
+                        <th class="header_edca_maxBurst"><span class="header_maxBurst"></span></th>
+                    </tr>
+                </tbody>
+                </table>
+
+                <table class="content_edca">
+                <tbody>
+                    <tr>
+                        <td class="content_edca_queue"><span class="label_vo"></span></th>
+                        <td class="content_edca_aifs"><input type="text"  id="ap_vo_aifs_5g"      class="edca_aifs"      name="ap_vo_aifs"      value="" /></th>
+                        <td class="content_edca_cwmin"><input type="text"  id="ap_vo_cwmin_5g"     class="edca_cwmin"     name="ap_vo_cwmin"     value="" /></th>
+                        <td class="content_edca_cwmax"><input type="text"  id="ap_vo_cwmax_5g"     class="edca_cwmax"     name="ap_vo_cwmax"     value="" /></th>
+                        <td class="content_edca_maxBurst"><input type="text"  id="ap_vo_maxBurst_5g"  class="edca_maxBurst"  name="ap_vo_maxBurst"  value="" /></th>
+                    </tr>
+                    <tr>
+                        <td class="content_edca_queue"><span class="label_vi"></span></th>
+                        <td class="content_edca_aifs"><input type="text"  id="ap_vi_aifs_5g"      class="edca_aifs"      name="ap_vi_aifs"      value="" /></th>
+                        <td class="content_edca_cwmin"><input type="text"  id="ap_vi_cwmin_5g"     class="edca_cwmin"     name="ap_vi_cwmin"     value="" /></th>
+                        <td class="content_edca_cwmax"><input type="text"  id="ap_vi_cwmax_5g"     class="edca_cwmax"     name="ap_vi_cwmax"     value="" /></th>
+                        <td class="content_edca_maxBurst"><input type="text"  id="ap_vi_maxBurst_5g"  class="edca_maxBurst"  name="ap_vi_maxBurst"  value="" /></th>
+                    </tr>
+                    <tr>
+                        <td class="content_edca_queue"><span class="label_be"></span></th>
+                        <td class="content_edca_aifs"><input type="text"  id="ap_be_aifs_5g"      class="edca_aifs"      name="ap_be_aifs"      value="" /></th>
+                        <td class="content_edca_cwmin"><input type="text"  id="ap_be_cwmin_5g"     class="edca_cwmin"     name="ap_be_cwmin"     value="" /></th>
+                        <td class="content_edca_cwmax"><input type="text"  id="ap_be_cwmax_5g"     class="edca_cwmax"     name="ap_be_cwmax"     value="" /></th>
+                        <td class="content_edca_maxBurst"><input type="text"  id="ap_be_maxBurst_5g"  class="edca_maxBurst"  name="ap_be_maxBurst"  value="" /></th>
+                    </tr>
+                    <tr>
+                        <td class="content_edca_queue"><span class="label_bk"></span></th>
+                        <td class="content_edca_aifs"><input type="text"  id="ap_bk_aifs_5g"      class="edca_aifs"      name="ap_bk_aifs"      value="" /></th>
+                        <td class="content_edca_cwmin"><input type="text"  id="ap_bk_cwmin_5g"     class="edca_cwmin"     name="ap_bk_cwmin"     value="" /></th>
+                        <td class="content_edca_cwmax"><input type="text"  id="ap_bk_cwmax_5g"     class="edca_cwmax"     name="ap_bk_cwmax"     value="" /></th>
+                        <td class="content_edca_maxBurst"><input type="text"  id="ap_bk_maxBurst_5g"  class="edca_maxBurst"  name="ap_bk_maxBurst"  value="" /></th>
+                    </tr>
+                </tbody>
+                </table>
+            </div>
+
+            <div class="qos_edca" id="edca_sta_5g">
+                <h4>
+                    <span class="title_edca_sta"></span>
+                </h4>
+
+                <table class="header_edca">
+                <tbody>
+                    <tr>
+                        <th class="header_edca_queue"><span class="header_queue"></span></th>
+                        <th class="header_edca_aifs"><span class="header_aifs"></span></th>
+                        <th class="header_edca_cwmin"><span class="header_cwmin"></span></th>
+                        <th class="header_edca_cwmax"><span class="header_cwmax"></span></th>
+                        <th class="header_edca_txopLimit"><span class="header_txopLimit"></span></th>
+                    </tr>
+                </tbody>
+                </table>
+
+                <table class="content_edca">
+                <tbody>
+                    <tr>
+                        <td class="content_edca_queue"><span class="label_vo"></span></th>
+                        <td class="content_edca_aifs"><input type="text"  id="sta_vo_aifs_5g"      class="edca_aifs"      name="sta_vo_aifs"      value="" /></th>
+                        <td class="content_edca_cwmin"><input type="text"  id="sta_vo_cwmin_5g"     class="edca_cwmin"     name="sta_vo_cwmin"     value="" /></th>
+                        <td class="content_edca_cwmax"><input type="text"  id="sta_vo_cwmax_5g"     class="edca_cwmax"     name="sta_vo_cwmax"     value="" /></th>
+                        <td class="content_edca_txopLimit"><input type="text"  id="sta_vo_txopLimit_5g" class="edca_txopLimit" name="sta_vo_txopLimit" value="" /></th>
+                    </tr>
+                    <tr>
+                        <td class="content_edca_queue"><span class="label_vi"></span></th>
+                        <td class="content_edca_aifs"><input type="text"  id="sta_vi_aifs_5g"      class="edca_aifs"      name="sta_vi_aifs"      value="" /></th>
+                        <td class="content_edca_cwmin"><input type="text"  id="sta_vi_cwmin_5g"     class="edca_cwmin"     name="sta_vi_cwmin"     value="" /></th>
+                        <td class="content_edca_cwmax"><input type="text"  id="sta_vi_cwmax_5g"     class="edca_cwmax"     name="sta_vi_cwmax"     value="" /></th>
+                        <td class="content_edca_txopLimit"><input type="text"  id="sta_vi_txopLimit_5g" class="edca_txopLimit" name="sta_vi_txopLimit" value="" /></th>
+                    </tr>
+                    <tr>
+                        <td class="content_edca_queue"><span class="label_be"></span></th>
+                        <td class="content_edca_aifs"><input type="text"  id="sta_be_aifs_5g"      class="edca_aifs"      name="sta_be_aifs"      value="" /></th>
+                        <td class="content_edca_cwmin"><input type="text"  id="sta_be_cwmin_5g"     class="edca_cwmin"     name="sta_be_cwmin"     value="" /></th>
+                        <td class="content_edca_cwmax"><input type="text"  id="sta_be_cwmax_5g"     class="edca_cwmax"     name="sta_be_cwmax"     value="" /></th>
+                        <td class="content_edca_txopLimit"><input type="text"  id="sta_be_txopLimit_5g" class="edca_txopLimit" name="sta_be_txopLimit" value="" /></th>
+                    </tr>
+                    <tr>
+                        <td class="content_edca_queue"><span class="label_bk"></span></th>
+                        <td class="content_edca_aifs"><input type="text"  id="sta_bk_aifs_5g"      class="edca_aifs"      name="sta_bk_aifs"      value="" /></th>
+                        <td class="content_edca_cwmin"><input type="text"  id="sta_bk_cwmin_5g"     class="edca_cwmin"     name="sta_bk_cwmin"     value="" /></th>
+                        <td class="content_edca_cwmax"><input type="text"  id="sta_bk_cwmax_5g"     class="edca_cwmax"     name="sta_bk_cwmax"     value="" /></th>
+                        <td class="content_edca_txopLimit"><input type="text"  id="sta_bk_txopLimit_5g" class="edca_txopLimit" name="sta_bk_txopLimit" value="" /></th>
+                    </tr>
+                </tbody>
+                </table>
+            </div>
+
+            <input type="text" id="noAck_status_5g" class="noAck_status" name="noAck_enable" value="" />
+            <input type="text" id="uapsd_status_5g" class="uapsd_status" name="uapsd_enable" value="" />
+        </form>
+        
+        <form id="qos_setting_5g2" class="hidden">
+
+            <input type="text"  class="hidden" id="qos_setting_5g2_radio" name="radioID" value="2"/>
+
+            <input type="text" id="wmm_status_5g2" class="wmm_status hidden" name="wmm_enable"   value="on" />
+
+            <div class="qos_edca" id="edca_ap_5g2">
+                <h4>
+                    <span class="title_edca_ap"></span>
+                </h4>
+
+                <table class="header_edca">
+                <tbody>
+                    <tr>
+                        <th class="header_edca_queue"><span class="header_queue"></span></th>
+                        <th class="header_edca_aifs"><span class="header_aifs"></span></th>
+                        <th class="header_edca_cwmin"><span class="header_cwmin"></span></th>
+                        <th class="header_edca_cwmax"><span class="header_cwmax"></span></th>
+                        <th class="header_edca_maxBurst"><span class="header_maxBurst"></span></th>
+                    </tr>
+                </tbody>
+                </table>
+
+                <table class="content_edca">
+                <tbody>
+                    <tr>
+                        <td class="content_edca_queue"><span class="label_vo"></span></th>
+                        <td class="content_edca_aifs"><input type="text"  id="ap_vo_aifs_5g2"      class="edca_aifs"      name="ap_vo_aifs"      value="" /></th>
+                        <td class="content_edca_cwmin"><input type="text"  id="ap_vo_cwmin_5g2"     class="edca_cwmin"     name="ap_vo_cwmin"     value="" /></th>
+                        <td class="content_edca_cwmax"><input type="text"  id="ap_vo_cwmax_5g2"     class="edca_cwmax"     name="ap_vo_cwmax"     value="" /></th>
+                        <td class="content_edca_maxBurst"><input type="text"  id="ap_vo_maxBurst_5g2"  class="edca_maxBurst"  name="ap_vo_maxBurst"  value="" /></th>
+                    </tr>
+                    <tr>
+                        <td class="content_edca_queue"><span class="label_vi"></span></th>
+                        <td class="content_edca_aifs"><input type="text"  id="ap_vi_aifs_5g2"      class="edca_aifs"      name="ap_vi_aifs"      value="" /></th>
+                        <td class="content_edca_cwmin"><input type="text"  id="ap_vi_cwmin_5g2"     class="edca_cwmin"     name="ap_vi_cwmin"     value="" /></th>
+                        <td class="content_edca_cwmax"><input type="text"  id="ap_vi_cwmax_5g2"     class="edca_cwmax"     name="ap_vi_cwmax"     value="" /></th>
+                        <td class="content_edca_maxBurst"><input type="text"  id="ap_vi_maxBurst_5g2"  class="edca_maxBurst"  name="ap_vi_maxBurst"  value="" /></th>
+                    </tr>
+                    <tr>
+                        <td class="content_edca_queue"><span class="label_be"></span></th>
+                        <td class="content_edca_aifs"><input type="text"  id="ap_be_aifs_5g2"      class="edca_aifs"      name="ap_be_aifs"      value="" /></th>
+                        <td class="content_edca_cwmin"><input type="text"  id="ap_be_cwmin_5g2"     class="edca_cwmin"     name="ap_be_cwmin"     value="" /></th>
+                        <td class="content_edca_cwmax"><input type="text"  id="ap_be_cwmax_5g2"     class="edca_cwmax"     name="ap_be_cwmax"     value="" /></th>
+                        <td class="content_edca_maxBurst"><input type="text"  id="ap_be_maxBurst_5g2"  class="edca_maxBurst"  name="ap_be_maxBurst"  value="" /></th>
+                    </tr>
+                    <tr>
+                        <td class="content_edca_queue"><span class="label_bk"></span></th>
+                        <td class="content_edca_aifs"><input type="text"  id="ap_bk_aifs_5g2"      class="edca_aifs"      name="ap_bk_aifs"      value="" /></th>
+                        <td class="content_edca_cwmin"><input type="text"  id="ap_bk_cwmin_5g2"     class="edca_cwmin"     name="ap_bk_cwmin"     value="" /></th>
+                        <td class="content_edca_cwmax"><input type="text"  id="ap_bk_cwmax_5g2"     class="edca_cwmax"     name="ap_bk_cwmax"     value="" /></th>
+                        <td class="content_edca_maxBurst"><input type="text"  id="ap_bk_maxBurst_5g2"  class="edca_maxBurst"  name="ap_bk_maxBurst"  value="" /></th>
+                    </tr>
+                </tbody>
+                </table>
+            </div>
+
+            <div class="qos_edca" id="edca_sta_5g2">
+                <h4>
+                    <span class="title_edca_sta"></span>
+                </h4>
+
+                <table class="header_edca">
+                <tbody>
+                    <tr>
+                        <th class="header_edca_queue"><span class="header_queue"></span></th>
+                        <th class="header_edca_aifs"><span class="header_aifs"></span></th>
+                        <th class="header_edca_cwmin"><span class="header_cwmin"></span></th>
+                        <th class="header_edca_cwmax"><span class="header_cwmax"></span></th>
+                        <th class="header_edca_txopLimit"><span class="header_txopLimit"></span></th>
+                    </tr>
+                </tbody>
+                </table>
+
+                <table class="content_edca">
+                <tbody>
+                    <tr>
+                        <td class="content_edca_queue"><span class="label_vo"></span></th>
+                        <td class="content_edca_aifs"><input type="text"  id="sta_vo_aifs_5g2"      class="edca_aifs"      name="sta_vo_aifs"      value="" /></th>
+                        <td class="content_edca_cwmin"><input type="text"  id="sta_vo_cwmin_5g2"     class="edca_cwmin"     name="sta_vo_cwmin"     value="" /></th>
+                        <td class="content_edca_cwmax"><input type="text"  id="sta_vo_cwmax_5g2"     class="edca_cwmax"     name="sta_vo_cwmax"     value="" /></th>
+                        <td class="content_edca_txopLimit"><input type="text"  id="sta_vo_txopLimit_5g2" class="edca_txopLimit" name="sta_vo_txopLimit" value="" /></th>
+                    </tr>
+                    <tr>
+                        <td class="content_edca_queue"><span class="label_vi"></span></th>
+                        <td class="content_edca_aifs"><input type="text"  id="sta_vi_aifs_5g2"      class="edca_aifs"      name="sta_vi_aifs"      value="" /></th>
+                        <td class="content_edca_cwmin"><input type="text"  id="sta_vi_cwmin_5g2"     class="edca_cwmin"     name="sta_vi_cwmin"     value="" /></th>
+                        <td class="content_edca_cwmax"><input type="text"  id="sta_vi_cwmax_5g2"     class="edca_cwmax"     name="sta_vi_cwmax"     value="" /></th>
+                        <td class="content_edca_txopLimit"><input type="text"  id="sta_vi_txopLimit_5g2" class="edca_txopLimit" name="sta_vi_txopLimit" value="" /></th>
+                    </tr>
+                    <tr>
+                        <td class="content_edca_queue"><span class="label_be"></span></th>
+                        <td class="content_edca_aifs"><input type="text"  id="sta_be_aifs_5g2"      class="edca_aifs"      name="sta_be_aifs"      value="" /></th>
+                        <td class="content_edca_cwmin"><input type="text"  id="sta_be_cwmin_5g2"     class="edca_cwmin"     name="sta_be_cwmin"     value="" /></th>
+                        <td class="content_edca_cwmax"><input type="text"  id="sta_be_cwmax_5g2"     class="edca_cwmax"     name="sta_be_cwmax"     value="" /></th>
+                        <td class="content_edca_txopLimit"><input type="text"  id="sta_be_txopLimit_5g2" class="edca_txopLimit" name="sta_be_txopLimit" value="" /></th>
+                    </tr>
+                    <tr>
+                        <td class="content_edca_queue"><span class="label_bk"></span></th>
+                        <td class="content_edca_aifs"><input type="text"  id="sta_bk_aifs_5g2"      class="edca_aifs"      name="sta_bk_aifs"      value="" /></th>
+                        <td class="content_edca_cwmin"><input type="text"  id="sta_bk_cwmin_5g2"     class="edca_cwmin"     name="sta_bk_cwmin"     value="" /></th>
+                        <td class="content_edca_cwmax"><input type="text"  id="sta_bk_cwmax_5g2"     class="edca_cwmax"     name="sta_bk_cwmax"     value="" /></th>
+                        <td class="content_edca_txopLimit"><input type="text"  id="sta_bk_txopLimit_5g2" class="edca_txopLimit" name="sta_bk_txopLimit" value="" /></th>
+                    </tr>
+                </tbody>
+                </table>
+            </div>
+
+            <input type="text" id="noAck_status_5g2" class="noAck_status" name="noAck_enable" value="" />
+            <input type="text" id="uapsd_status_5g2" class="uapsd_status" name="uapsd_enable" value="" />
+        </form>
+        
+        <form id="qos_setting_6g" class="hidden">
+
+            <input type="text"  class="hidden" id="qos_setting_6g_radio" name="radioID" value="3"/>
+
+            <input type="text" id="wmm_status_6g" class="wmm_status hidden" name="wmm_enable"   value="on" />
+
+            <div class="qos_edca" id="edca_ap_6g">
+                <h4>
+                    <span class="title_edca_ap"></span>
+                </h4>
+
+                <table class="header_edca">
+                <tbody>
+                    <tr>
+                        <th class="header_edca_queue"><span class="header_queue"></span></th>
+                        <th class="header_edca_aifs"><span class="header_aifs"></span></th>
+                        <th class="header_edca_cwmin"><span class="header_cwmin"></span></th>
+                        <th class="header_edca_cwmax"><span class="header_cwmax"></span></th>
+                        <th class="header_edca_maxBurst"><span class="header_maxBurst"></span></th>
+                    </tr>
+                </tbody>
+                </table>
+
+                <table class="content_edca">
+                <tbody>
+                    <tr>
+                        <td class="content_edca_queue"><span class="label_vo"></span></th>
+                        <td class="content_edca_aifs"><input type="text"  id="ap_vo_aifs_6g"      class="edca_aifs"      name="ap_vo_aifs"      value="" /></th>
+                        <td class="content_edca_cwmin"><input type="text"  id="ap_vo_cwmin_6g"     class="edca_cwmin"     name="ap_vo_cwmin"     value="" /></th>
+                        <td class="content_edca_cwmax"><input type="text"  id="ap_vo_cwmax_6g"     class="edca_cwmax"     name="ap_vo_cwmax"     value="" /></th>
+                        <td class="content_edca_maxBurst"><input type="text"  id="ap_vo_maxBurst_6g"  class="edca_maxBurst"  name="ap_vo_maxBurst"  value="" /></th>
+                    </tr>
+                    <tr>
+                        <td class="content_edca_queue"><span class="label_vi"></span></th>
+                        <td class="content_edca_aifs"><input type="text"  id="ap_vi_aifs_6g"      class="edca_aifs"      name="ap_vi_aifs"      value="" /></th>
+                        <td class="content_edca_cwmin"><input type="text"  id="ap_vi_cwmin_6g"     class="edca_cwmin"     name="ap_vi_cwmin"     value="" /></th>
+                        <td class="content_edca_cwmax"><input type="text"  id="ap_vi_cwmax_6g"     class="edca_cwmax"     name="ap_vi_cwmax"     value="" /></th>
+                        <td class="content_edca_maxBurst"><input type="text"  id="ap_vi_maxBurst_6g"  class="edca_maxBurst"  name="ap_vi_maxBurst"  value="" /></th>
+                    </tr>
+                    <tr>
+                        <td class="content_edca_queue"><span class="label_be"></span></th>
+                        <td class="content_edca_aifs"><input type="text"  id="ap_be_aifs_6g"      class="edca_aifs"      name="ap_be_aifs"      value="" /></th>
+                        <td class="content_edca_cwmin"><input type="text"  id="ap_be_cwmin_6g"     class="edca_cwmin"     name="ap_be_cwmin"     value="" /></th>
+                        <td class="content_edca_cwmax"><input type="text"  id="ap_be_cwmax_6g"     class="edca_cwmax"     name="ap_be_cwmax"     value="" /></th>
+                        <td class="content_edca_maxBurst"><input type="text"  id="ap_be_maxBurst_6g"  class="edca_maxBurst"  name="ap_be_maxBurst"  value="" /></th>
+                    </tr>
+                    <tr>
+                        <td class="content_edca_queue"><span class="label_bk"></span></th>
+                        <td class="content_edca_aifs"><input type="text"  id="ap_bk_aifs_6g"      class="edca_aifs"      name="ap_bk_aifs"      value="" /></th>
+                        <td class="content_edca_cwmin"><input type="text"  id="ap_bk_cwmin_6g"     class="edca_cwmin"     name="ap_bk_cwmin"     value="" /></th>
+                        <td class="content_edca_cwmax"><input type="text"  id="ap_bk_cwmax_6g"     class="edca_cwmax"     name="ap_bk_cwmax"     value="" /></th>
+                        <td class="content_edca_maxBurst"><input type="text"  id="ap_bk_maxBurst_6g"  class="edca_maxBurst"  name="ap_bk_maxBurst"  value="" /></th>
+                    </tr>
+                </tbody>
+                </table>
+            </div>
+
+            <div class="qos_edca" id="edca_sta_6g">
+                <h4>
+                    <span class="title_edca_sta"></span>
+                </h4>
+
+                <table class="header_edca">
+                <tbody>
+                    <tr>
+                        <th class="header_edca_queue"><span class="header_queue"></span></th>
+                        <th class="header_edca_aifs"><span class="header_aifs"></span></th>
+                        <th class="header_edca_cwmin"><span class="header_cwmin"></span></th>
+                        <th class="header_edca_cwmax"><span class="header_cwmax"></span></th>
+                        <th class="header_edca_txopLimit"><span class="header_txopLimit"></span></th>
+                    </tr>
+                </tbody>
+                </table>
+
+                <table class="content_edca">
+                <tbody>
+                    <tr>
+                        <td class="content_edca_queue"><span class="label_vo"></span></th>
+                        <td class="content_edca_aifs"><input type="text"  id="sta_vo_aifs_6g"      class="edca_aifs"      name="sta_vo_aifs"      value="" /></th>
+                        <td class="content_edca_cwmin"><input type="text"  id="sta_vo_cwmin_6g"     class="edca_cwmin"     name="sta_vo_cwmin"     value="" /></th>
+                        <td class="content_edca_cwmax"><input type="text"  id="sta_vo_cwmax_6g"     class="edca_cwmax"     name="sta_vo_cwmax"     value="" /></th>
+                        <td class="content_edca_txopLimit"><input type="text"  id="sta_vo_txopLimit_6g" class="edca_txopLimit" name="sta_vo_txopLimit" value="" /></th>
+                    </tr>
+                    <tr>
+                        <td class="content_edca_queue"><span class="label_vi"></span></th>
+                        <td class="content_edca_aifs"><input type="text"  id="sta_vi_aifs_6g"      class="edca_aifs"      name="sta_vi_aifs"      value="" /></th>
+                        <td class="content_edca_cwmin"><input type="text"  id="sta_vi_cwmin_6g"     class="edca_cwmin"     name="sta_vi_cwmin"     value="" /></th>
+                        <td class="content_edca_cwmax"><input type="text"  id="sta_vi_cwmax_6g"     class="edca_cwmax"     name="sta_vi_cwmax"     value="" /></th>
+                        <td class="content_edca_txopLimit"><input type="text"  id="sta_vi_txopLimit_6g" class="edca_txopLimit" name="sta_vi_txopLimit" value="" /></th>
+                    </tr>
+                    <tr>
+                        <td class="content_edca_queue"><span class="label_be"></span></th>
+                        <td class="content_edca_aifs"><input type="text"  id="sta_be_aifs_6g"      class="edca_aifs"      name="sta_be_aifs"      value="" /></th>
+                        <td class="content_edca_cwmin"><input type="text"  id="sta_be_cwmin_6g"     class="edca_cwmin"     name="sta_be_cwmin"     value="" /></th>
+                        <td class="content_edca_cwmax"><input type="text"  id="sta_be_cwmax_6g"     class="edca_cwmax"     name="sta_be_cwmax"     value="" /></th>
+                        <td class="content_edca_txopLimit"><input type="text"  id="sta_be_txopLimit_6g" class="edca_txopLimit" name="sta_be_txopLimit" value="" /></th>
+                    </tr>
+                    <tr>
+                        <td class="content_edca_queue"><span class="label_bk"></span></th>
+                        <td class="content_edca_aifs"><input type="text"  id="sta_bk_aifs_6g"      class="edca_aifs"      name="sta_bk_aifs"      value="" /></th>
+                        <td class="content_edca_cwmin"><input type="text"  id="sta_bk_cwmin_6g"     class="edca_cwmin"     name="sta_bk_cwmin"     value="" /></th>
+                        <td class="content_edca_cwmax"><input type="text"  id="sta_bk_cwmax_6g"     class="edca_cwmax"     name="sta_bk_cwmax"     value="" /></th>
+                        <td class="content_edca_txopLimit"><input type="text"  id="sta_bk_txopLimit_6g" class="edca_txopLimit" name="sta_bk_txopLimit" value="" /></th>
+                    </tr>
+                </tbody>
+                </table>
+            </div>
+
+            <input type="text" id="noAck_status_6g" class="noAck_status" name="noAck_enable" value="" />
+            <input type="text" id="uapsd_status_6g" class="uapsd_status" name="uapsd_enable" value="" />
+        </form>
+
+    </div>
+	
+	<!-- <div id="wmmDisabledNote">
+		<div class="warning-msg">
+			<h4 class="title">
+				<span class="icon"></span>
+				<span class="text" id="wmm_disable_note"></span>
+			</h4>
+		</div>
+	</div> -->
+</div>
+
+<script type="text/javascript">
+$(document).ready(function(e){
+
+    // var URL_QOS_2G = "./data/qos_setting.2g.json";
+    // var URL_QOS_5G = "./data/qos_setting.5g.json";
+
+    var URL_QOS = "./data/qos_setting.json";
+    var qosProxy = new $.su.Proxy({url: URL_QOS, timeout: 60000, type: "GET"});
+
+    // var qosProxy_2g = new $.su.Proxy({url: URL_QOS_2G, timeout: 60000, type: "GET"});
+    // var qosProxy_5g = new $.su.Proxy({url: URL_QOS_5G, timeout: 60000, type: "GET"});
+
+    var cwItems = [];
+    for(var k = 1; k <= 10; k++)
+    {
+        var tmpItem = {};
+        tmpItem.value = ((1<<k)-1);
+        tmpItem.name  = ((1<<k)-1);
+        cwItems.push(tmpItem);
+    }
+
+    var curFreqBand = "2g";
+    var freqBand = {"0":"2g", "1":"5g", "2": "5g2", "3":"6g"};
+    var wmmAC = {"0":"vo", "1":"vi", "2":"be", "3":"bk"};
+    var fb_idx, ac_idx;
+
+    function showTips()
+    {
+        $("div.warning_tip").slideDown("slow");
+    }
+
+    function hideTips()
+    {
+        $("div.warning_tip").slideUp("slow");
+    }
+
+	function tipsIn2G()
+	{
+		$("div.warning_tip").insertBefore("div#edca_ap_2g");
+	}
+
+	function tipsIn5G()
+	{
+		$("div.warning_tip").insertBefore("div#edca_ap_5g");
+    }
+    
+	function tipsIn5G2()
+	{
+		$("div.warning_tip").insertBefore("div#edca_ap_5g2");
+	}
+
+    String.format = function(src){
+        if (arguments.length == 0) return null;
+        var args = Array.prototype.slice.call(arguments, 1);
+        return src.replace(/\{(\d+)\}/g, function(m, i){
+            return args[i];
+        });
+    };
+
+    function setEdcaState(freqBand, edState)
+    {
+        for(ac_idx in wmmAC)
+        {
+            /* AP EDCA */
+            var ap_aifs_selector     = String.format("input#ap_{0}_aifs_{1}",     wmmAC[ac_idx], freqBand);
+            var ap_cwmin_selector    = String.format("input#ap_{0}_cwmin_{1}",    wmmAC[ac_idx], freqBand);
+            var ap_cwmax_selector    = String.format("input#ap_{0}_cwmax_{1}",    wmmAC[ac_idx], freqBand);
+            var ap_maxBurst_selector = String.format("input#ap_{0}_maxBurst_{1}", wmmAC[ac_idx], freqBand);
+
+            $(ap_aifs_selector).textbox(edState);
+            $(ap_cwmin_selector).combobox(edState);
+            $(ap_cwmax_selector).combobox(edState);
+            $(ap_maxBurst_selector).textbox(edState);
+
+            /* STATION EDCA */
+            var sta_aifs_selector      = String.format("input#sta_{0}_aifs_{1}",      wmmAC[ac_idx], freqBand);
+            var sta_cwmin_selector     = String.format("input#sta_{0}_cwmin_{1}",     wmmAC[ac_idx], freqBand);
+            var sta_cwmax_selector     = String.format("input#sta_{0}_cwmax_{1}",     wmmAC[ac_idx], freqBand);
+            var sta_txopLimit_selector = String.format("input#sta_{0}_txopLimit_{1}", wmmAC[ac_idx], freqBand);
+
+            $(sta_aifs_selector).textbox(edState);
+            $(sta_cwmin_selector).combobox(edState);
+            $(sta_cwmax_selector).combobox(edState);
+            $(sta_txopLimit_selector).textbox(edState);
+        }
+
+		var noAck_status_selector = String.format("input#noAck_status_{0}", freqBand);
+		var uapsd_status_selector = String.format("input#uapsd_status_{0}", freqBand);
+		if ("enable" == edState)
+		{
+			$(noAck_status_selector).checkbox("enableItem", ["on"]);
+			$(uapsd_status_selector).checkbox("enableItem", ["on"]);
+		}
+		else if("disable" == edState)
+		{
+			$(noAck_status_selector).checkbox("disableItem", ["on"]);
+			$(uapsd_status_selector).checkbox("disableItem", ["on"]);
+		}
+    }
+
+    function checkQosForm(freqBand)
+    {
+        var aifs, cwmin, cwmax, maxBurst, txopLimit;
+        for(ac_idx in wmmAC)
+        {
+            /* AP EDCA */
+            var ap_aifs_selector     = String.format("input#ap_{0}_aifs_{1}",     wmmAC[ac_idx], freqBand);
+            var ap_cwmin_selector    = String.format("input#ap_{0}_cwmin_{1}",    wmmAC[ac_idx], freqBand);
+            var ap_cwmax_selector    = String.format("input#ap_{0}_cwmax_{1}",    wmmAC[ac_idx], freqBand);
+            var ap_maxBurst_selector = String.format("input#ap_{0}_maxBurst_{1}", wmmAC[ac_idx], freqBand);
+
+            aifs      = parseInt($(ap_aifs_selector).textbox("getValue"));
+            cwmin     = parseInt($(ap_cwmin_selector).combobox("getValue"));
+            cwmax     = parseInt($(ap_cwmax_selector).combobox("getValue"));
+            maxBurst  = parseInt($(ap_maxBurst_selector).textbox("getValue"));
+
+            if (aifs < 0 || aifs > 15)
+            {
+                //$("span.warning_text").html(String.format($.su.CHAR.QOS_SETTING.EDCA_AIFS_TIP, "AP", ac_idx));
+                //$(ap_aifs_selector).textbox("setFocus");
+				$(ap_aifs_selector).textbox("setError", "0-15");
+                return false;
+            }
+            if (!((cwmin > 0 && cwmin < 1024) && (cwmax > 0 && cwmax < 1024) && (cwmin <= cwmax)))
+            {
+                //$("span.warning_text").html(String.format($.su.CHAR.QOS_SETTING.EDCA_CW_TIP, "AP", ac_idx));
+                //$(ap_cwmin_selector).combobox("setFocus");
+                $(ap_cwmin_selector).combobox("setErrorTips", $.su.CHAR.QOS_SETTING.CONTENTION_WINDOW_ERROR);
+                return false;
+            }
+            if (maxBurst < 0 || maxBurst > 8192 || maxBurst%32 != 0)
+            {
+                //$("span.warning_text").html(String.format($.su.CHAR.QOS_SETTING.EDCA_MAXBURST_TIP, "AP", ac_idx));
+                //$(ap_maxBurst_selector).textbox("setFocus");
+				$(ap_maxBurst_selector).textbox("setError", $.su.CHAR.QOS_SETTING.MAXIMUM_BURST_ERROR);
+                return false;
+            }
+
+            /* STATION EDCA */
+            var sta_aifs_selector      = String.format("input#sta_{0}_aifs_{1}",      wmmAC[ac_idx], freqBand);
+            var sta_cwmin_selector     = String.format("input#sta_{0}_cwmin_{1}",     wmmAC[ac_idx], freqBand);
+            var sta_cwmax_selector     = String.format("input#sta_{0}_cwmax_{1}",     wmmAC[ac_idx], freqBand);
+            var sta_txopLimit_selector = String.format("input#sta_{0}_txopLimit_{1}", wmmAC[ac_idx], freqBand);
+
+            aifs      = parseInt($(sta_aifs_selector).textbox("getValue"));
+            cwmin     = parseInt($(sta_cwmin_selector).combobox("getValue"));
+            cwmax     = parseInt($(sta_cwmax_selector).combobox("getValue"));
+            txopLimit = parseInt($(sta_txopLimit_selector).textbox("getValue"));
+
+            if (aifs < 0 || aifs > 15)
+            {
+                //$("span.warning_text").html(String.format($.su.CHAR.QOS_SETTING.EDCA_AIFS_TIP, "STATION", ac_idx));
+                //$(sta_aifs_selector).textbox("setFocus");
+				$(sta_aifs_selector).textbox("setError", "0-15");
+                return false;
+            }
+            if (!((cwmin > 0 && cwmin < 1024) && (cwmax > 0 && cwmax < 1024) && (cwmin <= cwmax)))
+            {
+                //$("span.warning_text").html(String.format($.su.CHAR.QOS_SETTING.EDCA_CW_TIP, "STATION", ac_idx));
+                //$(sta_cwmin_selector).combobox("setFocus");
+                $(sta_cwmin_selector).combobox("setErrorTips", $.su.CHAR.QOS_SETTING.CONTENTION_WINDOW_ERROR);
+                return false;
+            }
+            if (txopLimit < 0 || txopLimit > 8192 || txopLimit%32 != 0)
+            {
+                //$("span.warning_text").html(String.format($.su.CHAR.QOS_SETTING.EDCA_TXOPLIMIT_TIP, "STATION", ac_idx));
+                //$(sta_txopLimit_selector).textbox("setFocus");
+				$(sta_txopLimit_selector).textbox("setError", $.su.CHAR.QOS_SETTING.MAXIMUM_BURST_ERROR);
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    $("div.func-container").page({
+        title: $.su.CHAR.QOS_SETTING.TITLE,
+        help: ""	//可能是个调用的id 也可能是个url
+    });
+
+    $("#show-2g").html($.su.CHAR.MODE.MODE_2G);
+    $("#show-6g").html($.su.CHAR.MODE.MODE_6G);
+
+    $("span#show-2g").click(function(){
+        if(!($(this).hasClass("mode-select")))
+        {
+            $(this).addClass("mode-select");
+            $("span#show-5g").removeClass("mode-select");
+            $("span#show-5g2").removeClass("mode-select");
+            $("span#show-6g").removeClass("mode-select");
+            $("#qos_setting_2g").show();
+            $("#qos_setting_5g").hide();
+            $("#qos_setting_5g2").hide();
+            $("#qos_setting_6g").hide();
+			// $("#qos_setting_2g").form("reset");
+            $("#qos_setting_2g").form("load", {radioID: 0});
+
+			tipsIn2G();
+			hideTips();
+            curFreqBand = "2g";
+        }
+    });
+
+    $("span#show-5g").click(function(){
+        if(!($(this).hasClass("mode-select")))
+        {
+            $(this).addClass("mode-select");
+            $("span#show-2g").removeClass("mode-select");
+            $("span#show-5g2").removeClass("mode-select");
+            $("span#show-6g").removeClass("mode-select");
+            $("#qos_setting_2g").hide();
+            $("#qos_setting_5g2").hide();
+            $("#qos_setting_5g").show();
+            $("#qos_setting_6g").hide();
+			// $("#qos_setting_5g").form("reset");
+            $("#qos_setting_5g").form("load", {radioID: 1});
+
+			tipsIn5G();
+			hideTips();
+            curFreqBand = "5g";
+        }
+    });
+
+    $("span#show-5g2").click(function(){
+        if(!($(this).hasClass("mode-select")))
+        {
+            $(this).addClass("mode-select");
+            $("span#show-2g").removeClass("mode-select");
+            $("span#show-5g").removeClass("mode-select");
+            $("span#show-6g").removeClass("mode-select");
+            $("#qos_setting_2g").hide();
+            $("#qos_setting_5g").hide();
+            $("#qos_setting_5g2").show();
+            $("#qos_setting_6g").hide();
+			// $("#qos_setting_5g").form("reset");
+            $("#qos_setting_5g2").form("load", {radioID: 2});
+
+			tipsIn5G2();
+			hideTips();
+            curFreqBand = "5g2";
+        }
+    });
+
+    $("span#show-6g").click(function(){
+        if(!($(this).hasClass("mode-select")))
+        {
+            $(this).addClass("mode-select");
+            $("span#show-2g").removeClass("mode-select");
+            $("span#show-5g").removeClass("mode-select");
+            $("span#show-5g2").removeClass("mode-select");
+            $("#qos_setting_2g").hide();
+            $("#qos_setting_5g").hide();
+            $("#qos_setting_5g2").hide();
+            $("#qos_setting_6g").show();
+			// $("#qos_setting_5g").form("reset");
+            $("#qos_setting_6g").form("load", {radioID: 3});
+
+			tipsIn5G2();
+			hideTips();
+            curFreqBand = "6g";
+        }
+    });
+
+    $("div#qos-setting").panel({
+        title: $.su.CHAR.QOS_SETTING.QOS_SETTING_TITLE,
+        collapsible: false
+    });
+
+    $("span.title_edca_ap").html($.su.CHAR.QOS_SETTING.AP_EDCA_TITLE);
+    $("span.title_edca_sta").html($.su.CHAR.QOS_SETTING.STA_EDCA_TITLE);
+    $("span.header_queue").html($.su.CHAR.QOS_SETTING.LABEL_QUEUE);
+    $("span.header_aifs").html($.su.CHAR.QOS_SETTING.LABEL_AIFS);
+    $("span.header_cwmin").html($.su.CHAR.QOS_SETTING.LABEL_CWMIN);
+    $("span.header_cwmax").html($.su.CHAR.QOS_SETTING.LABEL_CWMAX);
+    $("span.header_maxBurst").html($.su.CHAR.QOS_SETTING.LABEL_MAXBURST);
+    $("span.header_txopLimit").html($.su.CHAR.QOS_SETTING.LABEL_TXOPLIMIT);
+    $("span.label_vo").html($.su.CHAR.QOS_SETTING.LABEL_VO);
+    $("span.label_vi").html($.su.CHAR.QOS_SETTING.LABEL_VI);
+    $("span.label_be").html($.su.CHAR.QOS_SETTING.LABEL_BE);
+    $("span.label_bk").html($.su.CHAR.QOS_SETTING.LABEL_BK);
+
+    $("div.qos_edca").addClass("edca_wrp");
+    $("div.qos_edca h4").addClass("edca_title");
+    $("div.qos_edca table.header_edca tr").addClass("header_edca_tr");
+    $("div.qos_edca table.header_edca tr th").addClass("header_edca_th");
+    $("div.qos_edca table.content_edca tr").addClass("content_edca_tr");
+    $("div.qos_edca table.content_edca tr td").addClass("content_edca_td");
+
+	tipsIn2G();
+
+	/* $("div#wmmDisabledNote").msg({
+		type: "alert",
+		cls: "m"
+	}); */
+
+    for(fb_idx in freqBand)
+    {
+        for(ac_idx in wmmAC)
+        {
+            var ap_aifs_selector = String.format("input#ap_{0}_aifs_{1}", wmmAC[ac_idx], freqBand[fb_idx]);
+            $(ap_aifs_selector).textbox({
+                fieldLabel: null,
+                inputCls: 'm',
+                cls: 'inline',
+                vtype: "number",
+                min: 0,
+        		max: 15
+            });
+
+            var ap_cwmin_selector = String.format("input#ap_{0}_cwmin_{1}", wmmAC[ac_idx], freqBand[fb_idx]);
+            $(ap_cwmin_selector).combobox({
+                fieldLabel: null,
+                inputCls: 'm',
+                cls: 'inline',
+                noneSelectedText: ''
+            });
+            $(ap_cwmin_selector).combobox("loadData", cwItems);
+
+            var ap_cwmax_selector = String.format("input#ap_{0}_cwmax_{1}", wmmAC[ac_idx], freqBand[fb_idx]);
+            $(ap_cwmax_selector).combobox({
+                fieldLabel: null,
+                inputCls: 'm',
+                cls: 'inline',
+                noneSelectedText: ''
+            });
+            $(ap_cwmax_selector).combobox("loadData", cwItems);
+
+            var ap_maxBurst_selector = String.format("input#ap_{0}_maxBurst_{1}", wmmAC[ac_idx], freqBand[fb_idx]);
+            $(ap_maxBurst_selector).textbox({
+                fieldLabel: null,
+                inputCls: 'm',
+                cls: 'inline',
+                vtype: "number",
+                min: 0,
+        		max: 8192
+            });
+
+            var sta_aifs_selector = String.format("input#sta_{0}_aifs_{1}", wmmAC[ac_idx], freqBand[fb_idx]);
+            $(sta_aifs_selector).textbox({
+                fieldLabel: null,
+                inputCls: 'm',
+                cls: 'inline',
+                vtype: "number",
+                min: 0,
+        		max: 15
+            });
+
+            var sta_cwmin_selector = String.format("input#sta_{0}_cwmin_{1}", wmmAC[ac_idx], freqBand[fb_idx]);
+            $(sta_cwmin_selector).combobox({
+                fieldLabel: null,
+                inputCls: 'm',
+                cls: 'inline',
+                noneSelectedText: ''
+            });
+            $(sta_cwmin_selector).combobox("loadData", cwItems);
+
+            var sta_cwmax_selector = String.format("input#sta_{0}_cwmax_{1}", wmmAC[ac_idx], freqBand[fb_idx]);
+            $(sta_cwmax_selector).combobox({
+                fieldLabel: null,
+                inputCls: 'm',
+                cls: 'inline',
+                noneSelectedText: ''
+            });
+            $(sta_cwmax_selector).combobox("loadData", cwItems);
+
+            var sta_txopLimit_selector = String.format("input#sta_{0}_txopLimit_{1}", wmmAC[ac_idx], freqBand[fb_idx]);
+            $(sta_txopLimit_selector).textbox({
+                fieldLabel: null,
+                inputCls: 'm',
+                cls: 'inline',
+                vtype: "number",
+                min: 0,
+        		max: 8192
+            });
+        }
+
+        // var wmm_status_selector = String.format("input#wmm_status_{0}", freqBand[fb_idx]);
+        // $(wmm_status_selector).checkbox({
+        //     fieldLabel: $.su.CHAR.QOS_SETTING.WMM_RADIO,
+		// 	labelCls: "l",
+        //     items: [
+        //         {boxlabel: $.su.CHAR.QOS_SETTING.WMM_ENABLE, uncheckedValue: "off", inputValue: "on"}
+        //     ]
+        // }).on('ev_change', function(e, oldValue, newValue){
+        //     if("wmm_enable" == newValue || "on" == newValue){
+        //         setEdcaState(curFreqBand, "enable");
+        //     }
+        //     else{
+        //         setEdcaState(curFreqBand, "disable");
+		// 		/*Get 2.4G/5G wireless mode*/
+		// 		// var wireless_mode_url;
+        //         var wirelessMode;
+		// 		if (curFreqBand == "2g")
+		// 		{
+        //             wirelessMode = 0;
+		// 			// wireless_mode_url = "./data/wireless.basic.json";
+		// 		}else if (curFreqBand == "5g"){
+        //             wirelessMode = 1;
+		// 			// wireless_mode_url = "./data/wireless.basic.5ghz.json";
+		// 		}else if (curFreqBand == "5g2"){
+        //             wirelessMode = 2;
+        //         }else if (curFreqBand == "6g"){
+        //             wirelessMode = 3;
+        //         }
+		// 		$.ajax({
+		// 			url: "./data/wireless.basic.json",
+		// 			type: 'GET',
+        //             data: {
+        //                 radioID: wirelessMode
+        //             },
+		// 			dataType: 'json',
+		// 			error: function(){return false;},
+		// 			success: function(response){
+		// 				if (curFreqBand == "2g" && response.data.wirelessmode == 2 /*802.11n Only*/)
+		// 				{
+		// 					/*WMM can not be disabled*/
+        //                     $("#wmm_disable_note").html($.su.CHAR.QOS_SETTING.WMM_DISABLE_11N);
+		// 					$("div#wmmDisabledNote").msg("show");
+		// 					$("#qos_setting_2g").form("load", {radioID: 0});
+		// 				}
+		// 				else if ((curFreqBand == "5g"||curFreqBand == "5g2") && (response.data.wirelessmode == 6 /*802.11n Only*/
+        //                     || response.data.wirelessmode == 8 /*802.11ac Only*/
+		// 					|| response.data.wirelessmode == 9 /*802.11n/ac Mixed*/))
+		// 				{
+        //                     if (response.data.wirelessmode == 6)
+        //                     {
+        //                         $("#wmm_disable_note").html($.su.CHAR.QOS_SETTING.WMM_DISABLE_11N);
+        //                     }
+        //                     else
+        //                     {
+        //                         $("#wmm_disable_note").html($.su.CHAR.QOS_SETTING.WMM_DISABLE_11NAC);
+        //                     }
+		// 					$("div#wmmDisabledNote").msg("show");
+		// 					$("#qos_setting_5g").form("load", {radioID: 1});
+		// 				}
+		// 			}
+		// 		});
+        //     }
+        // });
+
+        var noAck_status_selector = String.format("input#noAck_status_{0}", freqBand[fb_idx]);
+        $(noAck_status_selector).checkbox({
+            fieldLabel: $.su.CHAR.QOS_SETTING.NOACK_RADIO,
+			labelCls: "xxl",
+            items: [
+                {boxlabel: $.su.CHAR.QOS_SETTING.NOACK_ENABLE, uncheckedValue: "off", inputValue: "on"}
+            ]
+        });
+
+        var uapsd_status_selector = String.format("input#uapsd_status_{0}", freqBand[fb_idx]);
+        $(uapsd_status_selector).checkbox({
+            fieldLabel: $.su.CHAR.QOS_SETTING.UAPSD_RADIO,
+			labelCls: "xxl",
+            items: [
+                {boxlabel: $.su.CHAR.QOS_SETTING.UAPSD_ENABLE, uncheckedValue: "off", inputValue: "on"}
+            ]
+        });
+    }
+
+    $("form#qos_setting_2g").form({
+        proxy: {
+            url: URL_QOS,
+            timeout: 60000,
+            type: "GET"
+        },
+        fields: [
+            {name: "ap_vo_aifs",       mapping: "ap_vo_aifs"},
+            {name: "ap_vo_cwmin",      mapping: "ap_vo_cwmin"},
+            {name: "ap_vo_cwmax",      mapping: "ap_vo_cwmax"},
+            {name: "ap_vo_maxBurst",   mapping: "ap_vo_maxBurst"},
+            {name: "ap_vi_aifs",       mapping: "ap_vi_aifs"},
+            {name: "ap_vi_cwmin",      mapping: "ap_vi_cwmin"},
+            {name: "ap_vi_cwmax",      mapping: "ap_vi_cwmax"},
+            {name: "ap_vi_maxBurst",   mapping: "ap_vi_maxBurst"},
+            {name: "ap_be_aifs",       mapping: "ap_be_aifs"},
+            {name: "ap_be_cwmin",      mapping: "ap_be_cwmin"},
+            {name: "ap_be_cwmax",      mapping: "ap_be_cwmax"},
+            {name: "ap_be_maxBurst",   mapping: "ap_be_maxBurst"},
+            {name: "ap_bk_aifs",       mapping: "ap_bk_aifs"},
+            {name: "ap_bk_cwmin",      mapping: "ap_bk_cwmin"},
+            {name: "ap_bk_cwmax",      mapping: "ap_bk_cwmax"},
+            {name: "ap_bk_maxBurst",   mapping: "ap_bk_maxBurst"},
+
+            {name: "sta_vo_aifs",      mapping: "sta_vo_aifs"},
+            {name: "sta_vo_cwmin",     mapping: "sta_vo_cwmin"},
+            {name: "sta_vo_cwmax",     mapping: "sta_vo_cwmax"},
+            {name: "sta_vo_txopLimit", mapping: "sta_vo_txopLimit"},
+            {name: "sta_vi_aifs",      mapping: "sta_vi_aifs"},
+            {name: "sta_vi_cwmin",     mapping: "sta_vi_cwmin"},
+            {name: "sta_vi_cwmax",     mapping: "sta_vi_cwmax"},
+            {name: "sta_vi_txopLimit", mapping: "sta_vi_txopLimit"},
+            {name: "sta_be_aifs",      mapping: "sta_be_aifs"},
+            {name: "sta_be_cwmin",     mapping: "sta_be_cwmin"},
+            {name: "sta_be_cwmax",     mapping: "sta_be_cwmax"},
+            {name: "sta_be_txopLimit", mapping: "sta_be_txopLimit"},
+            {name: "sta_bk_aifs",      mapping: "sta_bk_aifs"},
+            {name: "sta_bk_cwmin",     mapping: "sta_bk_cwmin"},
+            {name: "sta_bk_cwmax",     mapping: "sta_bk_cwmax"},
+            {name: "sta_bk_txopLimit", mapping: "sta_bk_txopLimit"},
+
+            {name: "wmm_enable",       mapping: "wmm_enable"},
+            {name: "noAck_enable",     mapping: "noAck_enable"},
+            {name: "uapsd_enable",     mapping: "uapsd_enable"}
+        ],
+        autoLoad: false,
+        validator: function(){
+            if(false == checkQosForm("2g"))
+            {
+                //showTips();
+                return false;
+            }
+
+            hideTips();
+            return true;
+        },
+        submitBtn: "default"
+    });
+    $("#qos_setting_2g").form("load", {radioID: 0});
+
+    $("form#qos_setting_5g").form({
+        proxy: {
+            url: URL_QOS,
+            timeout: 60000,
+            type: "GET"
+        },
+        fields: [
+            {name: "ap_vo_aifs",       mapping: "ap_vo_aifs"},
+            {name: "ap_vo_cwmin",      mapping: "ap_vo_cwmin"},
+            {name: "ap_vo_cwmax",      mapping: "ap_vo_cwmax"},
+            {name: "ap_vo_maxBurst",   mapping: "ap_vo_maxBurst"},
+            {name: "ap_vi_aifs",       mapping: "ap_vi_aifs"},
+            {name: "ap_vi_cwmin",      mapping: "ap_vi_cwmin"},
+            {name: "ap_vi_cwmax",      mapping: "ap_vi_cwmax"},
+            {name: "ap_vi_maxBurst",   mapping: "ap_vi_maxBurst"},
+            {name: "ap_be_aifs",       mapping: "ap_be_aifs"},
+            {name: "ap_be_cwmin",      mapping: "ap_be_cwmin"},
+            {name: "ap_be_cwmax",      mapping: "ap_be_cwmax"},
+            {name: "ap_be_maxBurst",   mapping: "ap_be_maxBurst"},
+            {name: "ap_bk_aifs",       mapping: "ap_bk_aifs"},
+            {name: "ap_bk_cwmin",      mapping: "ap_bk_cwmin"},
+            {name: "ap_bk_cwmax",      mapping: "ap_bk_cwmax"},
+            {name: "ap_bk_maxBurst",   mapping: "ap_bk_maxBurst"},
+
+            {name: "sta_vo_aifs",      mapping: "sta_vo_aifs"},
+            {name: "sta_vo_cwmin",     mapping: "sta_vo_cwmin"},
+            {name: "sta_vo_cwmax",     mapping: "sta_vo_cwmax"},
+            {name: "sta_vo_txopLimit", mapping: "sta_vo_txopLimit"},
+            {name: "sta_vi_aifs",      mapping: "sta_vi_aifs"},
+            {name: "sta_vi_cwmin",     mapping: "sta_vi_cwmin"},
+            {name: "sta_vi_cwmax",     mapping: "sta_vi_cwmax"},
+            {name: "sta_vi_txopLimit", mapping: "sta_vi_txopLimit"},
+            {name: "sta_be_aifs",      mapping: "sta_be_aifs"},
+            {name: "sta_be_cwmin",     mapping: "sta_be_cwmin"},
+            {name: "sta_be_cwmax",     mapping: "sta_be_cwmax"},
+            {name: "sta_be_txopLimit", mapping: "sta_be_txopLimit"},
+            {name: "sta_bk_aifs",      mapping: "sta_bk_aifs"},
+            {name: "sta_bk_cwmin",     mapping: "sta_bk_cwmin"},
+            {name: "sta_bk_cwmax",     mapping: "sta_bk_cwmax"},
+            {name: "sta_bk_txopLimit", mapping: "sta_bk_txopLimit"},
+
+            {name: "wmm_enable",       mapping: "wmm_enable"},
+            {name: "noAck_enable",     mapping: "noAck_enable"},
+            {name: "uapsd_enable",     mapping: "uapsd_enable"}
+        ],
+        autoLoad: false,
+        validator: function(){
+            if(false == checkQosForm("5g"))
+            {
+                //showTips();
+                return false;
+            }
+
+            hideTips();
+            return true;
+        },
+        submitBtn: "default"
+    });
+
+    $("form#qos_setting_5g2").form({
+        proxy: {
+            url: URL_QOS,
+            timeout: 60000,
+            type: "GET"
+        },
+        fields: [
+            {name: "ap_vo_aifs",       mapping: "ap_vo_aifs"},
+            {name: "ap_vo_cwmin",      mapping: "ap_vo_cwmin"},
+            {name: "ap_vo_cwmax",      mapping: "ap_vo_cwmax"},
+            {name: "ap_vo_maxBurst",   mapping: "ap_vo_maxBurst"},
+            {name: "ap_vi_aifs",       mapping: "ap_vi_aifs"},
+            {name: "ap_vi_cwmin",      mapping: "ap_vi_cwmin"},
+            {name: "ap_vi_cwmax",      mapping: "ap_vi_cwmax"},
+            {name: "ap_vi_maxBurst",   mapping: "ap_vi_maxBurst"},
+            {name: "ap_be_aifs",       mapping: "ap_be_aifs"},
+            {name: "ap_be_cwmin",      mapping: "ap_be_cwmin"},
+            {name: "ap_be_cwmax",      mapping: "ap_be_cwmax"},
+            {name: "ap_be_maxBurst",   mapping: "ap_be_maxBurst"},
+            {name: "ap_bk_aifs",       mapping: "ap_bk_aifs"},
+            {name: "ap_bk_cwmin",      mapping: "ap_bk_cwmin"},
+            {name: "ap_bk_cwmax",      mapping: "ap_bk_cwmax"},
+            {name: "ap_bk_maxBurst",   mapping: "ap_bk_maxBurst"},
+
+            {name: "sta_vo_aifs",      mapping: "sta_vo_aifs"},
+            {name: "sta_vo_cwmin",     mapping: "sta_vo_cwmin"},
+            {name: "sta_vo_cwmax",     mapping: "sta_vo_cwmax"},
+            {name: "sta_vo_txopLimit", mapping: "sta_vo_txopLimit"},
+            {name: "sta_vi_aifs",      mapping: "sta_vi_aifs"},
+            {name: "sta_vi_cwmin",     mapping: "sta_vi_cwmin"},
+            {name: "sta_vi_cwmax",     mapping: "sta_vi_cwmax"},
+            {name: "sta_vi_txopLimit", mapping: "sta_vi_txopLimit"},
+            {name: "sta_be_aifs",      mapping: "sta_be_aifs"},
+            {name: "sta_be_cwmin",     mapping: "sta_be_cwmin"},
+            {name: "sta_be_cwmax",     mapping: "sta_be_cwmax"},
+            {name: "sta_be_txopLimit", mapping: "sta_be_txopLimit"},
+            {name: "sta_bk_aifs",      mapping: "sta_bk_aifs"},
+            {name: "sta_bk_cwmin",     mapping: "sta_bk_cwmin"},
+            {name: "sta_bk_cwmax",     mapping: "sta_bk_cwmax"},
+            {name: "sta_bk_txopLimit", mapping: "sta_bk_txopLimit"},
+
+            {name: "wmm_enable",       mapping: "wmm_enable"},
+            {name: "noAck_enable",     mapping: "noAck_enable"},
+            {name: "uapsd_enable",     mapping: "uapsd_enable"}
+        ],
+        autoLoad: false,
+        validator: function(){
+            if(false == checkQosForm("5g2"))
+            {
+                //showTips();
+                return false;
+            }
+
+            hideTips();
+            return true;
+        },
+        submitBtn: "default"
+    });
+
+    $("form#qos_setting_6g").form({
+        proxy: {
+            url: URL_QOS,
+            timeout: 60000,
+            type: "GET"
+        },
+        fields: [
+            {name: "ap_vo_aifs",       mapping: "ap_vo_aifs"},
+            {name: "ap_vo_cwmin",      mapping: "ap_vo_cwmin"},
+            {name: "ap_vo_cwmax",      mapping: "ap_vo_cwmax"},
+            {name: "ap_vo_maxBurst",   mapping: "ap_vo_maxBurst"},
+            {name: "ap_vi_aifs",       mapping: "ap_vi_aifs"},
+            {name: "ap_vi_cwmin",      mapping: "ap_vi_cwmin"},
+            {name: "ap_vi_cwmax",      mapping: "ap_vi_cwmax"},
+            {name: "ap_vi_maxBurst",   mapping: "ap_vi_maxBurst"},
+            {name: "ap_be_aifs",       mapping: "ap_be_aifs"},
+            {name: "ap_be_cwmin",      mapping: "ap_be_cwmin"},
+            {name: "ap_be_cwmax",      mapping: "ap_be_cwmax"},
+            {name: "ap_be_maxBurst",   mapping: "ap_be_maxBurst"},
+            {name: "ap_bk_aifs",       mapping: "ap_bk_aifs"},
+            {name: "ap_bk_cwmin",      mapping: "ap_bk_cwmin"},
+            {name: "ap_bk_cwmax",      mapping: "ap_bk_cwmax"},
+            {name: "ap_bk_maxBurst",   mapping: "ap_bk_maxBurst"},
+
+            {name: "sta_vo_aifs",      mapping: "sta_vo_aifs"},
+            {name: "sta_vo_cwmin",     mapping: "sta_vo_cwmin"},
+            {name: "sta_vo_cwmax",     mapping: "sta_vo_cwmax"},
+            {name: "sta_vo_txopLimit", mapping: "sta_vo_txopLimit"},
+            {name: "sta_vi_aifs",      mapping: "sta_vi_aifs"},
+            {name: "sta_vi_cwmin",     mapping: "sta_vi_cwmin"},
+            {name: "sta_vi_cwmax",     mapping: "sta_vi_cwmax"},
+            {name: "sta_vi_txopLimit", mapping: "sta_vi_txopLimit"},
+            {name: "sta_be_aifs",      mapping: "sta_be_aifs"},
+            {name: "sta_be_cwmin",     mapping: "sta_be_cwmin"},
+            {name: "sta_be_cwmax",     mapping: "sta_be_cwmax"},
+            {name: "sta_be_txopLimit", mapping: "sta_be_txopLimit"},
+            {name: "sta_bk_aifs",      mapping: "sta_bk_aifs"},
+            {name: "sta_bk_cwmin",     mapping: "sta_bk_cwmin"},
+            {name: "sta_bk_cwmax",     mapping: "sta_bk_cwmax"},
+            {name: "sta_bk_txopLimit", mapping: "sta_bk_txopLimit"},
+
+            {name: "wmm_enable",       mapping: "wmm_enable"},
+            {name: "noAck_enable",     mapping: "noAck_enable"},
+            {name: "uapsd_enable",     mapping: "uapsd_enable"}
+        ],
+        autoLoad: false,
+        validator: function(){
+            if(false == checkQosForm("6g"))
+            {
+                //showTips();
+                return false;
+            }
+
+            hideTips();
+            return true;
+        },
+        submitBtn: "default"
+    });
+
+	if (0 === $.su.dutMode)		/* single radio */
+	{
+		$("div#wireless-freq").hide();
+	}
+	if (1 === $.su.dutMode || 3 === $.su.dutMode)
+	{
+        $("#show-5g2").hide();
+        $("#show-5g").html($.su.CHAR.MODE.MODE_5G);
+	}
+	if (2 === $.su.dutMode || 4 === $.su.dutMode)
+	{
+        $("#show-5g2").show();
+        $("#show-5g").html($.su.CHAR.MODE.MODE_5G1);
+        $("#show-5g2").html($.su.CHAR.MODE.MODE_5G2);
+	}
+	if (3 === $.su.dutMode || 4 === $.su.dutMode)
+	{
+        $("#show-6g").show();
+	}else{
+        $("#show-6g").hide();
+    }
+
+});
+</script>
+</body>
+
+</html>

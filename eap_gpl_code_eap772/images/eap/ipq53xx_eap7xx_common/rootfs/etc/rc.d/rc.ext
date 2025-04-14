@@ -1,0 +1,22 @@
+#!/bin/sh
+productCfgFile=$(head -n 1 /tmp/cfgFilePath)
+max_Radio_Num=`cat "$productCfgFile/radio_config.json" | grep maxRadioSupp | cut -d ":" -f2 | tr -d ' ' | tr -d ','`
+if [ "$max_Radio_Num" -eq 1 ]; then
+maxRadioNum=1
+elif [ "$max_Radio_Num" -eq 2 ]; then
+maxRadioNum=2
+elif [ "$max_Radio_Num" -eq 3 ]; then
+maxRadioNum=3
+else
+maxRadioNum=0xFFF
+fi
+
+if [ -f /tmp/kernel_module_path ]; then
+	kernel_module_path=`cat /tmp/kernel_module_path`
+	cd $kernel_module_path
+	insmod urlfilter.ko l_maxRadioNum=$maxRadioNum
+
+	rm /tmp/kernel_module_path
+else
+	echo "/tmp/kernel_module_path not exist, some ko maybe miss !!!" > /dev/console
+fi

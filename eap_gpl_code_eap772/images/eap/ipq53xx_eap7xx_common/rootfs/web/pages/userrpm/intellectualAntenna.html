@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Smart Antenna</title>
+</head>
+
+<body>
+	<div class="func-container">
+		<div id="smart_antenna">
+			<form id="smart_antenna_form" class="no-padding">
+				<input type="text"  id="smart_antenna" name="wireless_isenable_smartant" value="0" />
+				<div class="note">
+					<h5 id="smart_antenna_note_title" class="title"></h5>
+					<p id="smart_antenna_note_content" class="content"></p>
+				</div>
+			</form>
+		</div>
+	</div>
+	
+<script type="text/javascript">
+//<![CDATA[
+$(document).ready(function(e){
+	var CHECKBOX_ENABLE = {
+		CHECKED: "1",
+		UNCHECKED: "0"
+	}
+	
+	$("#smart_antenna_note_title").html($.su.CHAR.ANTENNA.NOTE_TITLE + ":");
+	$("#smart_antenna_note_content").html($.su.CHAR.ANTENNA.SMART_ANTENNA_NOTE);
+
+	$("div.func-container").page({
+		title: $.su.CHAR.ANTENNA.SMART_ANTENNA,
+		help: ""	//可能是个调用的id 也可能是个url
+	});
+
+	$('div#smart_antenna').panel({
+		title: $.su.CHAR.ANTENNA.SMART_ANTENNA,
+		collapsible: false
+	});
+	
+	$("input#smart_antenna").checkbox({
+		fieldLabel: $.su.CHAR.ANTENNA.SMART_ANTENNA,
+		labelCls: 'l',
+		items: [
+			{boxlabel: $.su.CHAR.OPERATION.ENABLE, inputValue: CHECKBOX_ENABLE.CHECKED, uncheckedValue: CHECKBOX_ENABLE.UNCHECKED}
+		]
+	});
+	
+	var smartAntennaProxy = new $.su.Proxy({
+		url: "./data/smartantenna.json"
+	});
+
+	$("form#smart_antenna_form").form({
+		proxy: smartAntennaProxy,
+		fields: [{
+			name: "wireless_isenable_smartant", mapping: "isenable_smartant"
+		}],
+		autoLoad: true,
+		submitBtn: "default"
+	});
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+{
+"EIRP": true,
+"maxStaPerRadio":128,
+"maxRadioSupp": 3,
+"radioTable": [
+	{
+		"band": 2,
+		"mimo": 2,
+		"anttgain": 2, 
+		"mode": 55,
+		"modeCap": 436,
+		"mcslvl": 13,
+		"ifindex": 0,
+		"aniMaxlvl": 35,
+		"burst": 16000,
+		"mloSupp": false,
+		"muMimoSupp": 0
+	},
+	{
+		"band": 5,
+		"mimo": 2,
+		"anttgain": 2, 
+		"mode": 62,
+		"modeCap": 1380,
+		"mcslvl": 13,
+		"ifindex": 1,
+		"mesh": {
+			"meshId": 0,
+			"bkhap": "bkhap1",
+			"sta": "sta1"
+		},
+		"burst": 8000,
+		"mloSupp": true,
+		"muMimoSupp": 31
+	},
+	{
+		"band": 6,
+		"mimo": 2,
+		"anttgain": 2, 
+		"mode": 48,
+		"modeCap": 520,
+		"mcslvl": 13,
+		"ifindex": 2,
+		"mesh": {
+			"meshId": 1,
+			"bkhap": "bkhap2",
+			"sta": "sta2"
+		},
+		"burst": 8000,
+		"pwrLimitBw": [13, 16, 19, 22, 23],
+		"mloSupp": true,
+		"muMimoSupp": 31
+	}],
+	"dfsImproveSupp": false,
+	"ofdmaCfgSupp": true,
+	"noAutoWradarSupp": false,
+	"n1024QAMSupp": true
+}

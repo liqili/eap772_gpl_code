@@ -1,0 +1,1236 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Statistics</title>
+<style type="text/css">
+
+	/*div#monitor_ap div#apListGrid table tr.hover{
+        color: rgb(31, 187, 166);
+		cursor: pointer;
+    }*/
+
+	/*div#monitor_ap div#apListGrid table tr.selected{
+        background-color: rgb(31, 187, 166);
+		color: rgb(255, 255, 255);
+    }*/
+
+	div#monitor_ap div.statistics_tab{
+		margin: 50px 0 20px 20px;
+	}
+	div#monitor_ap div.statistics_tab ul li{
+		display: inline-block;
+	}
+	div#monitor_ap div.statistics_tab ul li.tab_text{
+		cursor: pointer;
+		padding: 0 4px 0;
+	}
+	div#monitor_ap div.statistics_tab ul li.tab_cur{
+		/*color: rgb(31, 187, 166);*/
+		color: #4acbd6;
+	}
+
+	div#monitor_ap div.wireless_settings div.mode_change,
+	div#monitor_ap div.wireless_signal div.mode_change,
+	div#monitor_ap div.rdTraffic div.mode_change{
+		margin-bottom: 12px;
+	}
+
+	div#monitor_ap div.wireless_settings span.span_text,
+	div#monitor_ap div.wireless_signal span.span_text,
+	div#monitor_ap div.rdTraffic span.span_text{
+		cursor: pointer;
+	}
+	div#monitor_ap div.wireless_settings span.mode_selected,
+	div#monitor_ap div.wireless_signal span.mode_selected,
+	div#monitor_ap div.rdTraffic span.mode_selected{
+		/*color: rgb(31, 187, 166);*/
+		color: #4acbd6;
+	}
+
+	div#monitor_ap div.dev_info,
+	div#monitor_ap div.wireless_settings,
+	div#monitor_ap div.wireless_signal,
+	div#monitor_ap div.lan_info,
+	div#monitor_ap div.throughput,
+	div#monitor_ap div.client,
+	div#monitor_ap div.lanTraffic,
+	div#monitor_ap div.rdTraffic{
+		margin: 20px 0 30px 23px;
+	}
+
+	div#monitor_ap div.client,
+	div#monitor_ap div.lanTraffic,
+	div#monitor_ap div.rdTraffic{
+		margin-top: 20px;
+	}
+
+	div#monitor_ap div.client span.block_content{
+		/*color: rgb(31, 187, 166);*/
+		color: #4acbd6;
+		cursor: pointer;
+	}
+
+	div#monitor_ap div.lanTraffic table,
+	div#monitor_ap div.rdTraffic table{
+		margin-left: 25px;
+	}
+	div#monitor_ap div.lanTraffic .label_wrap,
+	div#monitor_ap div.rdTraffic .label_wrap{
+		width: 142px;
+		text-align: left;
+	}
+
+</style>
+</head>
+
+<body>
+<div class="func-container">
+
+    <div id="monitor_ap">
+
+		<div id="ap_list">
+			<div id="apListGrid">
+			</div>
+		</div>
+
+		<div class="statistics_tab">
+			<ul>
+				<li class="tab_text" id="tab_devinfo"></li>
+				<li class="tab_separator"> | </li>
+				<li class="tab_text" id="tab_wset"></li>
+				<li class="tab_separator"> | </li>
+				<li class="tab_text" style="display: none;" id="tab_wsignal"></li>
+				<li class="tab_separator" style="display: none;" id="tab_wsignal_separator"> | </li>
+				<li class="tab_text" id="tab_laninfo"></li>
+				<li class="tab_separator"> | </li>
+				<li class="tab_text" style="display: none;" id="tab_throughput"></li>
+				<li class="tab_separator" style="display: none;"> | </li>
+				<li class="tab_text" id="tab_client"></li>
+				<li class="tab_separator" id="tab_client_separator"> | </li>
+				<li class="tab_text" id="tab_lanTraffic"></li>
+				<li class="tab_separator"> | </li>
+				<li class="tab_text" id="tab_rdTraffic"></li>
+			</ul>
+		</div>
+
+		<div class="dev_info">
+			<input type="text" id="dev_name"   name="dev_name" />
+			<input type="text" id="dev_model"  name="dev_model" />
+			<input type="text" id="firm_ver"   name="firm_ver" />
+			<input type="text" id="sys_time"   name="sys_time" />
+			<input type="text" id="sys_uptime" name="sys_uptime" />
+			<div><input type="text" id="sys_cpu"    name="sys_cpu" /></div>
+			<div><input type="text" id="sys_mem"    name="sys_mem" /></div>
+		</div>
+
+		<div class="wireless_settings">
+			<div class="mode_change">
+				<span id="wireless_settings_2g" class="span_text"></span>
+				<span> | </span>
+				<span id="wireless_settings_5g" class="span_text"></span>
+			</div>
+
+			<input class="hidden" type="text" id="region"    name="region" />
+			<input type="text" id="channel"   name="channel" />
+			<input type="text" id="bandWidth" name="bandWidth" />
+			<input type="text" id="rdMode"    name="rdMode" />
+			<input type="text" id="txRate"    name="txRate" />
+			<input type="text" id="txPower"   name="txPower" />
+		</div>
+
+		<div class="wireless_signal">
+			<div class="mode_change">
+				<span id="wireless_signal_2g" class="span_text"></span>
+				<span> | </span>
+				<span id="wireless_signal_5g" class="span_text"></span>
+			</div>
+
+			<input type="text" id="signal" name="signal" />
+			<input type="text" id="noise" name="noise" />
+			<input type="text" id="snr" name="snr" />
+			<input type="text" id="ccq" name="ccq" />
+		</div>
+
+		<div class="lan_info">
+			<input type="text" id="mac_addr"    name="mac_addr" />
+			<input type="text" id="ip_addr"     name="ip_addr" />
+			<input type="text" id="subnet_mask" name="subnet_mask" />
+			<!-- <input type="text" id="lan_port"    name="lan_port" /> -->
+		</div>
+
+		<div class="throughput">
+			<span style="margin-left: 100px;"></span>
+		</div>
+
+		<div class="client">
+			<div id="clientGrid">
+			</div>
+		</div>
+
+		<div class="lanTraffic">
+			<table>
+				<tr>
+					<td><input type="text" id="lan_rx_packets" name="lan_rx_packets" /></td>
+					<td><input type="text" id="lan_tx_packets" name="lan_tx_packets" /></td>
+				</tr>
+				<tr>
+					<td><input type="text" id="lan_rx_bytes" name="lan_rx_bytes" /></td>
+					<td><input type="text" id="lan_tx_bytes" name="lan_tx_bytes" /></td>
+				</tr>
+				<tr>
+					<td><input type="text" id="lan_rx_droped_packets" name="lan_rx_droped_packets" /></td>
+					<td><input type="text" id="lan_tx_droped_packets" name="lan_tx_droped_packets" /></td>
+				</tr>
+				<tr style="display:none;">
+					<td><input type="text" id="lan_rx_droped_bytes" name="lan_rx_droped_bytes" /></td>
+					<td><input type="text" id="lan_tx_droped_bytes" name="lan_tx_droped_bytes" /></td>
+				</tr>
+				<tr>
+					<td><input type="text" id="lan_rx_errors" name="lan_rx_errors" /></td>
+					<td><input type="text" id="lan_tx_errors" name="lan_tx_errors" /></td>
+				</tr>
+			</table>
+		</div>
+
+		<div class="rdTraffic">
+			<div class="mode_change">
+				<span id="lan_traffic_2g" class="span_text"></span>
+				<span> | </span>
+				<span id="lan_traffic_5g" class="span_text"></span>
+			</div>
+
+			<table>
+				<tr>
+					<td><input type="text" id="rd_rx_packets" name="rd_rx_packets" /></td>
+					<td><input type="text" id="rd_tx_packets" name="rd_tx_packets" /></td>
+				</tr>
+				<tr>
+					<td><input type="text" id="rd_rx_bytes" name="rd_rx_bytes" /></td>
+					<td><input type="text" id="rd_tx_bytes" name="rd_tx_bytes" /></td>
+				</tr>
+				<tr>
+					<td><input type="text" id="rd_rx_droped_packets" name="rd_rx_droped_packets" /></td>
+					<td><input type="text" id="rd_tx_droped_packets" name="rd_tx_droped_packets" /></td>
+				</tr>
+				<tr style="display:none;">
+					<td><input type="text" id="rd_rx_droped_bytes" name="rd_rx_droped_bytes" /></td>
+					<td><input type="text" id="rd_tx_droped_bytes" name="rd_tx_droped_bytes" /></td>
+				</tr>
+				<tr>
+					<td><input type="text" id="rd_rx_errors" name="rd_rx_errors" /></td>
+					<td><input type="text" id="rd_tx_errors" name="rd_tx_errors" /></td>
+				</tr>
+			</table>
+		</div>
+
+	</div>
+
+</div>
+<script type="text/javascript">
+//<![CDATA[
+$(document).ready(function(e){
+
+	var curAPMac;
+
+	var freqBand_2g = 0;
+	var freqBand_5g = 1;
+
+	var URL_APLIST      = "./data/monitor.ap.aplist.json";
+	var URL_DEVINFO     = "./data/monitor.ap.devinfo.json";
+	var URL_WSETTING    = "./data/monitor.ap.wsetting.json";
+	var URL_WSIGNAL     = "./data/monitor.ap.wsignal.json";
+	var URL_LANINFO     = "./data/monitor.ap.laninfo.json";
+	var URL_CLIENT      = "./data/monitor.ap.client.json";
+	var URL_INTERFACE   = "./data/monitor.ap.interface.json";
+	var URL_BLOCK       = "./data/monitor.ap.block.json";
+	
+	var getRadio = 1;
+
+    String.format = function(src){
+        if (arguments.length == 0) return null;
+        var args = Array.prototype.slice.call(arguments, 1);
+        return src.replace(/\{(\d+)\}/g, function(m, i){
+            return args[i];
+        });
+    };
+
+	function num2Str(num)
+	{
+		var str = "";
+		if(num <= 1000)
+		{
+			str += num;
+		}
+		else
+		{
+			str += Math.floor(num/1000) + "k";
+		}
+
+		return str;
+	}
+
+	function regionId2Name(region_id)
+	{
+
+		for (var k in $.su.CHAR.REGION_ID)
+		{
+			if (region_id == k.substr(1))
+			{
+				return $.su.CHAR.REGION_ID[k];
+			}
+		}
+
+		return region_id;
+	}
+	
+	function getDutMode()
+	{
+		var data = {};
+		if (getRadio == 0)
+		{
+			return;
+		}
+		
+		data = $.extend({"operation": "read"}, data);
+		getRadio = 0;
+		return $.ajax({
+			type: "GET",
+			url: "./data/sysmod.json",
+			timeout: 3000,
+			dataType: "json",
+			cache: false,
+			data: data,
+			traditional: true,
+			success: function(data){
+				if(data.success && 0 == data.errCode)
+				{
+					$.su.dutMode = data.data.multiRadio;
+					$.su.dutManageMode = data.data.newMode;
+				}
+			},
+			error: function(e, status){
+				//console.log("error", e, status);
+			}
+		});
+	}
+
+	function devInfo_load(data)
+	{
+		var data = $.extend({
+			"operation": "read"
+		}, data);
+
+		return $.ajax({
+			url: URL_DEVINFO,
+			type: "GET",
+			timeout: 5000,
+			dataType: "json",
+			data: data,
+			cache: false,
+			success: function(data, status, xhr){
+				if (data.success)
+				{   
+					$("input#dev_name").textbox("setValue", data.data.dev_name);
+					$("input#dev_model").textbox("setValue", data.data.dev_model);
+					$("input#firm_ver").textbox("setValue", data.data.firm_ver);
+					$("input#sys_time").textbox("setValue", data.data.sys_time);
+					$("input#sys_uptime").textbox("setValue", data.data.sys_uptime);
+					$("input#sys_cpu").progressbar("setValue", (data.data.sys_cpu)/100);
+					$("input#sys_mem").progressbar("setValue", (data.data.sys_mem)/100);
+				}
+			},
+			error: function(e, status){
+				//console.log("error", e, status);
+			}
+		});
+	}
+
+	function wsetting_load(data, freqBand)
+	{
+		var data = $.extend({
+			"operation": "read",
+			"radioId": freqBand
+		}, data);
+
+		return $.ajax({
+			url: URL_WSETTING,
+			type: "GET",
+			timeout: 5000,
+			dataType: "json",
+			data: data,
+			cache: false,
+			success: function(data, status, xhr){
+				if (data.success)
+				{
+					//$("input#region").textbox("setValue", regionId2Name(data.data.region));
+					$("input#channel").textbox("setValue", data.data.channel);
+					$("input#bandWidth").textbox("setValue", data.data.bandWidth);
+					$("input#rdMode").textbox("setValue", data.data.rdMode);
+					$("input#txRate").textbox("setValue", data.data.txRate);
+					$("input#txPower").textbox("setValue", data.data.txPower);
+				}
+			},
+			error: function(e, status){
+				//console.log("error", e, status);
+			}
+		});
+	}
+
+	function wsignal_load(data, freqBand)
+	{
+		var data = $.extend({
+			"operation": "read",
+			"radioId": freqBand
+		}, data);
+
+		return $.ajax({
+			url: URL_WSIGNAL,
+			type: "GET",
+			timeout: 5000,
+			dataType: "json",
+			data: data,
+			cache: false,
+			success: function(data, status, xhr){
+				if (data.success)
+				{
+					$("input#signal").textbox("setValue", data.data.signal);
+					$("input#noise").textbox("setValue", data.data.noise);
+					$("input#snr").textbox("setValue", data.data.snr);
+					$("input#ccq").textbox("setValue", data.data.ccq);
+				}
+			},
+			error: function(e, status){
+				//console.log("error", e, status);
+			}
+		});
+	}
+
+	function lanInfo_load(data)
+	{
+		var data = $.extend({
+			"operation": "read"
+		}, data);
+
+		return $.ajax({
+			url: URL_LANINFO,
+			type: "GET",
+			timeout: 5000,
+			dataType: "json",
+			data: data,
+			cache: false,
+			success: function(data, status, xhr){
+				if (data.success)
+				{
+					$("input#mac_addr").textbox("setValue", data.data.mac_addr);
+					$("input#ip_addr").textbox("setValue", data.data.ip_addr);
+					$("input#subnet_mask").textbox("setValue", data.data.subnet_mask);	
+					
+					$('div.lan_info input.lan_info').closest('.text-container').remove();
+					for (var i = 0, len = data.data.lan_port_list.length; i < len; i++) {
+						var info = data.data.lan_port_list[i];
+						var id = 'lan_port' + i;
+						$('div.lan_info').append('<input type="text" id="'+ id +'" name="'+ id +'" />');
+						$("input#" + id).textbox({
+							fieldLabel: info.name,
+							inputCls: "xl lan_info",
+							readOnly: true
+						});
+						$("input#" + id).textbox("setValue", info.status);
+					}
+				}
+			},
+			error: function(e, status){
+				//console.log("error", e, status);
+			}
+		});
+	}
+
+	function lanTraffic_load(data)
+	{
+		var data = $.extend({
+			"operation": "read",
+			"interface": "LAN"
+		}, data);
+
+		return $.ajax({
+			url: URL_INTERFACE,
+			type: "GET",
+			timeout: 5000,
+			dataType: "json",
+			data: data,
+			cache: false,
+			success: function(data, status, xhr){
+				if (data.success)
+				{
+					$("input#lan_rx_packets").textbox("setValue", data.data.rx_packets);
+					$("input#lan_tx_packets").textbox("setValue", data.data.tx_packets);
+
+					$("input#lan_rx_bytes").textbox("setValue", data.data.rx_bytes);
+					$("input#lan_tx_bytes").textbox("setValue", data.data.tx_bytes);
+
+					$("input#lan_rx_droped_packets").textbox("setValue", data.data.rx_droped_packets);
+					$("input#lan_tx_droped_packets").textbox("setValue", data.data.tx_droped_packets);
+
+					$("input#lan_rx_droped_bytes").textbox("setValue", data.data.rx_droped_bytes);
+					$("input#lan_tx_droped_bytes").textbox("setValue", data.data.tx_droped_bytes);
+
+					$("input#lan_rx_errors").textbox("setValue", data.data.rx_errors);
+					$("input#lan_tx_errors").textbox("setValue", data.data.tx_errors);
+				}
+			},
+			error: function(e, status){
+				//console.log("error", e, status);
+			}
+		});
+	}
+
+	function radioTraffic_load(data, freqBand)
+	{
+		var data = $.extend({
+			"operation": "read",
+			"interface": "WIFI" + freqBand
+		}, data);
+
+		return $.ajax({
+			url: URL_INTERFACE,
+			type: "GET",
+			timeout: 5000,
+			dataType: "json",
+			data: data,
+			cache: false,
+			success: function(data, status, xhr){
+				if (data.success)
+				{
+					$("input#rd_rx_packets").textbox("setValue", data.data.rx_packets);
+					$("input#rd_tx_packets").textbox("setValue", data.data.tx_packets);
+
+					$("input#rd_rx_bytes").textbox("setValue", data.data.rx_bytes);
+					$("input#rd_tx_bytes").textbox("setValue", data.data.tx_bytes);
+
+					$("input#rd_rx_droped_packets").textbox("setValue", data.data.rx_droped_packets);
+					$("input#rd_tx_droped_packets").textbox("setValue", data.data.tx_droped_packets);
+
+					$("input#rd_rx_droped_bytes").textbox("setValue", data.data.rx_droped_bytes);
+					$("input#rd_tx_droped_bytes").textbox("setValue", data.data.tx_droped_bytes);
+
+					$("input#rd_rx_errors").textbox("setValue", data.data.rx_errors);
+					$("input#rd_tx_errors").textbox("setValue", data.data.tx_errors);
+				}
+			},
+			error: function(e, status){
+				console.log("error", e, status);
+			}
+		});
+	}
+
+	$("div.statistics_tab #tab_devinfo").html($.su.CHAR.MONITOR_AP.DEVINFO);
+	$("div.statistics_tab #tab_wset").html($.su.CHAR.MONITOR_AP.WSETTING);
+	$("div.statistics_tab #tab_wsignal").html($.su.CHAR.MONITOR_AP.WSIGNAL);
+	$("div.statistics_tab #tab_laninfo").html($.su.CHAR.MONITOR_AP.LANINFO);
+	$("div.statistics_tab #tab_throughput").html($.su.CHAR.MONITOR_AP.THROUGHPUT);
+	$("div.statistics_tab #tab_client").html($.su.CHAR.MONITOR_AP.CLIENT);
+	$("div.statistics_tab #tab_lanTraffic").html($.su.CHAR.MONITOR_AP.LANTRAFFIC);
+	$("div.statistics_tab #tab_rdTraffic").html($.su.CHAR.MONITOR_AP.RADIOTRAFFIC);
+	$("span#wireless_settings_2g").html($.su.CHAR.MODE.MODE_2G);
+	$("span#wireless_settings_5g").html($.su.CHAR.MODE.MODE_5G);
+	$("span#wireless_signal_2g").html($.su.CHAR.MODE.MODE_2G);
+	$("span#wireless_signal_5g").html($.su.CHAR.MODE.MODE_5G);
+	$("span#lan_traffic_2g").html($.su.CHAR.MODE.MODE_2G);
+	$("span#lan_traffic_5g").html($.su.CHAR.MODE.MODE_5G);
+
+	$("div.func-container").page({
+		title: $.su.CHAR.MONITOR_AP.TITLE,
+		help: ""
+	});
+
+	$("div#ap_list").panel({
+		title: $.su.CHAR.MONITOR_AP.APLISTTITLE,
+		collapsible: false
+	});
+
+    var apListStore = new $.su.Store({
+        proxy: {
+            url: URL_APLIST,
+            type: "GET"
+        },
+        fields: [
+            {name: "Name"},
+            {name: "MAC"},
+			{name: "HardVer"},
+            {name: "StaNum"}
+        ],
+        autoLoad: true,
+		updateMode: "complete"
+    });
+
+    $("div#apListGrid").grid({
+        store: apListStore,
+		paging: {numPerPage: 4},
+        columns: [
+			{
+				xtype: "rownumberer",
+				width: 100
+			},
+			{
+				text: $.su.CHAR.MONITOR_AP.DEVICENAME,
+				width: 245,
+				dataIndex: "Name"
+			},
+			{
+				text: $.su.CHAR.MONITOR_AP.MACADDR,
+				width: 245,
+				dataIndex: "MAC"
+			},
+			{
+				text: $.su.CHAR.MONITOR_AP.HARDVER,
+				width: 245,
+				dataIndex: "HardVer"
+			},
+			{
+				text: $.su.CHAR.MONITOR_AP.STANUM,
+				/*width: 220,*/
+				dataIndex: "StaNum"
+			}
+        ],
+		operation: [
+			"refresh"
+		]
+    }).on("ev_load", function(e, data, start, len){
+		$("div#apListGrid .grid-content-container table tr:first").trigger("click");
+	});
+
+    $("div#apListGrid").delegate(".grid-content-container table tr",
+        "mouseenter mouseleave", function(){
+            $(this).toggleClass("hover");
+        }
+    );
+
+    $("div#apListGrid").delegate(".grid-content-container table tr",
+        "click", function(){
+			var t = $(this);
+			t.closest("table").find("tr").removeClass("selected");
+			
+            setTimeout(function(){
+				t.addClass("selected")
+			}, 200);	//firefox bug
+
+			$(this).find("td").each(function(i){
+				if ($(this).attr("name") == "MAC")
+				{
+					curAPMac = $(this).find(".content").text();
+				}
+			});
+
+			$("div.statistics_tab #tab_devinfo").trigger("click");
+
+        }
+    );
+
+	/* Device Information */
+	$("input#dev_name").textbox({
+		fieldLabel: $.su.CHAR.MONITOR_AP.DEVNAME,
+		inputCls: "xxl",
+		readOnly: true
+	});
+
+	$("input#dev_model").textbox({
+		fieldLabel: $.su.CHAR.MONITOR_AP.DEVMODEL,
+		inputCls: "xl",
+		readOnly: true
+	});
+
+	$("input#firm_ver").textbox({
+		fieldLabel: $.su.CHAR.MONITOR_AP.FIRMVER,
+		inputCls: "xxl",
+		readOnly: true
+	});
+
+	$("input#sys_time").textbox({
+		fieldLabel: $.su.CHAR.MONITOR_AP.SYSTIME,
+		inputCls: "xl",
+		readOnly: true
+	});
+
+	$("input#sys_uptime").textbox({
+		fieldLabel: $.su.CHAR.MONITOR_AP.SYSUPTIME,
+		inputCls: "xl",
+		readOnly: true
+	});
+
+	$("input#sys_cpu").progressbar({
+		text: "",
+		fieldLabel: $.su.CHAR.MONITOR_AP.SYSCPU,
+		cls: 'performance-memory-usage',
+		unit: "%",
+		expression: "percentage*1",
+		value: 0.1,
+		isProgressbar: true,
+		showPercentage: true,
+		width: 210,
+		height: 6
+	});
+
+	$("input#sys_mem").progressbar({
+		text: "",
+		fieldLabel: $.su.CHAR.MONITOR_AP.SYSMEM,
+		cls: 'performance-memory-usage',
+		unit: "%",
+		expression: "percentage*1",
+		value: 0.1,
+		isProgressbar: true,
+		showPercentage: true,
+		width: 210,
+		height: 6
+	});
+
+	$("input#channel").textbox({
+		fieldLabel: $.su.CHAR.MONITOR_AP.CHANNEL,
+		inputCls: "xl",
+		readOnly: true
+	});
+
+	$("input#bandWidth").textbox({
+		fieldLabel: $.su.CHAR.MONITOR_AP.BANDWIDTH,
+		inputCls: "xl",
+		readOnly: true
+	});
+
+	$("input#rdMode").textbox({
+		fieldLabel: $.su.CHAR.MONITOR_AP.RDMODE,
+		inputCls: "xl",
+		readOnly: true
+	});
+
+	$("input#txRate").textbox({
+		fieldLabel: $.su.CHAR.MONITOR_AP.TXRATE,
+		inputCls: "xl",
+		readOnly: true
+	});
+
+	$("input#txPower").textbox({
+		fieldLabel: $.su.CHAR.MONITOR_AP.TXPOWER,
+		inputCls: "xl",
+		readOnly: true
+	});
+
+	$("div.wireless_settings").delegate("span#wireless_settings_2g", "click", function(){
+		wsetting_load({"apMac":curAPMac}, freqBand_2g);
+
+		$("div.wireless_settings").find("span").removeClass("mode_selected");
+		$(this).addClass("mode_selected");
+	});
+
+	$("div.wireless_settings").delegate("span#wireless_settings_5g", "click", function(){
+		wsetting_load({"apMac":curAPMac}, freqBand_5g);
+
+		$("div.wireless_settings").find("span").removeClass("mode_selected");
+		$(this).addClass("mode_selected");
+	});
+
+	/* Wireless Signal Quality */
+	$("input#signal").textbox({
+		fieldLabel: $.su.CHAR.MONITOR_AP.SIGNAL,
+		inputCls: "xl",
+		readOnly: true
+	});
+
+	$("input#noise").textbox({
+		fieldLabel: $.su.CHAR.MONITOR_AP.NOISE,
+		inputCls: "xl",
+		readOnly: true
+	});
+
+	$("input#snr").textbox({
+		fieldLabel: $.su.CHAR.MONITOR_AP.SNR,
+		inputCls: "xl",
+		readOnly: true
+	});
+
+	$("input#ccq").textbox({
+		fieldLabel: $.su.CHAR.MONITOR_AP.CCQ,
+		inputCls: "xl",
+		readOnly: true
+	});
+
+	$("div.wireless_signal").delegate("span#wireless_signal_2g", "click", function(){
+		wsignal_load({"apMac":curAPMac}, freqBand_2g);
+
+		$("div.wireless_signal").find("span").removeClass("mode_selected");
+		$(this).addClass("mode_selected");
+	});
+
+	$("div.wireless_signal").delegate("span#wireless_signal_5g", "click", function(){
+		wsignal_load({"apMac":curAPMac}, freqBand_5g);
+
+		$("div.wireless_signal").find("span").removeClass("mode_selected");
+		$(this).addClass("mode_selected");
+	});
+
+	/* Lan Information */
+	$("input#mac_addr").textbox({
+		fieldLabel: $.su.CHAR.MONITOR_AP.LANMAC,
+		inputCls: "xl",
+		readOnly: true
+	});
+
+	$("input#ip_addr").textbox({
+		fieldLabel: $.su.CHAR.MONITOR_AP.IPADDR,
+		inputCls: "xl",
+		readOnly: true
+	});
+
+	$("input#subnet_mask").textbox({
+		fieldLabel: $.su.CHAR.MONITOR_AP.SUBNETMASK,
+		inputCls: "xl",
+		readOnly: true
+	});
+
+	// $("input#lan_port").textbox({
+	// 	fieldLabel: $.su.CHAR.MONITOR_AP.LANPORT,
+	// 	inputCls: "xl",
+	// 	readOnly: true
+	// });
+
+	/* Client */
+	/*=====================================================*/
+    var clientStore = new $.su.Store({
+        proxy: {
+            url: URL_CLIENT,
+            type: "GET"
+        },
+        fields: [
+        	{name: "key"},
+        	{name: "Radio"},
+            {name: "MAC"},
+            {name: "IP"},
+			{name: "SSID"},
+            {name: "SNR"},
+            {name: "CCQ"},
+			{name: "Rate"},
+            {name: "Down"},
+            {name: "Up"},
+			{name: "ActiveTime"}
+        ],
+        autoLoad: false,
+        keyProperty: "key",
+		updateMode: "complete"
+    });
+
+	$("div#clientGrid").grid({
+		store: clientStore,
+		paging: {numPerPage: 8},
+		columns: [
+			{
+				xtype: "rownumberer",
+				width: 40
+			},
+			{
+				text: $.su.CHAR.MONITOR_AP.CLIENTMAC,
+				width: 145,
+				dataIndex: "MAC"
+			},
+			
+			{
+				text: $.su.CHAR.MAC_FILTERING.BAND,
+				width: 65,
+				dataIndex: "Radio"
+			},
+			
+			{
+				text: $.su.CHAR.MONITOR_AP.CLENTSSID,
+				width: 150,
+				dataIndex: "SSID"
+			},
+			{
+				text: $.su.CHAR.MONITOR_AP.CLIENTSNR,
+				width: 65,
+				dataIndex: "SNR",
+				renderer: function(val){
+					return val;
+				}
+			},
+			{
+				text: $.su.CHAR.MONITOR_AP.CLIENTCCQ,
+				width: 70,
+				dataIndex: "CCQ",
+			},
+			{
+				text: $.su.CHAR.MONITOR_AP.CLIENTRATE,
+				width: 85,
+				dataIndex: "Rate",
+				renderer: function(val){
+					return val;
+				}
+			},
+			{
+				text: $.su.CHAR.MONITOR_AP.CLIENTDOWN,
+				width: 85,
+				dataIndex: "Down",
+				renderer: function(val){
+					return num2Str(val);
+				}
+			},
+			{
+				text: $.su.CHAR.MONITOR_AP.CLIENTUP,
+				width: 85,
+				dataIndex: "Up",
+				renderer: function(val){
+					return num2Str(val);
+				}
+			},
+			{
+				text: $.su.CHAR.MONITOR_AP.CLIENTATTIME,
+				/*width: 95,*/
+				dataIndex: "ActiveTime"
+			}
+		]
+	});
+	/*=====================================================*/
+	$("div#clientGrid").delegate(".block_content", "click", function(){
+		var cItem = $("div#clientGrid").grid("getStore").getData($(this).attr("key"));
+
+		var data = {};
+		data = $.extend({
+			"operation": $(this).attr("op"),
+			"apMac":     curAPMac,
+			"radio":     cItem["Radio"],
+			"clientMac": cItem["MAC"]
+		}, data);
+
+		$.ajax({
+            type: "GET",
+            url: URL_BLOCK,
+            timeout: 5000,
+            dataType: "json",
+            cache: false,
+            data: data,
+            traditional: true,
+			success: function(data){
+				if(data.success){
+					$("div#clientGrid").grid("getStore").load({"apMac":curAPMac});
+				}
+			},
+			error: function(e, status){
+				console.log("error", e, status);
+			}
+		});
+	});
+
+	/* Lan Traffic */
+	/*=====================================================*/
+	$("input#lan_rx_packets").textbox({
+		fieldLabel: $.su.CHAR.MONITOR_AP.LANRXPACKETS,
+		labelCls:"s110",
+		inputCls: "xl",
+		readOnly: true
+	});
+
+	$("input#lan_tx_packets").textbox({
+		fieldLabel: $.su.CHAR.MONITOR_AP.LANTXPACKETS,
+		labelCls:"s110",
+		inputCls: "xl",
+		readOnly: true
+	});
+
+	$("input#lan_rx_bytes").textbox({
+		fieldLabel: $.su.CHAR.MONITOR_AP.LANRXBYTES,
+		labelCls:"s110",
+		inputCls: "xl",
+		readOnly: true
+	});
+
+	$("input#lan_tx_bytes").textbox({
+		fieldLabel: $.su.CHAR.MONITOR_AP.LANTXBYTES,
+		labelCls:"s110",
+		inputCls: "xl",
+		readOnly: true
+	});
+
+	$("input#lan_rx_droped_packets").textbox({
+		fieldLabel: $.su.CHAR.MONITOR_AP.LANRXDROPEDPACKETS,
+		labelCls:"s110",
+		inputCls: "xl",
+		readOnly: true
+	});
+
+	$("input#lan_tx_droped_packets").textbox({
+		fieldLabel: $.su.CHAR.MONITOR_AP.LANTXDROPEDPACKETS,
+		labelCls:"s110",
+		inputCls: "xl",
+		readOnly: true
+	});
+
+	$("input#lan_rx_droped_bytes").textbox({
+		fieldLabel: $.su.CHAR.MONITOR_AP.LANRXDROPEDBYTES,
+		labelCls:"s110",
+		inputCls: "xl",
+		readOnly: true
+	});
+
+	$("input#lan_tx_droped_bytes").textbox({
+		fieldLabel: $.su.CHAR.MONITOR_AP.LANTXDROPEDBYTES,
+		labelCls:"s110",
+		inputCls: "xl",
+		readOnly: true
+	});
+
+	$("input#lan_rx_errors").textbox({
+		fieldLabel: $.su.CHAR.MONITOR_AP.LANRXERRORS,
+		labelCls:"s110",
+		inputCls: "xl",
+		readOnly: true
+	});
+
+	$("input#lan_tx_errors").textbox({
+		fieldLabel: $.su.CHAR.MONITOR_AP.LANTXERRORS,
+		labelCls:"s110",
+		inputCls: "xl",
+		readOnly: true
+	});
+	/*=====================================================*/
+	$("div.lanTraffic .widget-fieldlabel-wrap").addClass("label_wrap");
+
+	/* Radio Traffic */
+	/*=====================================================*/
+	$("input#rd_rx_packets").textbox({
+		fieldLabel: $.su.CHAR.MONITOR_AP.RDRXPACKETS,
+		labelCls:"s110",
+		inputCls: "xl",
+		readOnly: true
+	});
+
+	$("input#rd_tx_packets").textbox({
+		fieldLabel: $.su.CHAR.MONITOR_AP.RDTXPACKETS,
+		labelCls:"s110",
+		inputCls: "xl",
+		readOnly: true
+	});
+
+	$("input#rd_rx_bytes").textbox({
+		fieldLabel: $.su.CHAR.MONITOR_AP.RDRXBYTES,
+		labelCls:"s110",
+		inputCls: "xl",
+		readOnly: true
+	});
+
+	$("input#rd_tx_bytes").textbox({
+		fieldLabel: $.su.CHAR.MONITOR_AP.RDTXBYTES,
+		labelCls:"s110",
+		inputCls: "xl",
+		readOnly: true
+	});
+
+	$("input#rd_rx_droped_packets").textbox({
+		fieldLabel: $.su.CHAR.MONITOR_AP.RDRXDROPEDPACKETS,
+		labelCls:"s110",
+		inputCls: "xl",
+		readOnly: true
+	});
+
+	$("input#rd_tx_droped_packets").textbox({
+		fieldLabel: $.su.CHAR.MONITOR_AP.RDTXDROPEDPACKETS,
+		labelCls:"s110",
+		inputCls: "xl",
+		readOnly: true
+	});
+
+	$("input#rd_rx_droped_bytes").textbox({
+		fieldLabel: $.su.CHAR.MONITOR_AP.RDRXDROPEDBYTES,
+		labelCls:"s110",
+		inputCls: "xl",
+		readOnly: true
+	});
+
+	$("input#rd_tx_droped_bytes").textbox({
+		fieldLabel: $.su.CHAR.MONITOR_AP.RDTXDROPEDBYTES,
+		labelCls:"s110",
+		inputCls: "xl",
+		readOnly: true
+	});
+
+	$("input#rd_rx_errors").textbox({
+		fieldLabel: $.su.CHAR.MONITOR_AP.RDRXERRORS,
+		labelCls:"s110",
+		inputCls: "xl",
+		readOnly: true
+	});
+
+	$("input#rd_tx_errors").textbox({
+		fieldLabel: $.su.CHAR.MONITOR_AP.RDTXERRORS,
+		labelCls:"s110",
+		inputCls: "xl",
+		readOnly: true
+	});
+	/*=====================================================*/
+	$("div.rdTraffic .widget-fieldlabel-wrap").addClass("label_wrap");
+
+	$("div.rdTraffic").delegate("span#lan_traffic_2g", "click", function(){
+		radioTraffic_load({"apMac":curAPMac}, freqBand_2g);
+
+		$("div.rdTraffic").find("span").removeClass("mode_selected");
+		$(this).addClass("mode_selected");
+	});
+
+	$("div.rdTraffic").delegate("span#lan_traffic_5g", "click", function(){
+		radioTraffic_load({"apMac":curAPMac}, freqBand_5g);
+
+		$("div.rdTraffic").find("span").removeClass("mode_selected");
+		$(this).addClass("mode_selected");
+	});
+
+
+	/* =========================================== */
+	$("div.statistics_tab").delegate("#tab_devinfo", "click", function(){
+		devInfo_load({"apMac":curAPMac});
+		getDutMode();
+
+		$("div.statistics_tab").find("ul li").removeClass("tab_cur");
+		$(this).addClass("tab_cur");
+
+		$("div.dev_info").show();
+		$("div.wireless_settings").hide();
+		$("div.wireless_signal").hide();
+		$("div.lan_info").hide();
+		$("div.throughput").hide();
+		$("div.client").hide();
+		$("div.lanTraffic").hide();
+		$("div.rdTraffic").hide();
+	});
+
+	$("div.statistics_tab").delegate("#tab_wset", "click", function(){
+		$("div.wireless_settings span#wireless_settings_2g").trigger("click");
+
+		$("div.statistics_tab").find("ul li").removeClass("tab_cur");
+		$(this).addClass("tab_cur");
+
+		$("div.dev_info").hide();
+		$("div.wireless_settings").show();
+		$("div.wireless_signal").hide();
+		$("div.lan_info").hide();
+		$("div.throughput").hide();
+		$("div.client").hide();
+		$("div.lanTraffic").hide();
+		$("div.rdTraffic").hide();
+	});
+
+	$("div.statistics_tab").delegate("#tab_wsignal", "click", function(){
+		$("div.wireless_signal span#wireless_signal_2g").trigger("click");
+
+		$("div.statistics_tab").find("ul li").removeClass("tab_cur");
+		$(this).addClass("tab_cur");
+
+		$("div.dev_info").hide();
+		$("div.wireless_settings").hide();
+		$("div.wireless_signal").show();
+		$("div.lan_info").hide();
+		$("div.throughput").hide();
+		$("div.client").hide();
+		$("div.lanTraffic").hide();
+		$("div.rdTraffic").hide();
+	});
+
+	$("div.statistics_tab").delegate("#tab_laninfo", "click", function(){
+		lanInfo_load({"apMac":curAPMac});
+
+		$("div.statistics_tab").find("ul li").removeClass("tab_cur");
+		$(this).addClass("tab_cur");
+
+		$("div.dev_info").hide();
+		$("div.wireless_settings").hide();
+		$("div.wireless_signal").hide();
+		$("div.lan_info").show();
+		$("div.throughput").hide();
+		$("div.client").hide();
+		$("div.lanTraffic").hide();
+		$("div.rdTraffic").hide();
+	});
+
+	$("div.statistics_tab").delegate("#tab_throughput", "click", function(){
+
+		$("div.statistics_tab").find("ul li").removeClass("tab_cur");
+		$(this).addClass("tab_cur");
+
+		$("div.dev_info").hide();
+		$("div.wireless_settings").hide();
+		$("div.wireless_signal").hide();
+		$("div.lan_info").hide();
+		$("div.throughput").show();
+		$("div.client").hide();
+		$("div.lanTraffic").hide();
+		$("div.rdTraffic").hide();
+	});
+
+	$("div.statistics_tab").delegate("#tab_client", "click", function(){
+		$("div#clientGrid").grid("getStore").load({"apMac":curAPMac});
+
+		$("div.statistics_tab").find("ul li").removeClass("tab_cur");
+		$(this).addClass("tab_cur");
+
+		$("div.dev_info").hide();
+		$("div.wireless_settings").hide();
+		$("div.wireless_signal").hide();
+		$("div.lan_info").hide();
+		$("div.throughput").hide();
+		$("div.client").show();
+		$("div.lanTraffic").hide();
+		$("div.rdTraffic").hide();
+	});
+
+	$("div.statistics_tab").delegate("#tab_lanTraffic", "click", function(){
+		lanTraffic_load({"apMac":curAPMac});
+
+		$("div.statistics_tab").find("ul li").removeClass("tab_cur");
+		$(this).addClass("tab_cur");
+
+		$("div.dev_info").hide();
+		$("div.wireless_settings").hide();
+		$("div.wireless_signal").hide();
+		$("div.lan_info").hide();
+		$("div.throughput").hide();
+		$("div.client").hide();
+		$("div.lanTraffic").show();
+		$("div.rdTraffic").hide();
+	});
+
+	$("div.statistics_tab").delegate("#tab_rdTraffic", "click", function(){
+		$("div.rdTraffic span#lan_traffic_2g").trigger("click");
+
+		$("div.statistics_tab").find("ul li").removeClass("tab_cur");
+		$(this).addClass("tab_cur");
+
+		$("div.dev_info").hide();
+		$("div.wireless_settings").hide();
+		$("div.wireless_signal").hide();
+		$("div.lan_info").hide();
+		$("div.throughput").hide();
+		$("div.client").hide();
+		$("div.lanTraffic").hide();
+		$("div.rdTraffic").show();
+	});
+	/*=====================================================*/
+
+	if (0 == $.su.dutMode)		/* single radio */
+	{
+		$("div.wireless_settings div.mode_change").hide();
+		$("div.wireless_signal div.mode_change").hide();
+		$("div.rdTraffic div.mode_change").hide();
+	}
+	
+	if ("accessPoint" != $.su.dutManageMode)
+	{
+		$("li#tab_wsignal").show();
+		$("li#tab_wsignal_separator").show();
+		
+		if ("client" == $.su.dutManageMode)
+		{
+			$("li#tab_client").hide();
+			$("li#tab_client_separator").hide();
+		}
+	}
+
+});
+</script>
+
+</body>
+</html>

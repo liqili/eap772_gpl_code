@@ -1,0 +1,635 @@
+{
+	"SYSLOG":	{
+		"src":	"",
+		"dst":	"",
+		"smtp":	"",
+		"ssl":	false,
+		"smtpPort":	25,
+		"verify":	false,
+		"usr":	"",
+		"pwd":	"",
+		"enable":	false,
+		"interval":	0,
+		"hour":	0,
+		"min":	0,
+		"serverEnable":	false,
+		"serverIp":	"0.0.0.0",
+		"serverPort":	514,
+		"clientLogServerEnable":	false
+	},
+	"colorLedCtrl":	{
+		"enable":	1
+	},
+	"lan":	{
+		"lanType":	"dynamic",
+		"ip":	"192.168.0.254",
+		"mask":	"255.255.255.0",
+		"enableFallback":	true,
+		"fallbackIp":	"192.168.0.254",
+		"fallbackMask":	"255.255.255.0",
+		"fallbackGateway":	"0.0.0.0",
+		"dnsServerA":	"0.0.0.0",
+		"dnsServerB":	"0.0.0.0",
+		"gateway":	"0.0.0.0"
+	},
+	"lanv6":  {
+		"connType": "dynamic",
+		"getDynamicDNS": false,
+		"preferredDNS": "::",
+		"alternateDNS": "::",
+		"ipv6Addr": "::",
+		"gateway": "::",
+		"prefixLen": 0,
+		"ipv6DialEnable": false
+	},
+	"vlan_manage":	{
+		"vlan_enable":	false,
+		"vlan_id":	1
+	},
+	"SNMP":	{
+		"snmpEn":	false,
+		"remEn":	false,
+		"sysCon":	"",
+		"sysName":	"",
+		"sysLoc":	"",
+		"getCom":	"",
+		"getSrc":	"0.0.0.0",
+		"setCom":	"",
+		"setSrc":	"0.0.0.0",
+		"snmpv3En":	false,
+		"usrName":	"admin",
+		"pwd":	"password"
+	},
+	"MANAGE_USERS":	{
+		"usr":	"admin",
+		"pwd":	"21232F297A57A5A743894A0E4A801FC3"
+	},
+	"DATE_TIME":	{
+		"tZone":	0,
+		"ntp1":	"",
+		"ntp2":	"",
+		"dst":	{
+			"status":	0,
+			"mode":	0,
+			"type":	1,
+			"rOffset":	60,
+			"dOffset":	60,
+			"repeat":	0,
+			"date":	"2020/3/1@1:0:0_2020/10/1@1:0:0",
+			"recur":	"3/5/0@1:0:0_10/5/0@1:0:0"
+		}
+	},
+	"WEBCTRL":	{
+		"httpsEnable":	true,
+		"httpsPort":	443,
+		"httpPort":	80,
+		"timeout":	15,
+		"l3AccessEnable":	false,
+		"macEnable":	false,
+		"httpEnable":	true,
+		"appDisc":	false,
+		"mac1":	"00-00-00-00-00-00",
+		"mac2":	"00-00-00-00-00-00",
+		"mac3":	"00-00-00-00-00-00",
+		"mac4":	"00-00-00-00-00-00"
+	},
+	"SSH":	{
+		"enable":	false,
+		"remEn":	false,
+		"port":	22,
+		"rsaSta":	false,
+		"dssSta":	false,
+		"rsaLen":	0,
+		"dssLen":	0,
+		"rsaVal":	" ",
+		"dssVal":	" "
+	},
+	"wlanBasic":	{
+		"basicGrid":	[{
+				"radioID":	0,
+				"region":	276,
+				"mode":	17,
+				"chwidth":	4,
+				"ch":	0,
+				"DFS":	false,
+				"antennaGain":	0,
+				"txRate":	16
+			}, {
+				"radioID":	1,
+				"region":	276,
+				"mode":	18,
+				"chwidth":	6,
+				"ch":	0,
+				"DFS":	false,
+				"antennaGain":	0,
+				"txRate":	16
+			},{
+				"radioID":	2,
+				"region":	276,
+				"mode":	19,
+				"chwidth":	8,
+				"ch":	0,
+				"psc": 	true,
+				"DFS":	false,
+				"antennaGain":	0,
+				"txRate":	16
+			}],
+		"bandSteerEnable":	0,
+		"bandSteerthreshold":	20,
+		"bandSteerdiffThreshold":	4,
+		"bandSteermaxFail":	10
+	},
+	"wlanAp":	{
+		"apGrid":	[{
+				"enable":	true,
+				"radioID":	0
+			}, {
+				"enable":	true,
+				"radioID":	1
+			},{
+				"enable":	true,
+				"radioID":  2	
+			}]
+	},
+	"wlanAdv":	{
+		"advGrid":	[{
+				"RadioID":	0,
+				"BcnItvl":	100,
+				"RTS":	2347,
+				"Frag":	2346,
+				"DTIM":	1,
+				"atf":	false,
+				"maxClientNum":	512,
+				"ShortGi":	true,
+				"WMM":	true,
+				"ofdma": false
+			}, {
+				"RadioID":	1,
+				"BcnItvl":	100,
+				"RTS":	2347,
+				"Frag":	2346,
+				"DTIM":	1,
+				"atf":	false,
+				"maxClientNum":	512,
+				"ShortGi":	true,
+				"WMM":	true,
+				"ofdma": false
+			},{
+				"RadioID":	2,
+				"BcnItvl":	100,
+				"RTS":	2347,
+				"Frag":	2346,
+				"DTIM":	1,
+				"atf":	false,
+				"maxClientNum":	512,
+				"ShortGi":	true,
+				"WMM":	true,
+				"ofdma": false
+			}]
+	},
+	"wlanMacFilterExt":	{
+		"enable":	0,
+		"maclistCount":	0,
+		"assocCount":	0,
+		"raAssocCount":	0,
+		"maclistIdMark":	0,
+		"macaddrIdMark":	0,
+		"maclist":	[],
+		"macTable":	[],
+		"assoc":	[],
+		"raAssoc":	[]
+	},
+	"wlanBandWidthCtl":	{
+		"limits":	[{
+				"enable":	false,
+				"radioId":	0,
+				"id":	1,
+				"downlimit":	0,
+				"uplimit":	0,
+				"downunit":	0,
+				"upunit":	0
+			}, {
+				"enable":	false,
+				"radioId":	1,
+				"id":	1,
+				"downlimit":	0,
+				"uplimit":	0,
+				"downunit":	0,
+				"upunit":	0
+			},{
+				"enable":	false,
+				"radioId":	2,
+				"id":	1,
+				"downlimit":	0,
+				"uplimit":	0,
+				"downunit":	0,
+				"upunit":	0
+			}
+		]
+	},
+	"wlanRSSIFilter":	{
+		"rssiFilter":	[{
+				"enable":	false,
+				"radioId":	0,
+				"threshold":	0
+			}, {
+				"enable":	false,
+				"radioId":	1,
+				"threshold":	0
+			},{
+				"enable":	false,
+				"radioId":	2,
+				"threshold":	0
+			}]
+	},
+	"macBlock":	{
+		"mac_block":	[]
+	},
+	"wlanMSsid":	{
+		"radioGrid":	[{
+				"enable":	true,
+				"count":	1,
+				"keyMark":	1,
+				"MSsidGrid":	[{
+						"enable":	true,
+						"ssid":	"",
+						"enableVlan":	false,
+						"vlan":	0,
+						"ssidBc":	true,
+						"isolation":	false,
+						"key":	1,
+						"apIdx":	0,
+						"portalEnable":	false,
+						"authType":	0,
+						"httpsRedirectEnable":	true,
+						"accessCtrlRule":	"None",
+						"mcastFilterMode": 0,
+						"mcastConvCfg": 	{
+							"arpConvEnable": false,
+							"chanUtil": 100,
+							"mcastConvEnable": true,
+							"ipv6CastConvEnable": true
+						},
+						"secMode":	0,
+						"pskVer":	3,
+						"pskEnc":	3,
+						"pskPwd":	"",
+						"pskKeyPeriod":	0,
+						"wpaVer":	3,
+						"wpaEnc":	3,
+						"radiusIp":	"0.0.0.0",
+						"radiusPort":	0,
+						"radiusPwd":	"",
+						"wpaKeyPeriod":	0,
+						"wepAuthType":	3,
+						"wepKeySlt":	1,
+						"wepKeyFormat1":	2,
+						"wepKeyText1":	"weppw",
+						"wepType1":	1,
+						"wepKeyFormat2":	2,
+						"wepKeyText2":	"weppw",
+						"wepType2":	1,
+						"wepKeyFormat3":	2,
+						"wepKeyText3":	"weppw",
+						"wepType3":	1,
+						"wepKeyFormat4":	2,
+						"wepKeyText4":	"weppw",
+						"wepType4":	1
+					}]
+			}, {
+				"enable":	true,
+				"count":	1,
+				"keyMark":	1,
+				"MSsidGrid":	[{
+						"enable":	true,
+						"ssid":	"",
+						"enableVlan":	false,
+						"vlan":	0,
+						"ssidBc":	true,
+						"isolation":	false,
+						"key":	1,
+						"apIdx":	10,
+						"portalEnable":	false,
+						"authType":	0,
+						"httpsRedirectEnable":	true,
+						"accessCtrlRule":	"None",
+						"mcastFilterMode": 0,
+						"mcastConvCfg": 	{
+							"arpConvEnable": false,
+							"chanUtil": 100,
+							"mcastConvEnable": true,
+							"ipv6CastConvEnable": true
+						},
+						"secMode":	0,
+						"pskVer":	3,
+						"pskEnc":	3,
+						"pskPwd":	"",
+						"pskKeyPeriod":	0,
+						"wpaVer":	3,
+						"wpaEnc":	3,
+						"radiusIp":	"0.0.0.0",
+						"radiusPort":	0,
+						"radiusPwd":	"",
+						"wpaKeyPeriod":	0,
+						"wepAuthType":	3,
+						"wepKeySlt":	1,
+						"wepKeyFormat1":	2,
+						"wepKeyText1":	"weppw",
+						"wepType1":	1,
+						"wepKeyFormat2":	2,
+						"wepKeyText2":	"weppw",
+						"wepType2":	1,
+						"wepKeyFormat3":	2,
+						"wepKeyText3":	"weppw",
+						"wepType3":	1,
+						"wepKeyFormat4":	2,
+						"wepKeyText4":	"weppw",
+						"wepType4":	1
+					}]
+			},{
+				"enable":	true,
+				"count":	1,
+				"keyMark":	1,
+				"MSsidGrid":	[{
+						"enable":	true,
+						"ssid":	"",
+						"enableVlan":	false,
+						"vlan":	0,
+						"ssidBc":	true,
+						"isolation":	false,
+						"key":	1,
+						"apIdx":	20,
+						"portalEnable":	false,
+						"authType":	0,
+						"httpsRedirectEnable":	true,
+						"accessCtrlRule":	"None",
+						"mcastFilterMode": 0,
+						"mcastConvCfg": 	{
+							"arpConvEnable": false,
+							"chanUtil": 100,
+							"mcastConvEnable": true,
+							"ipv6CastConvEnable": true
+						},
+						"secMode":	6,
+						"pskVer":	3,
+						"pskEnc":	3,
+						"pskPwd":	"",
+						"pskKeyPeriod":	0,
+						"wpaVer":	3,
+						"wpaEnc":	3,
+						"radiusIp":	"0.0.0.0",
+						"radiusPort":	0,
+						"radiusPwd":	"",
+						"wpaKeyPeriod":	0,
+						"wepAuthType":	3,
+						"wepKeySlt":	1,
+						"wepKeyFormat1":	2,
+						"wepKeyText1":	"weppw",
+						"wepType1":	1,
+						"wepKeyFormat2":	2,
+						"wepKeyText2":	"weppw",
+						"wepType2":	1,
+						"wepKeyFormat3":	2,
+						"wepKeyText3":	"weppw",
+						"wepType3":	1,
+						"wepKeyFormat4":	2,
+						"wepKeyText4":	"weppw",
+						"wepType4":	1
+					}]
+			}]
+	},
+	"uc_qos":	{
+		"radioNum":	3,
+		"wmm":	[{
+				"radioIdx":	0,
+				"bWMMEnable":	1,
+				"noAckPolicy":	0,
+				"uapsd":	1,
+				"edca":	[{
+						"aifs_be":	3,
+						"cwmin_be":	15,
+						"cwmax_be":	63,
+						"txoplimit_be":	0,
+						"aifs_bk":	7,
+						"cwmin_bk":	15,
+						"cwmax_bk":	1023,
+						"txoplimit_bk":	0,
+						"aifs_vi":	1,
+						"cwmin_vi":	7,
+						"cwmax_vi":	15,
+						"txoplimit_vi":	3008,
+						"aifs_vo":	1,
+						"cwmin_vo":	3,
+						"cwmax_vo":	7,
+						"txoplimit_vo":	1504
+					}, {
+						"aifs_be":	3,
+						"cwmin_be":	15,
+						"cwmax_be":	1023,
+						"txoplimit_be":	0,
+						"aifs_bk":	7,
+						"cwmin_bk":	15,
+						"cwmax_bk":	1023,
+						"txoplimit_bk":	0,
+						"aifs_vi":	2,
+						"cwmin_vi":	7,
+						"cwmax_vi":	15,
+						"txoplimit_vi":	3008,
+						"aifs_vo":	2,
+						"cwmin_vo":	3,
+						"cwmax_vo":	7,
+						"txoplimit_vo":	1504
+					}]
+			}, {
+				"radioIdx":	1,
+				"bWMMEnable":	1,
+				"noAckPolicy":	0,
+				"uapsd":	1,
+				"edca":	[{
+						"aifs_be":	3,
+						"cwmin_be":	15,
+						"cwmax_be":	63,
+						"txoplimit_be":	0,
+						"aifs_bk":	7,
+						"cwmin_bk":	15,
+						"cwmax_bk":	1023,
+						"txoplimit_bk":	0,
+						"aifs_vi":	1,
+						"cwmin_vi":	7,
+						"cwmax_vi":	15,
+						"txoplimit_vi":	3008,
+						"aifs_vo":	1,
+						"cwmin_vo":	3,
+						"cwmax_vo":	7,
+						"txoplimit_vo":	1504
+					}, {
+						"aifs_be":	3,
+						"cwmin_be":	15,
+						"cwmax_be":	1023,
+						"txoplimit_be":	0,
+						"aifs_bk":	7,
+						"cwmin_bk":	15,
+						"cwmax_bk":	1023,
+						"txoplimit_bk":	0,
+						"aifs_vi":	2,
+						"cwmin_vi":	7,
+						"cwmax_vi":	15,
+						"txoplimit_vi":	3008,
+						"aifs_vo":	2,
+						"cwmin_vo":	3,
+						"cwmax_vo":	7,
+						"txoplimit_vo":	1504
+					}]
+			},{
+				"radioIdx":	2,
+				"bWMMEnable":	1,
+				"noAckPolicy":	0,
+				"uapsd":	1,
+				"edca":	[{
+						"aifs_be":	3,
+						"cwmin_be":	15,
+						"cwmax_be":	63,
+						"txoplimit_be":	0,
+						"aifs_bk":	7,
+						"cwmin_bk":	15,
+						"cwmax_bk":	1023,
+						"txoplimit_bk":	0,
+						"aifs_vi":	1,
+						"cwmin_vi":	7,
+						"cwmax_vi":	15,
+						"txoplimit_vi":	3008,
+						"aifs_vo":	1,
+						"cwmin_vo":	3,
+						"cwmax_vo":	7,
+						"txoplimit_vo":	1504
+					}, {
+						"aifs_be":	3,
+						"cwmin_be":	15,
+						"cwmax_be":	1023,
+						"txoplimit_be":	0,
+						"aifs_bk":	7,
+						"cwmin_bk":	15,
+						"cwmax_bk":	1023,
+						"txoplimit_bk":	0,
+						"aifs_vi":	2,
+						"cwmin_vi":	7,
+						"cwmax_vi":	15,
+						"txoplimit_vi":	3008,
+						"aifs_vo":	2,
+						"cwmin_vo":	3,
+						"cwmax_vo":	7,
+						"txoplimit_vo":	1504
+					}]
+			}]
+	},
+	"PORTAL":	{
+		"portal":	{
+			"authType":	0,
+			"title":	"",
+			"accptUseTerm":	false,
+			"useTerm":	"",
+			"sessTimeType":	0,
+			"days":	0,
+			"hours":	0,
+			"mins":	0,
+			"enableRedir":	false,
+			"redirUrl":	"",
+			"pwd":	"",
+			"radiusList":	[]
+		},
+		"freeAuth":	{
+			"cnt":	0,
+			"maxCnt":	96,
+			"grid":	[]
+		},
+		"aclList":	[]
+	},
+	"uc_rogueApDetect":	{
+		"enable":	false,
+		"macTable":	[]
+	},
+	"wlanWSchedule":	{
+		"isEnable":	0,
+		"type":	0,
+		"profileCount":	0,
+		"assocCount":	0,
+		"raAssocCount":	0,
+		"apCount":	0,
+		"idMark":	0,
+		"ruleIdMark":	0,
+		"profileTbl":	[],
+		"ruleTbl":	[],
+		"ssidTbl":	[],
+		"rootApTbl":	[],
+		"apTbl":	[]
+	},
+	"cluster":	{
+		"loadbTable":	[{
+				"radioID":	0,
+				"enable":	0,
+				"maxClient":	0
+			}, {
+				"radioID":	1,
+				"enable":	0,
+				"maxClient":	0
+			},{
+				"radioID":	2,
+				"enable":	0,
+				"maxClient":	0
+			}]
+	},
+	"ControllerIp":	{
+		"controller_ip":	{
+			"url":	"0.0.0.0"
+		},
+		"discP":	29810,
+		"adoptP": 29814,
+		"override":     {
+			"url":  "",
+			"discP": 29810,
+			"manageP": 0,
+			"omadacId": ""
+		}
+	},
+	"clientBandWidth":	{
+		"clientBandWidth":	[]
+	},
+	"Controller":	{
+		"controller":	{
+			"id":	"c21f969b5f03d33d43e04f8f136e7682",
+			"domain":	""
+		}
+	},
+	"roaming":	{
+		"fastRoaming":	0,
+		"dot11kEnable":	1,
+		"dualBand":	0,
+		"dot11vEnable":	1,
+		"forceDisassoc":	0
+	},
+	"urlfilter":	{
+		"itemCnt":	0,
+		"itemList":	[]
+	},
+	"PROFILE":	{
+		"ipGroupCnt":	0,
+		"ipGroup":	[],
+		"ipPortGroupCnt":	0,
+		"ipPortGroup":	[]
+	},
+	"CLOUDMANAGE":	{
+		"enable":	true,
+		"status":	true
+	},
+	"Mesh":	{
+		"meshEnable":	1,
+		"fullSector":	1,
+		"tgtIPEnable":	0,
+		"targetIP":	"",
+		"childAPNum":	0,
+		"childAPList":	[]
+	},
+    "ble": {
+        "BleAdvertisingEnable":  0
+    }	
+}

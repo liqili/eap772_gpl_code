@@ -1,0 +1,13 @@
+*.o
+*.d
+/.deps
+/.deps/*
+/ioctlent.h
+/tests/Makefile
+/config.h
+/stamp-h1
+/config.status
+/Makefile
+/config.log
+/strace
+/linux/ioctlent.h

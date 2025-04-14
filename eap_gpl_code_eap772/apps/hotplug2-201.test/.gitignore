@@ -1,0 +1,4 @@
+*.o
+*.depend
+/hotplug2-modwrap
+/hotplug2

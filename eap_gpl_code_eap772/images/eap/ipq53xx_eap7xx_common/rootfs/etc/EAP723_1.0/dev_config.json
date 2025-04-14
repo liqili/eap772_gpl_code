@@ -1,0 +1,46 @@
+{
+	"vlanbind":
+	{
+		"supp": false
+	},
+	"lanport":
+	{
+		"dlPortNum":0,
+		"poeOutSupp": false,
+		"poeOutBitMap":0,
+		"ulPortPhyId":0,
+		"ulPortAliasName":"LAN Port",
+		"ulPortIfName":"eth0",
+		"ulPortLinkStateMask":0,
+		"ulPortInSwitch":0,
+		"dlPortIfName":"",
+		"dlPort1AliasName":""
+	},
+	"hwWatchDog":
+	{
+		"supp": false
+	},
+	"cloudCtrl":
+	{
+		"supp": true,
+		"micType":"EAP.FESTA.CEILINGMOUNT"
+	},
+	"cliSetCcSupp": true,
+	"wifiLedSupp": false,
+	"festaFeatures": true,
+	"caldata":
+	{
+		"caldataFileList":
+		[{
+			"fileName":"/tmp/IPQ5332/caldata.bin",
+			"fileSize":63488
+		},{
+			"fileName":"/tmp/qcn9224/caldata_2.bin",
+			"fileSize":184320
+		}]
+	},
+	"powerDetect":
+	{
+		"supp": false
+	}
+}

@@ -1,0 +1,1641 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>MAC Filtering</title>
+<style type="text/css">
+	div#profile_name_grid{
+		float:left;
+		width:365px;
+	}
+	div#profile_rule_grid{
+		float:right;
+		width:515px;
+	}
+
+	div.arrow{
+		/*height: 100%;
+		padding-top: 100px;
+		display: inline-block;
+		position: absolute;*/
+		left:410px;
+	}
+	div.arrow-wrap-1{
+		padding-top: 100px;
+		/*left:457px;*/
+	}
+	div#empty_add{
+		width:125px;
+		margin-left: 40%;
+		cursor:pointer;
+		display: none;
+	}
+	div.widget-container#start_time div.widget-error-tips,
+	div.widget-container#end_time div.widget-error-tips{
+		left: -50px;
+	}
+
+</style>
+</head>
+
+<body>
+<div class="func-container">
+	<div id="set"> 
+		<form id="set_form">
+			<input type="checkbox" id="scheduler_enable" name="status" type="text"/>
+            <input id="scheduler_type" name="scheduler_type" >
+		</form>
+		<br />
+	</div>
+
+	<div id="profile" class="hidden"> 
+		<div id="empty_add" onClick="addMacList()" >
+			<span class="empty_add"></span>
+			<span class="text" id="text_create" style="color:#4ACBD6"></span>
+		</div>
+
+		<div id="profile_name_grid" name="profile_name_grid" ></div>
+
+		<div class="arrow" >
+			<div class="arrow-wrap-1" id="arrow">
+				<div class="arrow-wrap-2">
+					<span class="arrow-right" ></span>
+				</div>
+			</div>
+		</div>
+
+		<div id="profile_rule_grid" name="profile_rule_grid" ></div>
+
+		<div class="clear"></div>
+
+	<div id="association" class="hidden">
+		<form id="assoc_form">
+			<div id="assoc_entry" name="assoc_entry"></div>
+		</form>
+		<form id="assoc_form_ap" >
+			<div id="assoc_entry_ap" name="assoc_entry_ap" style="display:none"></div>
+			<button type="button" id="total_save"></button>
+		</form>
+
+		<div id="config_loading">
+			<!-- <span class="icon" ></span> -->
+		</div>
+	</div>
+
+<div id="profile_editor">
+	<input type="text" id="profileName_txt" name="profileName" />
+</div>
+
+<div id="rule_setting">
+	<div id="hide_profile">
+		<input type="text" id="proName" name="proName" />
+	</div>
+    <div id="week_day">
+		<input type="text" id="weekDay" name="weekDay" />
+        <input type="checkbox" id="dayVal_mon" name="dayVal_mon" />
+        <input type="checkbox" id="dayVal_tue" name="dayVal_tue" />
+        <input type="checkbox" id="dayVal_wed" name="dayVal_wed" />
+        <input type="checkbox" id="dayVal_thu" name="dayVal_thu" />
+        <input type="checkbox" id="dayVal_fri" name="dayVal_fri" />
+        <input type="checkbox" id="dayVal_sat" name="dayVal_sat" />
+        <input type="checkbox" id="dayVal_sun" name="dayVal_sun" />
+    </div>
+    <div id="time_set">
+        <input type="text" id="allDay" name="allDay" />
+    </div>
+    <div id="start_time">
+		<input type="text" id="start_hour" name="start_hour" />
+		<span id="st_span_ms" ></span>
+        <input type="text" id="start_min" name="start_min"  />
+        <!--span id="st_span_hrs" ></span-->
+    </div>
+    <div id="end_time">
+		<input type="text" id="end_hour" name="end_hour"  />
+		<span id="st_span_ms" ></span>
+        <input type="text" id="end_min" name="end_min"  />
+        <!--span id="st_span_hrs" ></span-->
+    </div>
+</div>
+
+	</div>
+
+	
+</div>
+
+		
+
+<div id="rule_add_alert">
+	<div class="grid-warning-msg warning">
+		<h4 class="title">
+		<span class="icon"></span>
+		<span class="text" id="cancel_add"></span>
+		</h4>
+	</div>
+</div>
+
+<script type="text/javascript">
+
+function addMacList(){
+	$("div#profile_name_grid").show();
+	$("div#arrow").show();
+	$("div#profile_rule_grid").show();
+	$("div#empty_add").hide();
+}
+
+$('span#text_create').text($.su.CHAR.SCHEDULER.CREATE_PROFILES);
+
+$(document).ready(function(e){
+
+/////////////////////////////////////////////////////////////////////////////
+
+	var SCHEDULER_URL = "./data/scheduler.json";
+	var SCHEDULER_SET_URL = "./data/scheduler.set.json";
+	var SCHEDULER_PROFILE_URL = "./data/scheduler.profile.json";
+	var SCHEDULER_RULE_URL = "./data/scheduler.rule.json";
+	var SCHEDULER_ASSOCIATION_URL = "./data/scheduler.association.json";
+	var SCHEDULER_ASSOCIATIONAP_URL = "./data/scheduler.associationAp.json"
+	var mode;
+	var gItem = [];
+	var hour_item = [];
+	var min_item = [];
+	var g_profile = null;
+	var curIdx = -1;
+	var curRuleIdx = -1;
+	var flag = 0;
+	var ssid_asso_commit = null;
+	var profileName_commit = [];
+
+	var DUT_MODE = {
+		BAND_24G: 0,
+		BAND_24G_5G: 1,
+		BAND_24G_5G1_5G2: 2,
+		BAND_24G_5G_6G: 3,
+		BAND_24G_5G1_5G2_6G: 4
+	};
+	
+	for (var index = 0; index < 24; index++)
+	{
+		var tmp = {};
+		
+		if (index < 10)
+			index = '0' + index;
+		tmp.name = index;
+		tmp.value = index;
+		hour_item.push(tmp);
+		min_item.push(tmp);
+	}
+	
+	for (var index = 24; index < 60; index++)
+	{
+		var tmp = {};
+		
+		tmp.value = index;
+		tmp.name  = index + "";
+		min_item.push(tmp);
+	}
+
+	$('div.func-container').page({
+		title: $.su.CHAR.SCHEDULER.TITLE,
+		help: ""	//可能是个调用的id 也可能是个url
+	});
+	
+	$('div#set').panel({
+		title: $.su.CHAR.SCHEDULER.SETTING,
+		collapsible: false
+	});
+
+	$('div#profile').panel({
+		title: $.su.CHAR.SCHEDULER.PROFILE,
+		collapsible: false
+	});
+	$('div#association').panel({
+		title: $.su.CHAR.SCHEDULER.ASSOCIATION,
+		collapsible: false
+	});
+	
+	/*             SETTING             */
+	$('#set_form').form({
+		proxy: {
+			timeout: 30000,
+			url: SCHEDULER_SET_URL
+		},
+		fields: [
+			{name: "status", mapping: "status"},
+			{name: "scheduler_type", mapping: "scheduler_type"}
+		],
+		autoLoad:true,
+		submitBtn: "default"
+	}).on("ev_loadData", function(e, data){
+		mode = data.scheduler_type;
+
+		if (mode == 1)
+		{
+			$("div#assoc_entry").hide();
+			$("div#assoc_entry_ap").show();
+			// setTimeout(getAssociationApFunc, 2000);
+		}
+		else
+		{
+			$("div#assoc_entry").show();
+			$("div#assoc_entry_ap").hide();
+			// setTimeout(getAssociationFunc, 2000);
+		}
+	});
+	$('input#scheduler_enable').checkbox({
+		fieldLabel: $.su.CHAR.SCHEDULER.SCHEDULER,
+		items:[
+			{boxlabel: $.su.CHAR.SCHEDULER.ENABLE, inputValue:"on", uncheckedValue:"off", checked:false}
+		]
+	}).on("ev_change", function(e, oldValue, newValue){
+		if( newValue.length==0 || newValue[0] =='off' || newValue[0] ==false || newValue[0] ==0){
+			$('div#profile').hide();
+			$('div#association').hide();
+		}else{
+			$('div#profile').show();
+			$('div#association').show();
+		}
+	});
+
+	$('input#scheduler_type').combobox({
+		fieldLabel: $.su.CHAR.SCHEDULER.TYPE,
+		items:[
+			{"value":"0", "name": $.su.CHAR.SCHEDULER.TYPE_SSID},
+			{"value":"1", "name": $.su.CHAR.SCHEDULER.TYPE_AP}
+		]
+	}).on("ev_change", function(e, oldValue, newValue){
+		if (oldValue == "0" && newValue == "1")
+		{
+			mode = 1;
+			$("div#assoc_entry").hide();
+			$("div#assoc_entry_ap").show();
+			getAssociationApFunc();
+		}
+		else if (oldValue == "1" && newValue == "0")
+		{
+			mode = 0;
+			$("div#assoc_entry").show();
+			$("div#assoc_entry_ap").hide();
+			getAssociationFunc();
+		}
+	});
+	
+	/*       		END SETTING				*/
+	
+	// 获得Rule列表
+	function getRuleFunc(profileName){
+		/*$.ajax({
+			url: SCHEDULER_RULE_URL+"?profileName="+profileName,
+			type: 'GET',
+			data: {},
+			dataType: 'json',
+			cache: false,
+			error: function(){
+				alert("Get Rule Error!");
+				return false;
+			},
+			success: function(result){
+				// console.log("getRuleFunc")
+				$('div#profile_rule_grid').grid("getStore").loadData(result.data, false, null);
+				return true;
+			}
+		});*/
+		$('div#profile_rule_grid').grid("getStore").load({"profileName":profileName});
+	}
+	// 获得profile列表
+	getProfileFunc();
+	
+	function getProfileFunc(){
+		// console.log(0001)
+		$.ajax({
+			url: SCHEDULER_PROFILE_URL,
+			type: 'GET',
+			data: {
+			},
+			dataType: 'json',
+			async:false,
+			cache:false,
+			error: function(){
+				//alert("error");
+				return false;
+			},
+			success: function(result){
+				// console.log(0002)
+				var index = 0;
+				var data = result.data;
+				
+				gItem = [];
+
+				if (data.length > 0)
+				{			
+					for (index = 0; index < data.length; index++)
+					{
+						var tmp = {};
+						tmp.value = data[index].profileName;
+						tmp.name  = data[index].profileName;
+						gItem.push(tmp);		
+						profileName_commit[index] = data[index].profileName;
+					}
+				}
+
+				var tmp = {};
+				tmp.value = "++++";
+				tmp.name  = $.su.CHAR.SCHEDULER.NONE;
+				gItem.unshift(tmp);
+			}
+		});
+
+		// console.log(0003)
+	}
+	
+	
+	var hide_profile_field = $('#hide_profile').fieldset({
+		fields:[
+			{name: "proName"}
+		]
+	});
+	
+	var week_day_field = $('#week_day').fieldset({
+		fields:[
+			{name: "weekDay"},
+			{name: "dayVal_mon"},
+			{name: "dayVal_tue"},
+			{name: "dayVal_wed"},
+			{name: "dayVal_thu"},
+			{name: "dayVal_fri"},
+			{name: "dayVal_sat"},
+			{name: "dayVal_sun"}
+		]
+	});
+		
+	var time_set_field = $('#time_set').fieldset({
+		fields:[
+			{name: "allDay"}
+		]
+	});
+	
+	var start_time_field = $('#start_time').fieldset({
+			fields:[
+				{name: "start_hour"},
+				{name: "start_min"}
+			]
+	});
+	
+	var end_time_field = $('#end_time').fieldset({
+			fields:[
+				{name: "end_hour"},
+				{name: "end_min"}
+			]
+	});
+	
+	$("input#proName").textbox({
+		//fieldLabel: $.su.CHAR.SCHEDULER.PROFILE_NAME,
+		name: "proName",
+		cls: "hidden"
+	});
+	
+	$("input#weekDay").radio({
+		fieldLabel: $.su.CHAR.SCHEDULER.DAY,
+		labelCls:"xxs",
+		name:$.su.CHAR.SCHEDULER.WEEK_DAY,
+		columns:4,
+		items:[
+			{boxlabel:$.su.CHAR.SCHEDULER.WEEKDAY, inputValue:"0"},
+			{boxlabel:$.su.CHAR.SCHEDULER.WEEKEND, inputValue:"1"},
+			{boxlabel:$.su.CHAR.SCHEDULER.EVERYDAY, inputValue:"2"},
+			{boxlabel:$.su.CHAR.SCHEDULER.SELECTDAY, inputValue:"3"}
+		]
+	}).on('ev_change', function(e, oldValue, newValue){
+		// flag用来标记已经点击过radio
+		flag = 1;
+		if (newValue == "0")
+		{
+			selectWeekday();
+		}
+		else if (newValue == "1")
+		{
+			selectWeekend();
+		}
+		else if (newValue == "2")
+		{
+			selectEveryday();
+		}
+		else if (newValue == "3")
+		{
+			selectDays();
+		}
+	});
+	
+	$("input#dayVal_mon").checkbox({
+		fieldLabel: null,
+		labelCls:"xxs",
+		cls:"inline",
+		items:[
+			{boxlabel:$.su.CHAR.SCHEDULER.MONDAY, inputValue:"1", uncheckedValue:"0"}
+		]
+	});
+	$("input#dayVal_tue").checkbox({
+		fieldLabel: null,
+		cls:"inline",
+		items:[
+			{boxlabel:$.su.CHAR.SCHEDULER.TUESDAY, inputValue:"1", uncheckedValue:"0"}
+		]
+	});
+	$("input#dayVal_wed").checkbox({
+		fieldLabel: null,
+		cls:"inline",
+		items:[
+			{boxlabel:$.su.CHAR.SCHEDULER.WEDNESDAY, inputValue:"1", uncheckedValue:"0"}
+		]
+	});
+	$("input#dayVal_thu").checkbox({
+		fieldLabel: null,
+		cls:"inline",
+		items:[
+			{boxlabel:$.su.CHAR.SCHEDULER.THUSDAY, inputValue:"1", uncheckedValue:"0"}
+		]
+	});
+	$("input#dayVal_fri").checkbox({
+		fieldLabel: null,
+		cls:"inline",
+		items:[
+			{boxlabel:$.su.CHAR.SCHEDULER.FRIDAY, inputValue:"1", uncheckedValue:"0"}
+		]
+	});
+	$("input#dayVal_sat").checkbox({
+		fieldLabel: null,
+		cls:"inline",
+		items:[
+			{boxlabel:$.su.CHAR.SCHEDULER.SATURDAY, inputValue:"1", uncheckedValue:"0"}
+		]
+	});
+	$("input#dayVal_sun").checkbox({
+		fieldLabel: null,
+		cls:"inline",
+		items:[
+			{boxlabel:$.su.CHAR.SCHEDULER.SUNDAY, inputValue:"1", uncheckedValue:"0"}
+		]
+	});
+	
+	$("input#allDay").checkbox({
+		fieldLabel: $.su.CHAR.SCHEDULER.TIME,
+		labelCls:"xxs",
+		columns:1,
+		items:[
+			{boxlabel: $.su.CHAR.SCHEDULER.ALLDAY, name:"dayTime", uncheckedValue:"0", inputValue:"1"}
+		]
+	}).on("ev_change", function(e, oldValue, newValue){
+		if (newValue == "dayTime")
+		{
+			// 使时间选择不可用
+			$("input#start_hour").combobox('setNormal');
+			$("input#start_min").combobox('setNormal');
+			$("input#end_hour").combobox('setNormal');
+			$("input#end_min").combobox('setNormal');
+			
+			$("input#start_hour").combobox("setValue", 0);
+			$("input#start_min").combobox("setValue", 0);
+			$("input#end_hour").combobox("setValue", 23);
+			$("input#end_min").combobox("setValue", 59);
+			setTimeSlt(true);
+		}
+		else
+		{
+			setTimeSlt(false);
+		}
+	});
+	
+	$("input#start_hour").combobox({
+		fieldLabel: $.su.CHAR.SCHEDULER.START_TIME,
+		noneSelectedText: $.su.CHAR.OPERATION.NOSELECTEDTEXT,
+		labelCls:"xxs",
+		cls:"inline-block",
+		inputCls:'s',
+		// tips: $.su.CHAR.SCHEDULER.MH,
+		items:hour_item
+	});
+
+	$("span#st_span_ms").html($.su.CHAR.SCHEDULER.MH);
+
+	$("input#start_min").combobox({
+		fieldLabel:null,
+		noneSelectedText: $.su.CHAR.OPERATION.NOSELECTEDTEXT,
+		cls:"inline-block",
+		inputCls:'s',
+		// tips: $.su.CHAR.SCHEDULER.HRS,
+		items:min_item
+	});
+
+	//$("span#st_span_hrs").html($.su.CHAR.SCHEDULER.HRS);
+
+	$("input#end_hour").combobox({
+		fieldLabel: $.su.CHAR.SCHEDULER.END_TIME,
+		noneSelectedText: $.su.CHAR.OPERATION.NOSELECTEDTEXT,
+		labelCls:"xxs",
+		cls:"inline-block",
+		inputCls:'s',
+		// tips: $.su.CHAR.SCHEDULER.MH,
+		items:hour_item
+	});
+
+	$("input#end_min").combobox({
+		fieldLabel:null,
+		noneSelectedText: $.su.CHAR.OPERATION.NOSELECTEDTEXT,
+		cls:"inline-block",
+		inputCls:'s',
+		// tips: $.su.CHAR.SCHEDULER.HRS,
+		items:min_item
+	});
+
+	$('input#profileName_txt').textbox({
+		fieldLabel: $.su.CHAR.SCHEDULER.PROFILE,
+		labelCls:"xxs",
+		lengthText:$.su.CHAR.SCHEDULER.LENERROR,
+		minLength:"1",
+		maxLength:"31",
+		hint:$.su.CHAR.SCHEDULER.PROFILE_NAME,
+        allowBlank:false,
+        vtype:"string_strict_strict"
+	});
+	
+	var pn = $("div#profile_name_grid").grid({
+		store:{
+			proxy:{
+				url: SCHEDULER_PROFILE_URL
+			},
+			fields:[
+				{name:"profileName"}
+			],
+			updateMode:"complete",
+			autoLoad: true
+		},
+		editor: {
+			content:"#profile_editor",
+			validator:function(){
+				var value = $("input#profileName_txt").textbox("getValue");
+
+				/*
+				if (value.length >= 32)
+				{
+					$("input#profileName_txt").textbox("setError", $.su.CHAR.SCHEDULER.LENERROR);
+					return false;
+				}
+				*/
+				// 重复性检查
+				var store = $('div#profile_name_grid').grid("getStore");
+	        	var data = store.data;
+	        	var index = 0;
+	        	var num = data.length;
+
+	        	for (index = 0; index < num; index++)
+	        	{
+	        		if (value == data[index].profileName && index != curIdx)
+	        		{
+	        			$("input#profileName_txt").textbox("setError", $.su.CHAR.SCHEDULER.DUPERROR);
+	        			return false;
+	        		}
+	        	}
+
+				return true;
+			},
+			fields:[
+				{name:"profileName"}
+			]
+		},
+		paging:{
+		},
+		columns:[
+			{
+				text:$.su.CHAR.SCHEDULER.PROFILE_NAME,
+				dataIndex:"profileName",
+				width:280
+			},
+			{
+				xtype:"settings"
+				// width:60
+			}
+		],
+		operation:"add-lp"
+	}).on("ev_load", function(e, data, start, len){
+
+		curIdx = -1;
+		if (data.length == 0)
+		{
+			// console.log("profile_rule_grid 001")
+			$("div#profile_rule_grid").grid("getStore").loadData(null, false, null);
+			$("div#profile_name_grid").hide();
+			$("div#arrow").hide();
+			$("div#profile_rule_grid").hide();
+			$("div#empty_add").show();
+		}
+		else
+		{
+			for (index = 0; index < data.length; index ++)
+			{
+				profileName_commit[index] = data[index].profileName;
+			}
+			$("div#profile_name_grid .grid-content-container table tr:first").trigger("click");
+			$("div#empty_add").hide();
+		}
+	});
+	// console.log("profile_rule_grid")
+	var o = $("div#profile_rule_grid").grid({
+		maxRulesMsgText: $.su.CHAR.OPERATION.GRID_MAX_GROUPS,
+		store:{
+			proxy: {
+				url: SCHEDULER_RULE_URL
+			},
+			fields: [
+				{name: "profile"},
+				{name: "dayOpt"},
+				{name: "dayVal_mon"},
+				{name: "dayVal_tue"},
+				{name: "dayVal_wed"},
+				{name: "dayVal_thu"},
+				{name: "dayVal_fri"},
+				{name: "dayVal_sat"},
+				{name: "dayVal_sun"},
+				{name: "tStart"},
+				{name: "tEnd"},
+				{name: "allDay"}
+			],
+			updateMode:"complete",
+			autoLoad: true
+		},
+		beforeStartAdd:function(){
+			var store = $("div#profile_name_grid").grid("getStore");
+			var data = store.data;
+
+			if (data.length == 0)
+			{
+				$("#rule_add_alert").msg("show");
+				return false;
+			}
+			return true;
+		},
+		editor: {
+			content:"#rule_setting",
+			validator:function(){
+				var wd  = $("input#weekDay").radio("getValue");
+				var mon = $("input#dayVal_mon").checkbox("getValue");
+				var tue = $("input#dayVal_tue").checkbox("getValue");
+				var wed = $("input#dayVal_wed").checkbox("getValue");
+				var thu = $("input#dayVal_thu").checkbox("getValue");
+				var fri = $("input#dayVal_fri").checkbox("getValue");
+				var	sat	= $("input#dayVal_sat").checkbox("getValue");
+				var	sun	= $("input#dayVal_sun").checkbox("getValue");
+				var all = $("input#allDay").checkbox("getValue");
+				var sh  = $("input#start_hour").combobox("getValue");
+				var sm  = $("input#start_min").combobox("getValue");
+				var eh  = $("input#end_hour").combobox("getValue");
+				var em  = $("input#end_min").combobox("getValue");
+				var len = 0;
+
+				// $("input#proName").textbox("setValue", g_profile);
+				var profile = $("input#proName").textbox("getValue");
+
+				if (profile == null || profile.length == 0)
+				{
+					$("input#weekDay").radio("setError", $.su.CHAR.SCHEDULER.PROFILEEMPTY);
+					return false;
+				}
+				
+				if (wd == "")
+				{
+					$("input#weekDay").radio("setError", $.su.CHAR.SCHEDULER.WEEKDAYERROR);
+					return false;
+				}
+				else
+				{
+					flag = 1;
+				}
+
+				// 点击过radio之后，如果checkbox选中则长度为1，没有选中则为0；
+				// 没有点击radio的话，选中长度为2，没有选中则为1。
+				len = flag ^ 0x01;
+				//如果flag为1，并且wd为3，那如果mon~sun的长度均为0，则出错；
+				//如果flag为0，并且wd为3，那如果mon~sun的长度均为1，则出错。
+				if (wd == 3)
+				{
+					// 至少要选择一天
+					if (mon.length == len && tue.length == len && wed.length == len &&
+						thu.length == len && fri.length == len && sat.length == len &&
+						sun.length == len)
+					{
+						$("input#dayVal_mon").checkbox("setError", $.su.CHAR.SCHEDULER.DAYERROR);
+						return false;
+					}
+				}
+				
+				// 没有选择开始时间hour
+				if (sh.length == 0)
+				{
+					$("input#start_hour").combobox("setError", $.su.CHAR.SCHEDULER.SHERROR);
+					return false;
+				}
+				// 没有选择开始时间minute
+				if (sm.length == 0)
+				{
+					$("input#start_min").combobox("setError", $.su.CHAR.SCHEDULER.SMERROR);
+					return false;
+				}
+				// 没有选择结束时间hour
+				if (eh.length == 0)
+				{
+					$("input#end_hour").combobox("setError", $.su.CHAR.SCHEDULER.EHERROR);
+					return false;
+				}
+				// 没有选择结束时间minute
+				if (em.length == 0)
+				{
+					$("input#end_min").combobox("setError", $.su.CHAR.SCHEDULER.EMERROR);
+					return false;
+				}
+				// 开始时间晚于结束时间hour
+				if (sh[0] > eh[0])
+				{
+					$("input#end_hour").combobox("setError", $.su.CHAR.SCHEDULER.TIMEERROR);
+					return false;
+				}
+				// 开始时间晚于结束时间minute
+				if (sh[0] == eh[0] && sm[0] >= em[0])
+				{
+					$("input#end_min").combobox("setError", $.su.CHAR.SCHEDULER.TIMEERROR);
+					return false;
+				}
+				
+				if (sh[0] == 0 && sm[0] == 0 && eh[0] == 23 && em[0] == 59)
+				{
+					//$("input#allDay").checkbox("setValue", 1);
+					all.length = 1;
+				}
+				
+				// 不能与已存在的规则相同
+				var store = $("div#profile_rule_grid").grid("getStore");
+				var data = store.data;
+				var index = 0;
+				var st = sh + ":" + sm;
+				var et = eh + ":" + em;
+				
+				for (index; index < data.length; index++)
+				{
+					var dt = data[index];
+				
+					// 状态一致，都是checked/unchecked。
+					if ((mon.length == Number(dt.dayVal_mon) + len) && (tue.length == Number(dt.dayVal_tue) + len) &&
+						(wed.length == Number(dt.dayVal_wed) + len) && (thu.length == Number(dt.dayVal_thu) + len) &&
+						(fri.length == Number(dt.dayVal_fri) + len) && (sat.length == Number(dt.dayVal_sat) + len) &&
+						(sun.length == Number(dt.dayVal_sun) + len) && (index != curRuleIdx))
+					{
+						if (dt.allDay == all.length && all.length == 1)
+						{
+							$("input#weekDay").radio("setError", $.su.CHAR.SCHEDULER.RULEDUP);
+							return false;
+						}
+						if (dt.allDay == all.length && all.length == 0)
+						{
+							if (st == dt.tStart && et == dt.tEnd)
+							{
+								$("input#weekDay").radio("setError", $.su.CHAR.SCHEDULER.RULEDUP);
+								return false;
+							}
+						}
+					}
+				}
+				
+				dayEnableAll();
+				setTimeSlt(false);
+
+				return true;
+			},
+			fields:[
+				{name: "proName"},
+				{name: "weekDay"},
+				{name: "dayVal_mon"},
+				{name: "dayVal_tue"},
+				{name: "dayVal_wed"},
+				{name: "dayVal_thu"},
+				{name: "dayVal_fri"},
+				{name: "dayVal_sat"},
+				{name: "dayVal_sun"},
+				{name: "allDay"},
+				{name: "start_hour"},
+				{name: "start_min"},
+				{name: "end_hour"},
+				{name: "end_min"}
+			]
+		},
+		paging: {
+		},
+		columns: [
+			{
+				text: $.su.CHAR.SCHEDULER.ID, 
+				xtype: "rownumberer",
+				width:40
+			},{
+				text: $.su.CHAR.SCHEDULER.PROFILE_NAME,
+				dataIndex: "profile",
+				width:195
+			},{
+				text: $.su.CHAR.SCHEDULER.DAY_WEEK,
+				dataIndex: "dayOpt",
+				width:80
+			},{
+				text: $.su.CHAR.SCHEDULER.START_TIME,
+				dataIndex: "tStart",
+				width:65
+			},{
+				text: $.su.CHAR.SCHEDULER.END_TIME,
+				dataIndex: "tEnd",
+				width:65
+			},{
+				xtype: "settings"
+				// width:80
+			}
+		],
+		operation:"add-rp"
+	}).on("ev_load", function(e, data, start, len){
+		flag = 0;
+		curRuleIdx = -1;
+	});
+
+	$("#rule_add_alert").msg({
+		type:"alert",
+		cls:"grid-popup-msg"
+	});
+
+	// $("#rule_add_alert").css("top", ($(window).height()-$("#rule_add_alert").height()-76)/2);
+	// $("#rule_add_alert").css("left", "50%" );
+	$("#cancel_add").html($.su.CHAR.SCHEDULER.NOPROFILE);
+
+	// 鼠标扫过Profile时，改变条目的颜色
+	$("div#profile_name_grid").delegate(".grid-content-container table tr",
+	 "mouseenter mouseleave", function(){
+	 	$(this).toggleClass("hover");
+	 });
+	// 鼠标点击profile时，获取该profile下相应的rules
+	$("div#profile_name_grid").delegate(".grid-content-container table tr",
+		"click", function(){
+			var profile = null;
+			var tr = $(this);
+			
+			tr.closest("table").find("tr").removeClass("selected");
+			setTimeout(function(){
+				tr.addClass("selected");
+			}, 200);
+			
+
+			$(this).find("td").each(function(i){
+				if ($(this).attr("name") == "settings-column")
+				{
+					var html = $(this).find(".btn-edit");
+					var index = html.attr("data-index");
+					var heigth = index * 50 + 100;
+					var hh = heigth + "px";
+
+					document.getElementById("arrow").style.paddingTop = hh;
+				}
+				if ($(this).attr("name") == "profileName")
+				{
+					//profile = $(this).find(".content").text().replace(/\u00A0/g, " ");/*将空格占位符&nbsp;替换为空格" "*/
+					profile = profileName_commit[$(this).closest("tr").index()];
+					g_profile = profile;
+					getRuleFunc(profile);
+					dayEnableAll();
+				}
+			});
+	});
+	// 添加或修改了profile
+	$("div#profile_name_grid").delegate(".btn-submit", "mouseup", function(){
+		setTimeout(getProfileFunc, 1000);
+		if (mode == 0)
+			setTimeout(getAssociationFunc, 1100);
+		else
+			setTimeout(getAssociationApFunc, 1100);
+	});
+
+	$("div#profile_name_grid").delegate(".btn-delete", "mouseup", function(){
+		setTimeout(getProfileFunc, 1400);
+		if (mode == 0)
+			setTimeout(getAssociationFunc, 1500);
+		else
+			setTimeout(getAssociationApFunc, 1500);
+	});
+
+	$("div#profile_name_grid").delegate(".btn-edit", "click", function(){
+		var store = $("div#profile_name_grid").grid("getStore");
+		var btn = $(this);
+		var index = btn.attr("data-index");
+		var data = store.getDataByIndex(index);
+
+		curIdx = index;
+		$("input#profileName_txt").textbox("setValue", data.profileName);
+	});
+	$("div#profile_name_grid").delegate("button.btn-cancel", "mouseup", function(){
+		curIdx = -1;
+		
+		if ($("input#profileName_txt").textbox("getValue") != "") {
+			$("input#profileName_txt").focus();
+			$("input#profileName_txt").trigger("focus");
+			
+			$("input#profileName_txt").blur();
+			$("input#profileName_txt").trigger("blur");
+		}
+	});
+
+	$("div#profile_rule_grid").delegate(".btn-add", "mouseup", function(){
+		setTimeout(function(){
+			$("input#weekDay").radio('reset');
+		}, 10);
+	});
+	
+	$("div#profile_rule_grid").delegate("a.btn-edit", "click", function(data){
+
+		var allDay = $("div#time_set input[name=dayTime]");
+		var store = $("div#profile_rule_grid").grid("getStore");
+		var btn = $(this);
+		var index = btn.attr("data-index");
+		var val = 3;
+
+		var data = store.getDataByIndex(index);
+		
+		curRuleIdx =  index;
+		
+		if (data.dayOpt == "Weekday")
+		{
+			val = 0;
+		}
+		else if (data.dayOpt == "Weekend")
+		{
+			val = 1;
+		}
+		else if (data.dayOpt == "Daily")
+		{
+			val = 2;
+		}
+		else
+		{
+			val = 3;
+		}
+		$("input#weekDay").radio("setValue", val);
+		if (val == 0 || val == 1 || val == 2)
+		{
+			dayDisableAll();
+		}
+		$("input#dayVal_mon").checkbox("setValue", data.dayVal_mon);
+		$("input#dayVal_tue").checkbox("setValue", data.dayVal_tue);
+		$("input#dayVal_wed").checkbox("setValue", data.dayVal_wed);
+		$("input#dayVal_thu").checkbox("setValue", data.dayVal_thu);
+		$("input#dayVal_fri").checkbox("setValue", data.dayVal_fri);
+		$("input#dayVal_sat").checkbox("setValue", data.dayVal_sat);
+		$("input#dayVal_sun").checkbox("setValue", data.dayVal_sun);
+
+		$("input#allDay").checkbox("setValue", data.allDay);
+		if (data.allDay == 1)
+		{
+			setTimeSlt(true);
+		}
+		else
+		{
+			setTimeSlt(false);
+		}
+
+		var tStart = data.tStart;
+		var tEnd = data.tEnd;
+		var pos = 0;
+		var sHour = 0;
+		var sMin = 0;
+		var eHour = 0;
+		var eMin = 0;
+
+		pos = tStart.indexOf(":");
+		sHour = tStart.substr(0, pos);
+		sMin  = tStart.substr(pos + 1);
+		pos = tEnd.indexOf(":");
+		eHour = tEnd.substr(0, pos);
+		eMin  = tEnd.substr(pos + 1);
+
+		$("input#start_hour").combobox("setValue", Number(sHour));
+		$("input#start_min").combobox("setValue", Number(sMin));
+		$("input#end_hour").combobox("setValue", Number(eHour));
+		$("input#end_min").combobox("setValue", Number(eMin));
+	});
+
+	$("div#profile_rule_grid").delegate("button.btn-cancel", "mouseup", function(){
+		flag = 0;
+		curRuleIdx = -1;
+		dayEnableAll();
+		setTimeSlt(false);
+		
+		$("input#weekDay").radio('setNormal');
+		$("input#weekDay").radio('reset');
+		$("input#dayVal_mon").checkbox('setNormal');
+		$("input#start_hour").combobox('setNormal');
+		$("input#start_min").combobox('setNormal');
+		$("input#end_hour").combobox('setNormal');
+		$("input#end_min").combobox('setNormal');
+		/*if ($("input#start_hour").combobox("getValue").length != 0) {
+			$("input#start_hour").parent().find(".widget-wrap-outer").find(".combobox-text").focus();
+			$("input#start_hour").parent().find(".widget-wrap-outer").find(".combobox-text").trigger("focus");
+			
+			$("input#start_hour").parent().find(".widget-wrap-outer").find(".combobox-text").blur();
+			$("input#start_hour").parent().find(".widget-wrap-outer").find(".combobox-text").trigger("blur");
+		}
+		if ($("input#start_min").combobox("getValue").length != 0) {
+			$("input#start_min").parent().find(".widget-wrap-outer").find(".combobox-text").focus();
+			$("input#start_min").parent().find(".widget-wrap-outer").find(".combobox-text").trigger("focus");
+			
+			$("input#start_min").parent().find(".widget-wrap-outer").find(".combobox-text").blur();
+			$("input#start_min").parent().find(".widget-wrap-outer").find(".combobox-text").trigger("blur");
+		}
+		if ($("input#end_hour").combobox("getValue").length != 0) {
+			$("input#end_hour").parent().find(".widget-wrap-outer").find(".combobox-text").focus();
+			$("input#end_hour").parent().find(".widget-wrap-outer").find(".combobox-text").trigger("focus");
+			
+			$("input#end_hour").parent().find(".widget-wrap-outer").find(".combobox-text").blur();
+			$("input#end_hour").parent().find(".widget-wrap-outer").find(".combobox-text").trigger("blur");
+		}
+		if ($("input#end_min").combobox("getValue").length != 0) {
+			$("input#end_min").parent().find(".widget-wrap-outer").find(".combobox-text").focus();
+			$("input#end_min").parent().find(".widget-wrap-outer").find(".combobox-text").trigger("focus");
+			
+			$("input#end_min").parent().find(".widget-wrap-outer").find(".combobox-text").blur();
+			$("input#end_min").parent().find(".widget-wrap-outer").find(".combobox-text").trigger("blur");
+		}
+		$("div.widget-error-tips").hide();*/
+	});
+	// 提交表单前把当前的profileName加入到Rule中
+	$("div#profile_rule_grid").delegate("button.btn-submit", "mouseup", function(){
+		var value = g_profile;
+
+		// dayEnableAll();
+		// setTimeSlt(false);
+		$('input#proName').textbox("setValue", value.replace(/\u00A0/g, " "));/*将空格占位符&nbsp;替换为空格" "*/
+		
+		/*if ($("input#start_hour").combobox("getValue").length != 0) {
+			$("input#start_hour").parent().find(".widget-wrap-outer").find(".combobox-text").focus();
+			$("input#start_hour").parent().find(".widget-wrap-outer").find(".combobox-text").trigger("focus");
+			
+			$("input#start_hour").parent().find(".widget-wrap-outer").find(".combobox-text").blur();
+			$("input#start_hour").parent().find(".widget-wrap-outer").find(".combobox-text").trigger("blur");
+		}
+		if ($("input#start_min").combobox("getValue").length != 0) {
+			$("input#start_min").parent().find(".widget-wrap-outer").find(".combobox-text").focus();
+			$("input#start_min").parent().find(".widget-wrap-outer").find(".combobox-text").trigger("focus");
+			
+			$("input#start_min").parent().find(".widget-wrap-outer").find(".combobox-text").blur();
+			$("input#start_min").parent().find(".widget-wrap-outer").find(".combobox-text").trigger("blur");
+		}
+		if ($("input#end_hour").combobox("getValue").length != 0) {
+			$("input#end_hour").parent().find(".widget-wrap-outer").find(".combobox-text").focus();
+			$("input#end_hour").parent().find(".widget-wrap-outer").find(".combobox-text").trigger("focus");
+			
+			$("input#end_hour").parent().find(".widget-wrap-outer").find(".combobox-text").blur();
+			$("input#end_hour").parent().find(".widget-wrap-outer").find(".combobox-text").trigger("blur");
+		}
+		if ($("input#end_min").combobox("getValue").length != 0) {
+			$("input#end_min").parent().find(".widget-wrap-outer").find(".combobox-text").focus();
+			$("input#end_min").parent().find(".widget-wrap-outer").find(".combobox-text").trigger("focus");
+			
+			$("input#end_min").parent().find(".widget-wrap-outer").find(".combobox-text").blur();
+			$("input#end_min").parent().find(".widget-wrap-outer").find(".combobox-text").trigger("blur");
+		}
+		$("div.widget-error-tips").hide();*/
+		return true;
+	});
+
+	/*           END           */
+
+	/*           ASSOCIATION          */
+	
+	$('#assoc_form').form({
+		fields: [
+			{name: "ssid", mapping: "ssid"},
+			{name: "profileName", mapping: "profileName"},
+			{name: "action",	mapping: "action"}
+		],
+		autoLoad:true,
+		submitBtn:false
+	});
+	$('#assoc_form_ap').form({
+		fields:[
+			{name:"apName", mapping:"apName"},
+			{name:"mac", mapping:"mac"},
+			{name:"profileName", mapping:"profileName"},
+			{name:"action", mapping:"action"}
+		],
+		autoLoad:true,
+		submitBtn:false
+	});
+	
+	// 在添加或删除Profile之后，调用此函数，更新assoc_entry中的profile选项。
+	function getAssociationFunc(){
+		$.ajax({
+			url: SCHEDULER_ASSOCIATION_URL,
+			type: 'GET',
+			data: {
+			},
+			dataType: 'json',
+			// async:false,
+			cache:false,
+			error: function(){
+				alert("error");
+				return false;
+			},
+			success: function(result){
+				var index = 0;
+				var data = result.data;
+				// console.log("assoc_entry ")
+				var store = $("div#assoc_entry").grid("getStore");
+
+				if (store)
+				{
+					store.loadData(data, false, null);
+				}
+				else
+				{
+					setTimeout(function(){
+						store.loadData(data, false, null);
+					}, 1000);
+				}
+			}
+		});
+	}
+
+	function getAssociationApFunc(){
+		$.ajax({
+			url: SCHEDULER_ASSOCIATIONAP_URL,
+			type:"GET",
+			data:{
+			},
+			dataType:"json",
+			cache:false,
+			error: function(){
+				alert($.su.CHAR.ERROR['00000023']);
+				return false;
+			},
+			success: function(result){
+				var data = result.data;
+				// console.log("assoc_entry_ap")
+				var store = $("div#assoc_entry_ap").grid("getStore");
+				if (store)
+				{
+					store.loadData(data, false, null);
+				}
+				else
+				{
+					setTimeout(function(){
+						store.loadData(data, false, null);
+					}, 1000);
+				}	
+			}
+		});
+	}
+	// console.log("assoc_entry")
+	var assoc = $("div#assoc_entry").grid({
+		store:{
+			proxy: {
+			url: SCHEDULER_ASSOCIATION_URL
+			},
+			fields: [
+				{name: "ssid"},
+				{name:"band"},
+				{name: "profileName"},
+				{name: "action"},
+				{name: "ml"}
+			],
+			updateMode:"complete",
+			autoLoad: true
+		},
+		editor: {
+		},
+		paging: {
+		},
+		columns: [
+			{
+				text: $.su.CHAR.SCHEDULER.ID, 
+				xtype: "rownumberer",
+				width:60
+			},{
+				text: $.su.CHAR.SCHEDULER.SSID_NAME,
+				dataIndex: "ssid",
+				width:240
+			},{
+				text: $.su.CHAR.SCHEDULER.BAND,
+				dataIndex:"band",
+				width:70,
+				renderer: function(val, index, row){
+					if (!row.ml) {
+						return val
+					} else {
+						var mlBitMap = row.ml.toString(2).split('')
+						var bands = []
+						$.each(mlBitMap, function (index, item) {
+							if (item == 1) {
+								var band = mlBitMap.length - 1 - index
+								if(band==0){
+									bands.unshift($.su.CHAR.VLAN.GHZ_24);
+								}else if(band==1){
+									var str = ($.su.dutMode === DUT_MODE.BAND_24G_5G1_5G2 || $.su.dutMode === DUT_MODE.BAND_24G_5G1_5G2_6G)?$.su.CHAR.VLAN.GHZ_5G1:$.su.CHAR.VLAN.GHZ_5;
+									bands.unshift(str);
+								}else if(band==2){
+									bands.unshift($.su.CHAR.VLAN.GHZ_5G2);
+								}else if(band==3){
+									bands.unshift($.su.CHAR.VLAN.GHZ_6);
+								}
+							}
+						})
+
+						return '<span class="band-wrap" ml="' + row.ml + '">' + bands.join(',<br>') + '</span>' 
+					}
+				}
+			},{
+				text: $.su.CHAR.SCHEDULER.PROFILE_NAME,
+				xtype:"actioncolumn",
+				items:[
+					{
+						xtype:"combobox",
+						name:"profileName",
+						inputCls:"xxl",
+						items:gItem
+					}
+				],
+				dataIndex: "profileName",
+				width:350
+			},{
+				text: $.su.CHAR.SCHEDULER.ACTION,
+				xtype:"actioncolumn",
+				items:[
+					{
+						xtype:"combobox",
+						name:"action",
+						items: [
+					 		{"name": $.su.CHAR.SCHEDULER.RADIO_ON, "value":"1"},
+							{"name": $.su.CHAR.SCHEDULER.RADIO_OFF, "value":"0"}
+						]
+					}
+				],
+				dataIndex: "action"
+				// width:120
+			}
+		]
+	}).on("ev_load", function(e, data, start, len){
+		var profile_arr = $("div#assoc_entry input.actioncolumn-input[name=profileName]");
+		var num = profile_arr.length;
+		var index = 0;
+		ssid_asso_commit=[];
+
+		for (index = 0; index < num; index++)
+		{
+			$(profile_arr[index]).combobox("loadData", gItem);
+			$(profile_arr[index]).combobox("setValue", data[index].profileName);
+			ssid_asso_commit.push(data[index].ssid);
+		}
+
+	});
+	// console.log("assoc_entry_ap")
+	var assoc_ap = $("div#assoc_entry_ap").grid({
+		store:{
+			proxy:{
+				url:SCHEDULER_ASSOCIATIONAP_URL
+			},
+			fields:[
+				{name:"apName"},
+				{name:"mac"},
+				{name:"profileName"},
+				{name:"action"}
+			],
+			updateMode:"complete",
+			autoLoad:true
+		},
+		editor:{
+		},
+		paging:{
+		},
+		columns:[
+			{
+				text:$.su.CHAR.SCHEDULER.ID,
+				xtype:"rownumberer",
+				width:40
+			},{
+				text:$.su.CHAR.SCHEDULER.APNAME,
+				dataIndex:"apName",
+				width:200
+			},{
+				text:$.su.CHAR.SCHEDULER.APMAC,
+				dataIndex:"mac",
+				width:140
+			},{
+				text:$.su.CHAR.SCHEDULER.PROFILE_NAME,
+				xtype:"actioncolumn",
+				items:[
+					{
+						xtype:"combobox",
+						name:"profileName",
+						inputCls:"xxl",
+						items:gItem
+					}
+				],
+				dataIndex:"profileName",
+				width:340
+			},{
+				text:$.su.CHAR.SCHEDULER.ACTION,
+				xtype:"actioncolumn",
+				items:[
+					{
+						xtype:"combobox",
+						name:"action",
+						dataIndex:"action",
+						items:[
+							{"name": $.su.CHAR.SCHEDULER.RADIO_ON, "value":"1"},
+							{"name": $.su.CHAR.SCHEDULER.RADIO_OFF, "value":"0"}
+						]
+					}
+				]
+				// width:120
+			}
+		]
+	}).on("ev_load", function(e, data, start, len){
+		var profile_arr = $("div#assoc_entry_ap input.actioncolumn-input[name=profileName]");
+		var num = profile_arr.length;
+		var index = 0;
+
+		for (index = 0; index < num; index++)
+		{
+			$(profile_arr[index]).combobox("loadData", gItem);
+			$(profile_arr[index]).combobox("setValue", data[index].profileName);
+		}
+	});
+
+	function refreshCombobox()
+	{
+		var profile_arr = $("div#assoc_entry input.actioncolumn-input[name=profileName]");
+		var num = profile_arr.length;
+		var index = 0;
+
+		for (index = 0; index < num; index++)
+		{
+			$(profile_arr[index]).combobox("loadData", gItem);
+		}
+	}
+	function    HTMLDeCode(str)  
+  {  
+        var    s    =    "";  
+        if    (str.length    ==    0)    return    "";  
+        s    =    str.replace(/&amp;/g,    "&");  
+        s    =    s.replace(/&lt;/g,        "<");  
+        s    =    s.replace(/&gt;/g,        ">");  
+        s    =    s.replace(/'/g,      "\'");  
+        s    =    s.replace(/&quot;/g,      "\""); 
+        s 	 = 	  s.replace(/&nbsp;/g, " "); 
+        //s    =    s.replace(/ <br>/g,      "\n"); 
+        return    s;  
+  }
+	$("#total_save").button({
+		text: $.su.CHAR.SCHEDULER.SAVE,
+		cls:"submit",
+		handler:function(){
+			// 提交grid里面的所有数据
+			if (mode == 0)
+			{
+				var para 		= {};
+				var ssid_arr 	= $("div#assoc_entry td[name=ssid] span");
+				var band_arr	= $("div#assoc_entry td[name=band] span").not(".band-wrap");
+				var profile_arr = $("div#assoc_entry input.actioncolumn-input[name=profileName]");
+				var action_arr  = $("div#assoc_entry input.actioncolumn-input[name=action]");
+				var num			= profile_arr.length;
+				var index 		= 0;
+				var ssid 		= [];
+				var band 		= [];
+				var ml = [];
+				var profile  	= [];
+				var action 		= [];
+
+				para.operation 	= "save";
+				para.ssid 		= "";
+				para.band 		= "";
+				para.ml 		= "";
+				para.profile    = "";
+				para.action 	= "";
+
+				for (index; index < num; index++)
+				{
+					ssid.push(HTMLDeCode(ssid_arr[index].innerHTML));
+					var bandDom = $(band_arr[index]).find(".band-wrap")
+					band.push(HTMLDeCode((bandDom && bandDom[0]) ? '0' : band_arr[index].innerHTML));
+					ml.push((bandDom && bandDom[0]) ? bandDom[0].getAttribute('ml') : 0);
+					profile.push($(profile_arr[index]).combobox("getValue"));
+					action.push($(action_arr[index]).combobox("getValue"));
+				}
+
+				para.ssid 		= ssid_asso_commit.join("\n");
+				para.band 		= band.join("\n");
+				para.ml      = ml.join("\n");
+				para.profile 	= profile.join("\n");
+				para.action 	= action.join("\n");
+
+				// document.getElementById("config_loading").style.display = "inline-block";
+				// $("#total_save").button("disable");
+
+				$.ajax({
+					url: SCHEDULER_ASSOCIATION_URL,
+					type: 'POST',
+					data:para,
+					dataType: 'json',
+					timeout: 10000,
+					success: function(result){
+						$("div#assoc_entry").grid("getStore").loadData(result.data);
+						// document.getElementById("config_loading").style.display = "none";
+						// $("#total_save").button("enable");
+						$("form#assoc_form").form("prompt", true, $.su.CHAR.SCHEDULER.SAVE_SUCC);
+					},
+					error: function(xhr, s, et){
+						// document.getElementById("config_loading").style.display = "none";
+						// $("#total_save").button("enable");
+						// console.log(xhr + " --- " + s + " --- " + et);
+						// 超时和出错
+						// if ("timeout" == s)
+						// {
+						// 	$("form#assoc_form").form("prompt", false, $.su.CHAR.SCHEDULER.TIMEOUT);
+						// }
+						// else
+						// {
+						// 	$("form#assoc_form").form("prompt", false, $.su.CHAR.SCHEDULER.SAVE_FAIL);
+						// }
+					}
+				});
+			}
+			else
+			{
+				var para 		= {};
+				var ap_arr 	= $("div#assoc_entry_ap td[name=apName] span");
+				var mac_arr	= $("div#assoc_entry_ap td[name=mac] span");
+				var profile_arr = $("div#assoc_entry_ap input.actioncolumn-input[name=profileName]");
+				var action_arr  = $("div#assoc_entry_ap input.actioncolumn-input[name=action]");
+				var num			= profile_arr.length;
+				var index 		= 0;
+				var ap 			= [];
+				var mac 		= [];
+				var profile  	= [];
+				var action 		= [];
+				var type 		= 1;
+
+				para.operation 	= "save";
+				para.ap 		= "";
+				para.mac 		= "";
+				para.profile    = "";
+				para.action 	= "";
+				para.type 		= type;
+
+				for (index; index < num; index++)
+				{
+					ap.push(HTMLDeCode(ap_arr[index].innerHTML));
+					mac.push(HTMLDeCode(mac_arr[index].innerHTML));
+					profile.push($(profile_arr[index]).combobox("getValue"));
+					action.push($(action_arr[index]).combobox("getValue"));
+				}
+
+				para.ap 		= ap.join("\n");
+				para.mac 		= mac.join("\n");
+				para.profile 	= profile.join("\n");
+				para.action 	= action.join("\n");
+
+				// document.getElementById("config_loading").style.display = "inline-block";
+				// $("#total_save").button("disable");
+
+				$.ajax({
+					url: SCHEDULER_ASSOCIATIONAP_URL,
+					type: 'POST',
+					data:para,
+					dataType: 'json',
+					timeout: 3000,
+					success: function(result){
+						// console.log("assoc_entry_ap")
+						$("div#assoc_entry_ap").grid("getStore").loadData(result.data);
+						// document.getElementById("config_loading").style.display = "none";
+						// $("#total_save").button("enable");
+						$("form#assoc_form_ap").form("prompt", true, $.su.CHAR.SCHEDULER.SAVE_SUCC);
+					},
+					error:function(xhr, s, et){
+						// document.getElementById("config_loading").style.display = "none";
+						// $("#total_save").button("enable");
+						// console.log(xhr + " ___ " + s + " ___ " + et);
+						// 超时和出错
+						// if ("timeout" == s)
+						// {
+						// 	$("form#assoc_form").form("prompt", false, $.su.CHAR.SCHEDULER.TIMEOUT);
+						// }
+						// else
+						// {
+						// 	$("form#assoc_form").form("prompt", false, $.su.CHAR.SCHEDULER.SAVE_FAIL);
+						// }
+					}
+				});
+			}
+		}
+	});
+
+	/*                END ASSOCIATION				*/
+	//$("#title").html($.su.CHAR.MAC_FITLERING.ACCESS_DEVICE);
+
+	function setTimeSlt(isTrue)
+	{
+		if ($("input#start_hour").combobox("getContainer") &&
+			$("input#start_min").combobox("getContainer") &&
+			$("input#end_hour").combobox("getContainer") &&
+			$("input#end_min").combobox("getContainer"))
+		{
+			if (isTrue)
+			{
+				$("input#start_hour").combobox("disable");
+				$("input#start_min").combobox("disable");
+				$("input#end_hour").combobox("disable");
+				$("input#end_min").combobox("disable");
+			}
+			else
+			{
+				$("input#start_hour").combobox("enable");
+				$("input#start_min").combobox("enable");
+				$("input#end_hour").combobox("enable");
+				$("input#end_min").combobox("enable");
+			}
+		}
+	}
+	
+	function dayPickAll()
+	{
+		$("input#dayVal_mon").checkbox("setValue", "1");
+		$("input#dayVal_tue").checkbox("setValue", "1");
+		$("input#dayVal_wed").checkbox("setValue", "1");
+		$("input#dayVal_thu").checkbox("setValue", "1");
+		$("input#dayVal_fri").checkbox("setValue", "1");
+		$("input#dayVal_sat").checkbox("setValue", "1");
+		$("input#dayVal_sun").checkbox("setValue", "1");
+	}
+
+	function dayPickNone()
+	{
+		$("input#dayVal_mon").checkbox("setValue", "0");
+		$("input#dayVal_tue").checkbox("setValue", "0");
+		$("input#dayVal_wed").checkbox("setValue", "0");
+		$("input#dayVal_thu").checkbox("setValue", "0");
+		$("input#dayVal_fri").checkbox("setValue", "0");
+		$("input#dayVal_sat").checkbox("setValue", "0");
+		$("input#dayVal_sun").checkbox("setValue", "0");
+	}
+	function dayDisableAll()
+	{
+		$("input#dayVal_mon").checkbox("disableAll");
+		$("input#dayVal_tue").checkbox("disableAll");
+		$("input#dayVal_wed").checkbox("disableAll");
+		$("input#dayVal_thu").checkbox("disableAll");
+		$("input#dayVal_fri").checkbox("disableAll");
+		$("input#dayVal_sat").checkbox("disableAll");
+		$("input#dayVal_sun").checkbox("disableAll");
+	}
+	function dayEnableAll()
+	{
+		$("input#dayVal_mon").checkbox("enableAll");
+		$("input#dayVal_tue").checkbox("enableAll");
+		$("input#dayVal_wed").checkbox("enableAll");
+		$("input#dayVal_thu").checkbox("enableAll");
+		$("input#dayVal_fri").checkbox("enableAll");
+		$("input#dayVal_sat").checkbox("enableAll");
+		$("input#dayVal_sun").checkbox("enableAll");
+	}
+	// daily
+	function selectEveryday()
+	{
+		/*  自动选中星期一到星期天  */
+		dayPickAll();
+		/*  设置成禁用  */
+		dayDisableAll();
+	}
+	// weekday
+	function selectWeekday()
+	{
+		dayDisableAll();
+		dayPickAll();
+		$("input#dayVal_sat").checkbox("setValue", "0");
+		$("input#dayVal_sun").checkbox("setValue", "0");
+	}
+	// weekend
+	function selectWeekend()
+	{
+		dayPickNone();
+		dayDisableAll();
+		$("input#dayVal_sat").checkbox("setValue", "1");
+		$("input#dayVal_sun").checkbox("setValue", "1");	
+	}
+	// days
+	function selectDays()
+	{
+		dayPickNone();
+		dayEnableAll();
+	}
+	
+});
+	
+</script>
+</body>
+
+</html>

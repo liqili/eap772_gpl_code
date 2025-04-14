@@ -1,0 +1,295 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>controller settings</title>
+</head>
+
+<body>
+	<div class="func-container">
+		<form id="controller_setting" class="">
+			<div id="controller_panel">
+				<input type="text"  id="conn_status" name="" value="" />
+				<input type="text"  id="conn_status_hidden" name="cloudStatus" class="hidden"/>
+				<input type="checkbox"  id="conn_enable" name="cloudEnable" value="" />
+				<div id="terms-privacy-policy" class="terms-privacy-policy hidden">
+					<input id="terms-privacy-policy-enable" name="termsPrivacyPolicyEnable" class="no-label-checkbox" value="" />
+					<p id="terms-privacy-policy-text"></p>
+				</div>
+				<div class="note">
+					<h5 id="ctrl_note_title" class="title"></h5>
+					<p id="ctrl_note_1" class="content"></p> 
+					<p id="ctrl_note_2" class="content"></p> 
+				</div>
+			</div>
+			<div id="inform_panel">
+				<input type="text"  id="inform_url_port" name="" value="" />
+				<input type="text"  id="inform_url" name="controllerUrl" value="" />
+				<!-- <input type="text"  id="inform_port" name="controllerPort" value="" /> -->
+
+				<input type="text"  id="inform_dPort" name="dPort" value="" />
+				<input type="text"  id="inform_mPort" name="mPort" value="" />
+				<input type="text"  id="inform_omadacId" name="omadacId" value="" />
+				<div class="note">
+					<h5 id="inform_note_title" class="title"></h5>
+					<p id="inform_note_1" class="content"></p>
+					<p id="inform_note_2" class="content"></p>
+				</div>
+			</div>
+			
+			<!-- <button type="button" id="submitButton" name="submitButton" value=""></button> -->
+		</form>
+	</div>
+
+	<div id="tou_pp_error_msg" class="hidden">
+		<div class="warning-msg">
+			<h4 class="title">
+				<span class="icon"></span>
+				<span class="text" id="tou_pp_error_tip"></span>
+			</h4>
+		</div>
+	</div>
+	
+<script type="text/javascript">
+//<![CDATA[
+$(document).ready(function(e){
+/* 
+	$("div.func-container").page({
+		title: $.su.CHAR.SSH.TITLE,
+		help: ""	
+	}); */
+	
+	$('#ctrl_note_title').html($.su.CHAR.CONTROLLER.NOTE+':');
+	$('#ctrl_note_1').html($.su.CHAR.CONTROLLER.CLOUD_BASED_NOTE_1);
+	$('#ctrl_note_2').html($.su.CHAR.CONTROLLER.CLOUD_BASED_NOTE_2);
+	$('#inform_note_title').html($.su.CHAR.CONTROLLER.NOTE+':');
+	$('#inform_note_1').html($.su.CHAR.CONTROLLER.INFORM_URL_NOTE_1);
+	$('#inform_note_2').html($.su.CHAR.CONTROLLER.INFORM_URL_NOTE_2);
+
+	$('div#controller_panel').panel({
+		title: $.su.CHAR.CONTROLLER.CLOUD_BASED_MNGT,
+		collapsible: false
+	});
+	
+	$('div#inform_panel').panel({
+		title: $.su.CHAR.CONTROLLER.CONTROLLER_INFORM_URL,
+		collapsible: false
+	});
+
+	$("input#conn_status").textbox({
+		fieldLabel: $.su.CHAR.CONTROLLER.CONNECTION_STATUS,
+		labelCls: "xxl",
+		readOnly: true
+	});
+
+	$("input#conn_status_hidden").textbox({
+		fieldLabel: $.su.CHAR.CONTROLLER.CONNECTION_STATUS,
+		labelCls: "xxl",
+		cls: "hidden",
+		readOnly: true
+	});
+
+	$("input#conn_enable").checkbox({
+		fieldLabel: $.su.CHAR.CONTROLLER.CLOUD_BASED_MNGT,
+		labelCls: "xxl",
+		items: [
+			{boxlabel: $.su.CHAR.CONTROLLER.ENABLE, inputValue: "true", uncheckedValue: "false", checked:true}
+		]
+	}).on("ev_change", function (e, oldValue, newValue) {
+		var enable = newValue == "cloudEnable" || newValue == 'true';
+		if (enable) {
+			$("#terms-privacy-policy").show();
+		} else {
+			$("#terms-privacy-policy").hide();
+		}
+	});
+
+	$("input#terms-privacy-policy-enable").checkbox({
+		labelCls: 'xs',
+		items: [
+			{boxlabel: '', inputValue: "true", uncheckedValue:"false", checked: false}
+		]
+	})
+	
+	$('p#terms-privacy-policy-text').html($.su.CHAR.WIZARD.TERMS_PRIVACY_POLICY);
+
+	$("#tou_pp_error_msg").msg({
+		type: "alert",
+		cls: "l"
+	});
+	$("#tou_pp_error_tip").html($.su.CHAR.WIZARD.TERMS_PRIVACY_POLICY_TIP);
+
+	$("input#inform_url_port").textbox({
+		fieldLabel: $.su.CHAR.CONTROLLER.INFORM_URL,
+		// tips:$.su.CHAR.SSH.SSH_RANGE,
+		inputCls: "xxxxl",
+		allowBlank: false,
+		validator: function(value){
+			var domainTest = $.su.vtype.types.ip_domain.regex;
+			var portTest = $.su.vtype.types.number.regex;
+
+			// var urlTest = /^(([hH][tT]{2}[pP]\:\/\/)|([hH][tT]{2}[pP][sS]\:\/\/))?([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,6}$/;
+			var urlTest = /^(([a-zA-Z0-9]{0,5}\:\/\/)|([hH][tT]{2}[pP]\:\/\/)|([hH][tT]{2}[pP][sS]\:\/\/))?([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,6}$/;
+			var hexTest  = /^((0[xX])[0-9a-fA-F]{30})|([0-9a-fA-F]{32})$/;
+
+			if(value.indexOf('?') > 0){
+				// $("input#inform_dPort").textbox('enable');
+				$("input#inform_mPort").textbox('enable');
+				$("input#inform_omadacId").textbox('enable');
+				$("input#inform_url").textbox('enable');
+
+				// $("input#inform_url").textbox('disable');
+				// $("input#inform_port").textbox('disable');
+
+				var url = value.split('?')[0];
+				var params = value.split('?')[1];
+
+				if(params.indexOf('=')<0){
+					return $.su.vtype.types.ip_domain.vtypeText;
+				}
+				if(urlTest.test(url) != true && $.su.vtype.types.ip.regex.test(url) != true){
+					return $.su.vtype.types.ip_domain.vtypeText;
+				}
+				if(url.indexOf('://')>0){
+					url = url.split('://')[1];
+				}
+				$("input#inform_url").textbox('setValue', url);
+
+				var paramsLen = params.split('&').length;
+				for(var i=0; i<paramsLen; i++){
+					var paramName = params.split('&')[i].split('=')[0];
+					var paramVal = params.split('&')[i].split('=')[1];
+
+					if( paramName==='dPort' ){
+						if( !portTest.test(paramVal) || (parseInt(paramVal)<0 || parseInt(paramVal)>65535) ){
+							return $.su.CHAR.VTYPETEXT.NUMBER_MIN_MAX.replace("%min", 0).replace("%max", 65535);
+						}
+						$("input#inform_dPort").textbox('setValue', paramVal);
+						continue;
+					}
+					if( paramName==='mPort' ){
+						if( !portTest.test(paramVal) || (parseInt(paramVal)<0 || parseInt(paramVal)>65535) ){
+							return $.su.CHAR.VTYPETEXT.NUMBER_MIN_MAX.replace("%min", 0).replace("%max", 65535);
+						}
+						$("input#inform_mPort").textbox('setValue', paramVal);
+						continue;
+					}
+					if( paramName==='omadacId' ){
+						if( !hexTest.test(paramVal) ){
+							return 'not hexadecimal';
+						}
+						$("input#inform_omadacId").textbox('setValue', paramVal);
+						continue;
+					}
+					return 'invalid dPort/mPort/omadacId';
+				}
+				if(paramsLen>3 || paramsLen<1){
+					return $.su.vtype.types.ip_domain.vtypeText;
+				}
+				return true;
+			}else{
+				// $("input#inform_dPort").textbox('disable');
+				$("input#inform_mPort").textbox('disable');
+				$("input#inform_omadacId").textbox('disable');
+				$("input#inform_url").textbox('enable');
+				// $("input#inform_port").textbox('enable');
+
+			var url = value.split(':')[0];
+			var port = value.split(':')[1];
+			if(domainTest.test(url) != true){
+				return $.su.vtype.types.ip_domain.vtypeText;
+			}
+			if(port!=undefined && portTest.test(port) != true){
+				return $.su.vtype.types.number.vtypeText;
+			}
+				if( port!=undefined && (port<0 || port>65535)){
+				return $.su.CHAR.VTYPETEXT.NUMBER_MIN_MAX.replace("%min", 0).replace("%max", 65535);
+			}
+			$("input#inform_url").textbox('setValue', url);
+				$("input#inform_dPort").textbox('setValue', port);
+
+			return true;
+			}				
+		}
+	});
+	
+	$("input#inform_url").textbox({
+		cls: "hidden"
+	});
+
+	/* $("input#inform_port").textbox({
+		cls: "hidden"
+	}); */
+
+	$("input#inform_dPort").textbox({
+		cls: "hidden"
+	});
+
+	$("input#inform_mPort").textbox({
+		cls: "hidden"
+	});
+
+	$("input#inform_omadacId").textbox({
+		cls: "hidden"
+	});
+
+	var cloudProxy = new $.su.Proxy({
+		url: "./data/controllerSetting.json"
+	});
+
+	$("form#controller_setting").form({
+		proxy: cloudProxy,
+		fields: [
+			{name: "cloudStatus"},
+			{name: "cloudEnable"},
+			{name: "controllerUrl"},
+			// {name: "controllerPort"},		
+			{name: "dPort"},
+			{name: "mPort"},
+			{name: "omadacId"}
+		],
+
+		autoLoad: false,
+		submitBtn: "default",
+		validator: function(){
+			if ($.su.supportCBC == true && $("#conn_enable").checkbox("getValue").length > 0 && !$("#terms-privacy-policy-enable").checkbox("getValue").length) {
+				$("#tou_pp_error_msg").msg("show")
+				return false;
+			}
+
+			if($("input#inform_url_port").textbox('validate')!=true){
+				return false;
+			}
+			return true;
+		}
+	}).on("ev_loadData", function(e, data){
+		switch(data.cloudStatus){
+			case 0:
+				$("input#conn_status").textbox('setValue', $.su.CHAR.CONTROLLER.DISABLED);
+				break;
+			case 1:
+				$("input#conn_status").textbox('setValue', $.su.CHAR.CONTROLLER.ONLINE);
+				break;
+			case 2:
+				$("input#conn_status").textbox('setValue', $.su.CHAR.CONTROLLER.OFFLINE);
+				break;
+		}
+	});
+
+	cloudProxy.read({}, function(data){
+		var urlPort =data.controllerUrl;
+		if(data.mPort === 0 && data.omadacId == ''){
+			urlPort = data.controllerUrl+':'+data.dPort;
+		}else{
+			urlPort = data.controllerUrl+'?dPort='+data.dPort + '&mPort=' + data.mPort + '&omadacId=' +data.omadacId;
+		}
+		$("input#inform_url_port").textbox('setValue', urlPort);
+		$("input#terms-privacy-policy-enable").checkbox('setValue', data.cloudEnable)
+	});
+});
+	if($.su.supportCBC != true){
+	$('div#controller_panel').hide();
+	}
+</script>
+</body>
+</html>

@@ -1,0 +1,2 @@
+/usr/bin/ar qc libxssl.a  CMakeFiles/xssl.dir/openssl.c.o
+/usr/bin/ranlib libxssl.a

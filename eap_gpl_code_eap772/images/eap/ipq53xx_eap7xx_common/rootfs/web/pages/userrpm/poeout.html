@@ -1,0 +1,251 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>PoE Out</title>
+</head>
+
+<body>
+	<div class="func-container">
+
+		<div id="lan_port_vlan" class="hidden">			
+			<form id="lan_port_vlan_form">
+				<div id="lanPortVlanGrid"></div>
+			</form>
+		</div>
+
+		<div id="poe_out" class="hidden">
+
+			<form id="poe_out_form">
+				<input id="poe_out_status" name="enable" type="text" />
+			</form>
+
+
+		</div>
+
+		
+		<button type="button" id="total_save" style="margin: 0 27px;"></button>
+	</div>
+
+<script type="text/javascript">
+$(document).ready(function (e) {
+	var poe_out_url = "./data/poeout.json";
+
+	var LAN_PORT_VLAN_URL = "./data/lan.port.config.json";
+
+	if($.su.bindVlan){
+		
+		$("div#lan_port_vlan").removeClass('hidden');
+		$("div#lan_port_vlan").panel({
+			title: $.su.CHAR.LAN_PORT_VLAN.VLAN_CONFIG,
+			collapsible: false
+		});
+		
+		$('#lan_port_vlan_form').form({
+			fields: [
+				{name: "lanPort", mapping: "lanPort"},
+				{name: "localVlanEnable",	mapping: "localVlanEnable"},
+				{name: "localVlanId", mapping: "localVlanId"}
+			],
+			autoLoad:true,
+			submitBtn:false
+		});
+		
+		$("div#lanPortVlanGrid").grid({
+			store:{
+				proxy: {
+					url: LAN_PORT_VLAN_URL
+				},
+				fields: [
+					{name: "lanPort"},
+					{name: "localVlanId"},
+					{name: "localVlanEnable"}
+				],
+				updateMode:"complete",
+				autoLoad: true
+			},
+			columns: [
+				{
+					text: $.su.CHAR.LAN_PORT_VLAN.ETH_PORT,
+					dataIndex: "lanPort",
+					width: 200
+				}, {
+					text: $.su.CHAR.LAN_PORT_VLAN.VLAN,
+					xtype:"actioncolumn",
+					items:[
+						{
+							xtype:"combobox",
+							name: "localVlanEnable",
+							fieldLabel: null,
+							items: [
+								{name:$.su.CHAR.LAN_PORT_VLAN.ENABLE, value:1},
+								{name:$.su.CHAR.LAN_PORT_VLAN.DISABLE, value:0}
+							],
+							change: function(e, oldValue, newValue){
+								var me = this;
+								var index = me.getAttribute('index');	
+
+								if( $(me).combobox('getValue').length == 0 || $(me).combobox('getValue')[0] ==0 ){
+									$('input#grid_edit_localVlanId_'+ index).textbox('disable');
+								}else{
+									$('input#grid_edit_localVlanId_'+ index).textbox('enable');
+								}
+									
+							}
+						}
+					],
+					dataIndex: "localVlanEnable"
+				},{
+					text: $.su.CHAR.LAN_PORT_VLAN.VLAN_ID,
+					xtype:"actioncolumn",
+					items:[
+						{
+							xtype:"textbox",
+							name:"localVlanId",
+							vtype: 'number',
+							fieldLabel: null,
+							validator:function(val){
+								if(val>4094){
+									return $.su.CHAR.VTYPETEXT.NUMBER_MAX.replace("%max", 4095);
+								}else if(val<1){
+									return $.su.CHAR.VTYPETEXT.NUMBER_MIN.replace("%min", 0);
+								}
+								return true;
+							}
+						}
+					],
+					dataIndex: "localVlanId"
+					// width:120
+				}
+			]
+		}).on('ev_load', function(e, data){
+			if(data.length>0){
+				for(var i=0; i<data.length; i++){
+					var vlan = 'input#grid_edit_localVlanEnable_'+ i;
+					var vlanID = 'input#grid_edit_localVlanId_'+ i;
+
+					if( $(vlan).combobox('getValue')==0 ){
+						$(vlanID).textbox('disable');
+					}
+				}
+			}
+		});
+
+
+	}
+	
+		//////////////////////////////////////////////
+
+	
+	if($.su.poeOut){
+		$("div#poe_out").removeClass('hidden');
+
+
+
+
+		$('div.func-container').page({
+			title: $.su.CHAR.POE_OUT.POE_OUT_LABEL,
+			help: ""
+		});
+
+		$('div#poe_out').panel({
+			title: $.su.CHAR.POE_OUT.POE_OUT_LABEL,
+			collapsible: false
+		});
+
+		$('input#poe_out_status').checkbox({
+			fieldLabel: $.su.CHAR.POE_OUT.POE_OUT_LABEL,
+			labelCls: "s",
+			items: [
+				{ boxlabel: $.su.CHAR.POE_OUT.ENABLE, uncheckedValue: "off", inputValue: "on" }
+			]
+
+		});
+		var poe_out_proxy = new $.su.Proxy({
+			url: poe_out_url
+		});
+
+		$('#poe_out_form').form({
+			proxy: poe_out_proxy,
+			fields: [
+
+				{ name: "enable", mapping: "enable" }
+			],
+
+			autoLoad: true,
+			submitBtn: null
+
+		});
+		
+	}
+
+	////////////////////////////////////////////////////////////////
+	
+	$("#total_save").button({
+		text: $.su.CHAR.OPERATION.SAVE,
+		cls:"submit",
+		handler:function(){
+			if($.su.bindVlan){
+				var para 		= {};
+				var ssid_arr 	= $("div#lanPortVlanGrid td[name=lanPort] span");
+				// var band_arr 	= $("div#lanPortVlanGrid td[name=band] span.band-wrap");
+				var vlan_arr  	= $("div#lanPortVlanGrid input.actioncolumn-input[name=localVlanEnable]");
+				var vlan_id_arr = $("div#lanPortVlanGrid input.actioncolumn-input[name=localVlanId]");
+				var num			= ssid_arr.length;
+				var index 		= 0;
+				var port 	= [];
+				var vlan 		= [];
+				var vlan_id  	= [];
+				// var band  		= [];
+
+				para.operation 	= "save";
+				para.lanPort 	= "";
+				para.localVlanEnable 		= "";
+				para.localVlanId    = "";
+				// para.band    	= "";
+
+				for (index; index < num; index++)
+				{
+					if( $(vlan_arr[index]).combobox("getValue")[0]==1 && !$(vlan_id_arr[index]).textbox("validate") ){
+						return false;
+					}
+
+					port.push($.su.func.encodeHtml(ssid_arr[index].innerHTML));
+					vlan.push($(vlan_arr[index]).combobox("getValue"));
+					vlan_id.push($(vlan_id_arr[index]).textbox("getValue"));
+					// band.push(band_arr[index].getAttribute('key'));
+				}
+
+				para.lanPort 	= port.join("\n");
+				// para.band 		= band.join("\n");
+				para.localVlanId 	= vlan_id.join("\n");
+				para.localVlanEnable 		= vlan.join("\n");
+
+				$.ajax({
+					url: LAN_PORT_VLAN_URL,
+					type: 'POST',
+					data: para,
+					dataType: 'json',
+					timeout: 3000,
+					success: function(result){
+						$("div#lanPortVlanGrid").grid("getStore").loadData(result.data);
+						$("form#lan_port_vlan_form").form("prompt", true, $.su.CHAR.SCHEDULER.SAVE_SUCC);
+					},
+					error:function(xhr, s, et){
+					}
+				});
+			}
+
+			if($.su.poeOut){
+				$('#poe_out_form').form('submit');
+			}
+		}
+	});
+
+	});
+</script>
+
+</body>
+
+</html>

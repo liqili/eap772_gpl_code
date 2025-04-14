@@ -1,0 +1,193 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>LED ON/OFF</title>
+</head>
+
+<body>
+<div class="func-container">
+
+	<div id="led_ctrl"> 
+		<form id="led_ctrl_form">
+			<input id="led_status" name="enable" type="text"/>
+			<!-- <input id="mac-filtering-access" name="access" type="text"/>
+			<p class="no-label-l" id="router-des"></p> -->
+		</form>
+		<br>
+		<br>
+	</div>
+
+	<!-- <div id="test">额外部分的grid</div> -->
+
+	<div id="led_locate">
+		<button id="led_locate_button" class=""></button>
+
+		<div class="note">
+			<h5 id="led_note_title" class="title"></h5>
+			<p id="led_locate_note" class="content"></p> 
+		</div>
+	</div>
+
+</div>
+
+<script type="text/javascript">
+
+$(document).ready(function(e){
+
+
+	var led_url = "./data/ledctrl.json";
+
+	$('div.func-container').page({
+		title: $.su.CHAR.LED_ON_OFF.TITLE,
+		help: ""	//可能是个调用的id 也可能是个url
+	});
+	
+	$('div#led_ctrl').panel({
+		title: $.su.CHAR.LED_ON_OFF.LED_CTRL,
+		collapsible: false
+	});
+
+	$('input#led_status').checkbox({
+            fieldLabel: $.su.CHAR.LED_ON_OFF.LED_ENABLE_LABEL ,
+			labelCls:"s",
+            items: [
+                {boxlabel: "Enable", uncheckedValue: "off", inputValue: "on"}
+            ]
+    });			
+	var led_proxy = new $.su.Proxy({
+		url: led_url
+	});
+	
+	$('#led_ctrl_form').form({
+		proxy: led_proxy,
+		fields: [
+			{name: "enable", mapping: "enable"}
+		],
+	//	type: 'GET',
+		autoLoad: true,
+		submitBtn: "default"
+	});	
+	
+	//led_proxy.read();
+
+////////////////////////////////////////////////////////////////////////////////////////////
+	
+	$('div#led_locate').panel({
+		title: $.su.CHAR.LED_ON_OFF.LED_LOCATE,
+		collapsible: false
+	});
+
+	var timeFlag = false;
+ 
+	$("button#led_locate_button").button({
+		text: $.su.CHAR.LED_ON_OFF.LOCATE,
+		handler: function(){
+			$("button#led_locate_button").blur();
+
+
+			var totalTime = 599;
+
+			if(!timeFlag){
+				$.ajax({
+					url: "./data/led.locate.json",
+					type: 'POST',
+					data: {
+						operation: 'write',
+						enable:true
+					},
+					dataType: 'json',
+					error: function(){return false;},
+					success: function(response){
+					}
+				});
+
+				$("button#led_locate_button").button('setText', $.su.CHAR.LED_ON_OFF.LOCATE+' (10:00)');
+
+				$.su.loop = setInterval(function(){
+					if(totalTime<=0){
+						clearInterval($.su.loop);
+						$.su.loop = false;
+						$("button#led_locate_button").button('setText', $.su.CHAR.LED_ON_OFF.LOCATE);
+					}else{
+						$("button#led_locate_button").button('setText', $.su.CHAR.LED_ON_OFF.LOCATE +' (' + getTime(totalTime)[0] + ':' + getTime(totalTime)[1] +')');
+						totalTime--;
+					}
+						
+				}, 1000);
+
+				timeFlag = true;
+			}else{
+				$.ajax({
+					url: "./data/led.locate.json",
+					type: 'POST',
+					data: {
+						operation: 'write',
+						enable:false
+					},
+					dataType: 'json',
+					error: function(){return false;},
+					success: function(response){
+					}
+				});
+
+				clearInterval($.su.loop);
+				$.su.loop = false;
+				$("button#led_locate_button").button('setText', $.su.CHAR.LED_ON_OFF.LOCATE);
+				timeFlag = false;
+			}
+
+		},
+		cls:"submit"
+	});
+
+	$('#led_note_title').html($.su.CHAR.LED_ON_OFF.NOTE);
+	$('p#led_locate_note').html($.su.CHAR.LED_ON_OFF.LED_LOCATE_NOTE);
+
+	function getTime(time){
+		time = parseInt(time);
+		var hour = Math.floor(time/60);
+		hour = '0' + hour.toString();
+		var minute = time%60;
+		if(minute.toString().length<2){
+			minute = '0' + minute.toString();
+		}
+		return [hour, minute];
+	}
+
+	$.ajax({
+		url: "./data/led.locate.json",
+		type: 'POST',
+		data: {operation:'read'},
+		dataType: 'json',
+		error: function(){return false;},
+		success: function(response){
+			var data = response.data;
+			if(data.locate==true){
+
+				var remainingTime = data.count;
+
+				$("button#led_locate_button").button('setText', $.su.CHAR.LED_ON_OFF.LOCATE+' ('+getTime(remainingTime)[0]+':'+getTime(remainingTime)[1]+')');
+
+				$.su.loop = setInterval(function(){
+					--remainingTime;
+					if(remainingTime<=0){
+						clearInterval($.su.loop);
+						$.su.loop = false;
+						$("button#led_locate_button").button('setText', $.su.CHAR.LED_ON_OFF.LOCATE);
+					}else{
+						$("button#led_locate_button").button('setText', $.su.CHAR.LED_ON_OFF.LOCATE +' (' + getTime(remainingTime)[0] + ':' + getTime(remainingTime)[1] +')');
+					}
+						
+				}, 1000);
+
+				timeFlag = true;
+			}
+		}
+	});
+	
+});
+</script>
+</body>
+
+</html>

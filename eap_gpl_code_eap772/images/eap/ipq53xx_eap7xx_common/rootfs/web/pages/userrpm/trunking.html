@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>MAC Trunking</title>
+</head>
+
+<body>
+	<div class="func-container">
+		<div id="trunk">
+			<form id="trunk_setting">
+				<input type="checkbox"  id="trunkEnable" name="trunkEnable" value="" />
+				<input type="text"  id="trunkMode" name="trunkMode" value="" />
+			</form>
+		</div>
+	</div>
+	
+<script type="text/javascript">
+//<![CDATA[
+$(document).ready(function(e){
+
+	var TRUNK_SET_URL = "./data/trunk.set.json";
+
+	$("div.func-container").page({
+		title: $.su.CHAR.TRUNK.TITLE,
+		help: ""	//可能是个调用的id 也可能是个url
+	});
+
+	$('div#trunk').panel({
+		title: $.su.CHAR.TRUNK.TITLE,
+		collapsible: false
+	});
+
+	$("input#trunkEnable").checkbox({
+		fieldLabel: $.su.CHAR.TRUNK.ENABLE,
+		items: [
+			{boxlabel: $.su.CHAR.TRUNK.ENABLE, inputValue: "true", uncheckedValue: "false", checked: false}
+		]
+	});
+	
+	$("input#trunkMode").combobox({
+		fieldLabel: $.su.CHAR.TRUNK.MODE,
+		items:[
+			{"value": "0", "name": $.su.CHAR.TRUNK.HASH_MAC_DA_SA},
+			{"value": "1", "name": $.su.CHAR.TRUNK.HASH_MAC_DA},
+			{"value": "2", "name": $.su.CHAR.TRUNK.HASH_MAC_SA}
+		]
+	});
+
+
+	$("form#trunk_setting").form({
+		proxy: {
+			url: TRUNK_SET_URL
+		},
+		fields: [
+			{name: "trunkEnable", mapping: "trunkEnable"},
+			{name: "trunkMode", mapping: "trunkMode"}		
+		],
+
+		autoLoad: true,
+		submitBtn: "default"
+	}).on("ev_loadData", function(e, data){
+		if (data.trunkEnable == false)
+		{
+			;
+		}
+	});
+
+});
+</script>
+</body>
+</html>

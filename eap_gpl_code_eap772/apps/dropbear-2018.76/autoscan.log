@@ -1,0 +1,492 @@
+autoscan: warning: missing AC_CHECK_FUNCS([alarm]) wanted by: 
+	progressmeter.c:234
+	progressmeter.c:255
+	progressmeter.c:261
+autoscan: warning: missing AC_CHECK_FUNCS([atexit]) wanted by: 
+	libtomcrypt/tests/test.c:273
+	libtomcrypt/demos/hashsum.c:182
+	libtommath/demo/demo.c:154
+autoscan: warning: missing AC_CHECK_FUNCS([dup2]) wanted by: 
+	scpmisc.c:246
+	cli-session.c:280
+	compat.c:178
+	compat.c:179
+	compat.c:180
+	scp.c:231
+	scp.c:232
+	cli-authpasswd.c:79
+	svr-chansession.c:834
+	svr-chansession.c:835
+	svr-chansession.c:836
+	dbutil.c:286
+	dbutil.c:287
+	dbutil.c:288
+autoscan: warning: missing AC_CHECK_FUNCS([ftruncate]) wanted by: 
+	scp.c:1054
+	loginrec.c:899
+	loginrec.c:1066
+autoscan: warning: missing AC_CHECK_FUNCS([gethostbyaddr]) wanted by: 
+	fake-rfc2553.c:72
+autoscan: warning: missing AC_CHECK_FUNCS([gethostbyname]) wanted by: 
+	fake-rfc2553.c:211
+autoscan: warning: missing AC_CHECK_FUNCS([gethostname]) wanted by: 
+	dropbearkey.c:334
+autoscan: warning: missing AC_CHECK_FUNCS([gettimeofday]) wanted by: 
+	scp.c:780
+	scp.c:788
+	scp.c:822
+	loginrec.c:302
+	dbrandom.c:231
+	dbutil.c:162
+	dbutil.c:172
+	libtomcrypt/tests/test.c:76
+autoscan: warning: missing AC_CHECK_FUNCS([inet_ntoa]) wanted by: 
+	svr-x11fwd.c:228
+	fake-rfc2553.c:66
+autoscan: warning: missing AC_CHECK_FUNCS([memmove]) wanted by: 
+	common-algo.c:40
+	libtomcrypt/tests/rsa_test.c:643
+	libtomcrypt/tests/base64_test.c:115
+autoscan: warning: missing AC_CHECK_FUNCS([memset]) wanted by: 
+	svr-x11fwd.c:247
+	keyimport.c:377
+	keyimport.c:567
+	keyimport.c:568
+	keyimport.c:1181
+	keyimport.c:1390
+	keyimport.c:1393
+	keyimport.c:1433
+	keyimport.c:1435
+	keyimport.c:1595
+	keyimport.c:1599
+	keyimport.c:1600
+	keyimport.c:1703
+	keyimport.c:1706
+	keyimport.c:1708
+	keyimport.c:1867
+	keyimport.c:1871
+	keyimport.c:1872
+	keyimport.c:1907
+	keyimport.c:1911
+	keyimport.c:1915
+	svr-auth.c:44
+	fake-rfc2553.c:134
+	cli-auth.c:37
+	signkey.c:423
+	svr-authpam.c:108
+	svr-authpam.c:138
+	netio.c:77
+	netio.c:119
+	netio.c:191
+	netio.c:410
+	netio.c:450
+	common-algo.c:511
+	svr-main.c:138
+	scp.c:324
+	scp.c:464
+	scp.c:554
+	scp.c:1245
+	common-kex.c:825
+	curve25519-donna.c:684
+	svr-agentfwd.c:226
+	loginrec.c:268
+	loginrec.c:392
+	loginrec.c:406
+	loginrec.c:425
+	loginrec.c:479
+	loginrec.c:575
+	loginrec.c:1270
+	dbrandom.c:230
+	dbutil.c:222
+	libtomcrypt/tests/base64_test.c:90
+	libtomcrypt/tests/base64_test.c:91
+	libtomcrypt/demos/openssl-enc.c:191
+	libtommath/demo/demo.c:762
+	libtommath/demo/demo.c:774
+	libtommath/mtest/mpi.c:2715
+autoscan: warning: missing AC_CHECK_FUNCS([mkdir]) wanted by: 
+	cli-kex.c:248
+	scp.c:976
+	svr-agentfwd.c:236
+autoscan: warning: missing AC_CHECK_FUNCS([rmdir]) wanted by: 
+	svr-agentfwd.c:171
+autoscan: warning: missing AC_CHECK_FUNCS([select]) wanted by: 
+	common-session.c:183
+	common-session.c:401
+	svr-main.c:196
+	dbrandom.c:93
+autoscan: warning: missing AC_CHECK_FUNCS([socket]) wanted by: 
+	svr-x11fwd.c:89
+	netio.c:68
+	netio.c:508
+	svr-agentfwd.c:64
+	dbutil.c:225
+autoscan: warning: missing AC_CHECK_FUNCS([strchr]) wanted by: 
+	keyimport.c:414
+	keyimport.c:1315
+	cli-auth.c:352
+	svr-runopts.c:418
+	scp.c:617
+	scp.c:938
+	cli-runopts.c:605
+	cli-runopts.c:606
+	cli-runopts.c:663
+	cli-runopts.c:678
+	cli-runopts.c:681
+	cli-runopts.c:699
+	cli-runopts.c:707
+	cli-runopts.c:767
+	cli-runopts.c:775
+	cli-runopts.c:783
+autoscan: warning: missing AC_CHECK_FUNCS([strcspn]) wanted by: 
+	keyimport.c:1337
+autoscan: warning: missing AC_CHECK_FUNCS([strdup]) wanted by: 
+	dbutil.c:541
+	libtomcrypt/demos/constants.c:55
+	libtomcrypt/demos/sizes.c:50
+	libtomcrypt/demos/hashsum.c:181
+autoscan: warning: missing AC_CHECK_FUNCS([strerror]) wanted by: 
+	scpmisc.c:239
+	scpmisc.c:247
+	cli-session.c:278
+	cli-session.c:283
+	packet.c:85
+	packet.c:115
+	packet.c:186
+	packet.c:236
+	sshpty.c:59
+	sshpty.c:80
+	sshpty.c:107
+	sshpty.c:112
+	sshpty.c:117
+	sshpty.c:132
+	sshpty.c:143
+	sshpty.c:147
+	sshpty.c:152
+	sshpty.c:165
+	sshpty.c:177
+	sshpty.c:214
+	sshpty.c:221
+	sshpty.c:231
+	sshpty.c:253
+	sshpty.c:258
+	sshpty.c:286
+	sshpty.c:303
+	sshpty.c:309
+	sshpty.c:320
+	sshpty.c:334
+	sshpty.c:380
+	sshpty.c:390
+	sshpty.c:394
+	sshpty.c:405
+	sshpty.c:408
+	netio.c:104
+	netio.c:133
+	netio.c:136
+	netio.c:156
+	netio.c:265
+	netio.c:276
+	netio.c:347
+	netio.c:377
+	netio.c:382
+	netio.c:396
+	netio.c:570
+	netio.c:572
+	netio.c:574
+	netio.c:591
+	netio.c:598
+	cli-kex.c:251
+	cli-kex.c:252
+	cli-kex.c:266
+	cli-kex.c:274
+	common-session.c:356
+	svr-main.c:160
+	svr-main.c:282
+	svr-main.c:311
+	scp.c:142
+	scp.c:161
+	scp.c:206
+	scp.c:208
+	scp.c:248
+	scp.c:625
+	scp.c:713
+	scp.c:726
+	scp.c:985
+	scp.c:996
+	scp.c:1020
+	scp.c:1055
+	scp.c:1066
+	scp.c:1077
+	scp.c:1090
+	scp.c:1096
+	scp.c:1188
+	scp.c:1230
+	cli-agentfwd.c:135
+	common-channel.c:443
+	common-channel.c:507
+	gensignkey.c:18
+	gensignkey.c:31
+	gensignkey.c:42
+	gensignkey.c:148
+	loginrec.c:711
+	loginrec.c:894
+	loginrec.c:901
+	loginrec.c:987
+	loginrec.c:992
+	loginrec.c:1007
+	loginrec.c:1060
+	loginrec.c:1068
+	loginrec.c:1143
+	loginrec.c:1148
+	loginrec.c:1163
+	loginrec.c:1226
+	loginrec.c:1285
+	loginrec.c:1323
+	loginrec.c:1333
+	loginrec.c:1358
+	dbutil.c:519
+	dbutil.c:696
+	dbutil.c:700
+autoscan: warning: missing AC_CHECK_FUNCS([strncasecmp]) wanted by: 
+	cli-runopts.c:851
+	svr-authpubkeyoptions.c:127
+autoscan: warning: missing AC_CHECK_FUNCS([strrchr]) wanted by: 
+	scpmisc.c:214
+	svr-runopts.c:431
+	compat.c:192
+	scp.c:472
+	scp.c:506
+	scp.c:574
+	scp.c:641
+	scp.c:729
+	cli-runopts.c:428
+	cli-runopts.c:615
+autoscan: warning: missing AC_CHECK_FUNCS([strstr]) wanted by: 
+	svr-authpasswd.c:91
+	svr-authpasswd.c:96
+	libtomcrypt/tests/test.c:376
+	libtomcrypt/tests/prng_test.c:60
+	libtomcrypt/demos/timing.c:1456
+	libtomcrypt/demos/hashsum.c:98
+autoscan: warning: missing AC_CHECK_FUNCS([strtol]) wanted by: 
+	fake-rfc2553.c:174
+	scp.c:896
+	scp.c:899
+	scp.c:902
+	scp.c:905
+	libtommath/mtest/mtest.c:116
+autoscan: warning: missing AC_CHECK_FUNCS([strtoul]) wanted by: 
+	cli-main.c:164
+	dbutil.c:588
+autoscan: warning: missing AC_CHECK_HEADERS([arpa/inet.h]) wanted by: 
+	includes.h:80
+	fake-rfc2553.c:46
+autoscan: warning: missing AC_CHECK_HEADERS([fcntl.h]) wanted by: 
+	includes.h:44
+autoscan: warning: missing AC_CHECK_HEADERS([limits.h]) wanted by: 
+	includes.h:46
+	svr-auth.c:28
+	libtomcrypt/src/headers/tomcrypt.h:19
+	libtomcrypt/src/math/fp/ltc_ecc_fp_mulmod.c:17
+	libtommath/tommath.h:21
+	libtommath/mtest/mpi.h:31
+autoscan: warning: missing AC_CHECK_HEADERS([mach/mach.h]) wanted by: 
+	dbutil.c:61
+autoscan: warning: missing AC_CHECK_HEADERS([stddef.h]) wanted by: 
+	libtomcrypt/src/headers/tomcrypt.h:16
+autoscan: warning: missing AC_CHECK_HEADERS([sys/ioctl.h]) wanted by: 
+	includes.h:33
+autoscan: warning: missing AC_CHECK_HEADERS([sys/param.h]) wanted by: 
+	includes.h:34
+autoscan: warning: missing AC_CHECK_HEADERS([sys/time.h]) wanted by: 
+	includes.h:37
+	libtomcrypt/tests/test.c:55
+autoscan: warning: missing AC_CHECK_HEADERS([syslog.h]) wanted by: 
+	includes.h:53
+autoscan: warning: missing AC_CHECK_HEADERS([termios.h]) wanted by: 
+	includes.h:51
+autoscan: warning: missing AC_CHECK_HEADERS([wchar.h]) wanted by: 
+	libtomcrypt/src/headers/tomcrypt_pk.h:670
+autoscan: warning: missing AC_CHECK_MEMBERS([struct stat.st_blksize]) wanted by: 
+	scp.c:1233
+autoscan: warning: missing AC_CHECK_TYPES([ptrdiff_t]) wanted by: 
+	libtomcrypt/src/pk/asn1/der/set/der_encode_setof.c:63
+autoscan: warning: missing AC_C_INLINE wanted by: 
+	curve25519-donna.c:247
+	curve25519-donna.c:263
+	auth.h:58
+	auth.h:59
+	libtomcrypt/src/headers/tomcrypt_macros.h:257
+	libtomcrypt/src/headers/tomcrypt_macros.h:265
+	libtomcrypt/src/headers/tomcrypt_macros.h:302
+	libtomcrypt/src/headers/tomcrypt_macros.h:310
+	libtomcrypt/src/headers/tomcrypt_macros.h:320
+	libtomcrypt/src/headers/tomcrypt_macros.h:328
+	libtomcrypt/src/headers/tomcrypt_macros.h:358
+	libtomcrypt/src/headers/tomcrypt_macros.h:366
+autoscan: warning: missing AC_FUNC_CHOWN wanted by: 
+	sshpty.c:250
+	sshpty.c:384
+autoscan: warning: missing AC_FUNC_ERROR_AT_LINE wanted by: 
+	sshpty.c:309
+autoscan: warning: missing AC_FUNC_FORK wanted by: 
+	svr-main.c:279
+	compat.c:162
+	scp.c:139
+	scp.c:224
+	cli-authpasswd.c:69
+	svr-chansession.c:815
+	dbutil.c:268
+	scp.c:137
+	scp.c:222
+	svr-chansession.c:813
+	dbutil.c:266
+autoscan: warning: missing AC_FUNC_MALLOC wanted by: 
+	scpmisc.c:59
+	scpmisc.c:77
+	fake-rfc2553.c:130
+	compat.c:253
+	loginrec.c:1206
+	libtomcrypt/demos/constants.c:49
+	libtomcrypt/demos/constants.c:68
+	libtomcrypt/demos/sizes.c:45
+	libtomcrypt/demos/sizes.c:63
+autoscan: warning: missing AC_FUNC_REALLOC wanted by: 
+	scpmisc.c:79
+	dbutil.c:555
+autoscan: warning: missing AC_FUNC_STRTOD wanted by: 
+	scp.c:352
+autoscan: warning: missing AC_PROG_AWK wanted by: 
+	libtomcrypt/coverage_more.sh:8
+autoscan: warning: missing AC_PROG_CXX wanted by: 
+	Makefile.in:104
+	libtomcrypt/printinfo.sh:17
+	libtomcrypt/coverage.sh:11
+	libtomcrypt/coverage.sh:15
+	libtommath/testme.sh:40
+	libtommath/testme.sh:73
+autoscan: warning: missing AC_PROG_INSTALL wanted by: 
+	libtomcrypt/scan_build.sh:2
+	libtommath/Makefile.in:92
+	libtommath/Makefile.in:93
+	libtommath/Makefile.in:94
+	libtommath/Makefile.in:95
+	Makefile.in:84
+autoscan: warning: missing AC_PROG_MAKE_SET wanted by: 
+	libtomcrypt/scan_build.sh:12
+	libtomcrypt/scan_build.sh:19
+	libtomcrypt/coverage.sh:39
+	libtomcrypt/coverage.sh:42
+	libtomcrypt/testbuild.sh:7
+	libtomcrypt/testbuild.sh:10
+	libtomcrypt/coverity.sh:12
+	libtomcrypt/coverity.sh:19
+	libtomcrypt/coverity.sh:23
+	libtomcrypt/check_source.sh:6
+	libtomcrypt/build.sh:4
+	libtomcrypt/build.sh:15
+	libtommath/Makefile.in:75
+	libtommath/Makefile.in:78
+	libtommath/testme.sh:42
+	libtommath/testme.sh:42
+	libtommath/testme.sh:43
+	libtommath/testme.sh:44
+	libtommath/testme.sh:71
+	libtommath/testme.sh:73
+	libtommath/testme.sh:121
+autoscan: warning: missing AC_PROG_RANLIB wanted by: 
+	libtomcrypt/testprof/makefile:5
+	Makefile.in:82
+	libtomcrypt/testprof/makefile:5
+autoscan: warning: missing AC_TYPE_INT32_T wanted by: 
+	curve25519-donna.c:56
+	curve25519-donna.c:253
+	curve25519-donna.c:253
+	curve25519-donna.c:255
+	curve25519-donna.c:269
+	curve25519-donna.c:269
+	curve25519-donna.c:271
+autoscan: warning: missing AC_TYPE_INT64_T wanted by: 
+	curve25519-donna.c:57
+autoscan: warning: missing AC_TYPE_OFF_T wanted by: 
+	progressmeter.c:43
+	progressmeter.c:44
+	progressmeter.c:59
+	progressmeter.c:60
+	progressmeter.c:61
+	progressmeter.c:77
+	progressmeter.c:96
+	progressmeter.c:113
+	progressmeter.c:116
+	progressmeter.c:178
+	progressmeter.c:239
+	progressmeter.c:239
+	scp.c:90
+	scp.c:605
+	scp.c:834
+	scp.c:837
+	loginrec.c:695
+	loginrec.c:708
+	loginrec.c:998
+	loginrec.c:1031
+	loginrec.c:1154
+	loginrec.c:1185
+	loginrec.c:1301
+	loginrec.c:1329
+	progressmeter.h:26
+	progressmeter.h:26
+	libtomcrypt/demos/openssl-enc.c:179
+	libtomcrypt/demos/openssl-enc.c:210
+autoscan: warning: missing AC_TYPE_SSIZE_T wanted by: 
+	packet.c:59
+	netio.c:317
+	cli-agentfwd.c:116
+	common-channel.c:431
+	common-channel.c:464
+	common-channel.c:797
+	atomicio.c:42
+	netio.h:50
+autoscan: warning: missing AC_TYPE_UINT16_T wanted by: 
+	svr-x11fwd.c:245
+	includes.h:148
+	libtommath/tommath.h:51
+	libtommath/tommath.h:57
+autoscan: warning: missing AC_TYPE_UINT32_T wanted by: 
+	includes.h:155
+	curve25519-donna.c:251
+	curve25519-donna.c:251
+	curve25519-donna.c:255
+	curve25519-donna.c:267
+	curve25519-donna.c:267
+	curve25519-donna.c:271
+	dbrandom.c:33
+	libtommath/tommath.h:58
+	libtommath/tommath.h:81
+autoscan: warning: missing AC_TYPE_UINT64_T wanted by: 
+	scp.c:776
+	curve25519-donna.c:251
+	curve25519-donna.c:267
+	libtommath/tommath.h:65
+	libtommath/tommath.h:82
+	libtommath/demo/timing.c:6
+	libtommath/demo/timing.c:51
+	libtommath/demo/timing.c:60
+	libtommath/demo/timing.c:60
+	libtommath/demo/timing.c:105
+	libtommath/etc/tune.c:17
+	libtommath/etc/tune.c:26
+	libtommath/etc/tune.c:26
+	libtommath/etc/tune.c:52
+	libtommath/etc/tune.c:54
+	libtommath/etc/tune.c:58
+	libtommath/etc/tune.c:61
+	libtommath/etc/tune.c:65
+	libtommath/etc/tune.c:91
+	libtommath/etc/tune.c:95
+	libtommath/etc/tune.c:121
+autoscan: warning: missing AC_TYPE_UINT8_T wanted by: 
+	includes.h:141
+	curve25519-donna.c:55
+	curve25519-donna.c:846
+	dbutil.c:622
+	libtommath/tommath.h:50

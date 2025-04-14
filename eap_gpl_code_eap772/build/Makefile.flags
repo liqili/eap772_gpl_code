@@ -1,0 +1,675 @@
+include product_configs/$(BOARD_TYPE)/config.$(BOARD_TYPE)
+ifeq ($(shell ls product_configs/$(BOARD_TYPE)/config), product_configs/$(BOARD_TYPE)/config)
+include product_configs/$(BOARD_TYPE)/config
+endif
+include product_configs/$(BOARD_TYPE)/spec/config.$(PID)
+
+export SMB_PRIV_COMMON_CFLAGS
+export SMB_EXTERNAL_CFLAGS
+#####################################  board define  #####################################
+
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_BOARD_$(CHIP)_SUPPORT
+
+ifdef INCLUDE_CPU_QCA_IPQ957X
+SMB_PRIV_COMMON_CFLAGS += -DINCLUDE_CPU_QCA_IPQ957X
+endif
+
+ifdef INCLUDE_CPU_QCA_IPQ53XX
+SMB_PRIV_COMMON_CFLAGS += -DINCLUDE_CPU_QCA_IPQ53XX
+endif
+
+ifdef INCLUDE_CPU_QCA_IPQ807X
+SMB_PRIV_COMMON_CFLAGS += -DINCLUDE_CPU_QCA_IPQ807X
+endif
+
+ifdef INCLUDE_CPU_QCA_IPQ60XX
+SMB_PRIV_COMMON_CFLAGS += -DINCLUDE_CPU_QCA_IPQ60XX
+endif
+
+ifeq ($(strip ${CONFIG_USERSPACE_64BIT}), y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_USERSPACE_64BIT
+else
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_USERSPACE_32BIT
+endif
+$(warning "userspace cpu bit width: 64:$(CONFIG_USERSPACE_64BIT), 32:$(CONFIG_USERSPACE_32BIT)")
+
+ifeq ($(strip ${CONFIG_KERNEL_64BIT}), y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_KERNEL_64BIT
+else
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_KERNEL_32BIT
+endif
+$(warning "kernel cpu bit width: 64:$(CONFIG_KERNEL_64BIT), 32:$(CONFIG_KERNEL_32BIT)")
+
+ifeq ($(strip ${CONFIG_DDR_512M}), y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_DDR_512M
+endif
+
+ifeq ($(strip ${CONFIG_DDR_2G}), y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_DDR_2G
+endif
+
+#####################################  wireless function define  #####################################
+ifeq ($(CONFIG_CALDATA_TWO_FILES),y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_CALDATA_TWO_FILES
+endif
+
+ifeq ($(strip ${CONFIG_SUPPORT_MODE_11BE}), y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_SUPPORT_MODE_11BE
+endif
+
+ifeq ($(strip ${CONFIG_SUPPORT_MODE_11AX}), y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_SUPPORT_MODE_11AX
+endif
+
+ifeq ($(strip ${CONFIG_SUPPORT_MODE_11AC}), y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_SUPPORT_MODE_11AC
+endif
+
+ifeq ($(strip ${CONFIG_2G_RESET_HT40_EXTBUSYTHRES_SUPPORT}),1)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_2G_RESET_HT40_EXTBUSYTHRES
+ifneq ($(CONFIG_2G_HT40_EXTBUSYTHRES),)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_2G_HT40_EXTBUSYTHRES=$(CONFIG_2G_HT40_EXTBUSYTHRES)
+endif
+endif
+
+ifeq ($(strip ${CONFIG_SUPPORT_BW_160MHZ}), y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_SUPPORT_BW_160MHZ
+endif
+
+ifeq ($(strip ${CONFIG_SUPPORT_BW_320MHZ}), y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_SUPPORT_BW_320MHZ
+endif
+
+ifeq ($(strip ${CONFIG_5G_RESET_THERMAL_CONFIG_SUPPORT}),1)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_5G_RESET_THERMAL_CONFIG
+
+ifneq ($(CONFIG_5G_THERMAL_LEV0_LOW),)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_5G_THERMAL_LEV0_LOW=$(CONFIG_5G_THERMAL_LEV0_LOW)
+endif
+
+ifneq ($(CONFIG_5G_THERMAL_LEV0_HIGH),)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_5G_THERMAL_LEV0_HIGH=$(CONFIG_5G_THERMAL_LEV0_HIGH)
+endif
+
+ifneq ($(CONFIG_5G_THERMAL_LEV0_DCOFF),)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_5G_THERMAL_LEV0_DCOFF=$(CONFIG_5G_THERMAL_LEV0_DCOFF)
+endif
+
+ifneq ($(CONFIG_5G_THERMAL_LEV1_LOW),)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_5G_THERMAL_LEV1_LOW=$(CONFIG_5G_THERMAL_LEV1_LOW)
+endif
+
+ifneq ($(CONFIG_5G_THERMAL_LEV1_HIGH),)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_5G_THERMAL_LEV1_HIGH=$(CONFIG_5G_THERMAL_LEV1_HIGH)
+endif
+
+ifneq ($(CONFIG_5G_THERMAL_LEV1_DCOFF),)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_5G_THERMAL_LEV1_DCOFF=$(CONFIG_5G_THERMAL_LEV1_DCOFF)
+endif
+
+ifneq ($(CONFIG_5G_THERMAL_LEV2_LOW),)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_5G_THERMAL_LEV2_LOW=$(CONFIG_5G_THERMAL_LEV2_LOW)
+endif
+
+ifneq ($(CONFIG_5G_THERMAL_LEV2_HIGH),)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_5G_THERMAL_LEV2_HIGH=$(CONFIG_5G_THERMAL_LEV2_HIGH)
+endif
+
+ifneq ($(CONFIG_5G_THERMAL_LEV2_DCOFF),)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_5G_THERMAL_LEV2_DCOFF=$(CONFIG_5G_THERMAL_LEV2_DCOFF)
+endif
+
+ifneq ($(CONFIG_5G_THERMAL_LEV3_LOW),)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_5G_THERMAL_LEV3_LOW=$(CONFIG_5G_THERMAL_LEV3_LOW)
+endif
+
+ifneq ($(CONFIG_5G_THERMAL_LEV3_HIGH),)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_5G_THERMAL_LEV3_HIGH=$(CONFIG_5G_THERMAL_LEV3_HIGH)
+endif
+
+ifneq ($(CONFIG_5G_THERMAL_LEV3_DCOFF),)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_5G_THERMAL_LEV3_DCOFF=$(CONFIG_5G_THERMAL_LEV3_DCOFF)
+endif
+
+endif
+
+# QCA方案的SDK版本计算规则:x.y.z的SPF形式转换为16进制的形式进行大小比较
+# x表示SPF的版本，若SDK没有SPF的概念则改为0,y、z分别表示SPF的次版本、小版本，若无则写为0
+# 平台当前的一些驱动VERSION转换情况:
+# N300:	9.5.3.16 => 0.9.5(0x905)	10.2.0082.4 => 0.10.2(0xA02)
+# AC:	10.4.2.3 => 2.0.0(0x20000)	10.4.x => 5.0.2(0x50002)
+# AX:	SPF10.0 => 10.0.0(0xA0000)	SPF11.1 => 11.1.0(0xB0100)	SPF11.3 => 11.3.0(0xB0300)	SPF11.4 => 11.4.0(0xB0400)
+ifneq ($(strip ${CONFIG_TP_QCA_SDK_VERSION_CODE}),)
+SMB_PRIV_COMMON_CFLAGS += -DTP_QCA_SDK_VERSION_CODE=${CONFIG_TP_QCA_SDK_VERSION_CODE}
+endif
+
+ifeq ($(strip ${CONFIG_DYN_ENABLE_FWDUMP}),y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_DYN_ENABLE_FWDUMP
+endif
+
+ifneq ($(strip ${CONFIG_WLAN_TOOL}),)
+SMB_PRIV_COMMON_CFLAGS += -DWLANTOOL=\"$(CONFIG_WLAN_TOOL)\"
+endif
+
+ifeq ($(strip ${CONFIG_MLO_SUPPORT}), y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_MLO_SUPPORT
+endif
+
+ifeq ($(strip ${CONFIG_WIFI_INITFAIL_REBOOT}),y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_WIFI_INITFAIL_REBOOT
+endif
+
+############MTK WIRELESS DRIVER###################
+ifeq ($(strip ${CONFIG_SUPPORT_DRIVER_MT7603E}),1)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_DRIVER_MT7603E
+endif
+ifeq ($(strip ${CONFIG_SUPPORT_DRIVER_MT7663E}),1)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_DRIVER_MT7663E
+endif
+ifeq ($(strip ${CONFIG_SUPPORT_DRIVER_MT7905D}),1)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_DRIVER_MT7905D
+endif
+
+ifeq ($(strip ${CONFIG_WPA2_VER_2_0_DEVEL}),1)    #没有机型定义，请春山确认
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_WPA2_VER_2_0_DEVEL
+endif
+
+## add by lianhang, 10Apr15, support band steering between 2.4G and 5G ##
+ifeq ($(strip ${ATH_BANDSTEERING_TP}),1)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_SUPPORT_BAND_STEERING=1
+endif
+
+# add by luliying
+ifeq ($(strip ${CONFIG_PERMANENTLY_LOCK_REGION}),1)
+SMB_PRIV_COMMON_CFLAGS += -DPERMANENTLY_LOCK_REGION=1
+endif
+
+ifeq ($(strip ${CONFIG_REDUCE_WL_INIT_TIME}),1)
+SMB_PRIV_COMMON_CFLAGS += -DREDUCE_WL_INIT_TIME=1
+endif
+
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_SUPPORT_MULTI_RADIO
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_SUPPORT_QOS
+
+ifeq ($(CONFIG_DFS_SUPPORT),y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_DFS_SUPPORT
+endif
+
+ifeq ($(CONFIG_CHANNEL_LIMIT),y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_CHANNEL_LIMIT
+endif
+
+ifeq ($(CONFIG_ATF_SUPPORT),y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_ATF_SUPPORT
+endif
+
+ifeq ($(CONFIG_WLAN_ISOLATION),1)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_WLAN_ISOLATION
+endif
+
+ifeq ($(CONFIG_CHANUTIL_SUPPORT),y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_CHANUTIL_SUPPORT
+endif
+
+ifeq ($(CONFIG_BUSY_CHANUTIL_SUPPORT),y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_BUSY_CHANUTIL_SUPPORT
+endif
+
+ifeq ($(CONFIG_RATE_CONTROL),y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_RATE_CONTROL
+endif
+
+ifeq ($(CONFIG_80211R_SUPPORT),y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_80211R_SUPPORT
+endif
+
+#special Macro
+ifeq ($(CONFIG_EAP220_SUPPORT), 1)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_EAP220_SUPPORT
+endif
+
+ifdef CONFIG_LAN_IF_NUM
+SMB_PRIV_COMMON_CFLAGS += -DLAN_IF_NUM=$(CONFIG_LAN_IF_NUM)
+else
+SMB_PRIV_COMMON_CFLAGS += -DLAN_IF_NUM=1
+endif
+
+ifdef CONFIG_MAX_RADIO_NUM
+SMB_PRIV_COMMON_CFLAGS += -DMAX_RADIO_NUM=$(CONFIG_MAX_RADIO_NUM)
+else
+SMB_PRIV_COMMON_CFLAGS += -DMAX_RADIO_NUM=2
+endif
+
+ifdef CONFIG_MAX_STA_PER_RADIO
+SMB_PRIV_COMMON_CFLAGS += -DMAX_STA_PER_RADIO=$(CONFIG_MAX_STA_PER_RADIO)
+else
+SMB_PRIV_COMMON_CFLAGS += -DMAX_STA_PER_RADIO=100
+endif
+
+ifdef CONFIG_MAX_PAT_BD
+SMB_PRIV_COMMON_CFLAGS += -DMAX_PAT_BD=$(CONFIG_MAX_PAT_BD)
+else
+SMB_PRIV_COMMON_CFLAGS += -DMAX_PAT_BD=4
+endif
+
+ifeq ($(CONFIG_SUPPORT_MBSS_TXVDEV), y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_SUPPORT_MBSS_TXVDEV
+endif
+
+#cfg80211 interface to configure wlan
+ifeq ($(CONFIG_WLAN_CFG80211),y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_WLAN_CFG80211
+endif
+
+
+ifeq ($(CONFIG_HOSTAPD_RECOVERY),y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_SUPPORT_HOSTAPD_RECOVERY
+endif
+
+ifeq ($(CONFIG_SUPPORT_TK_DEBUG),y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_SUPPORT_TK_DEBUG
+endif
+
+ifneq ($(CONFIG_SPEC_COUNTRY),)
+ifneq ($(CONFIG_SPEC_COUNTRY),"")
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_SPEC_COUNTRY=\"$(CONFIG_SPEC_COUNTRY)\"
+endif
+endif
+
+ifneq ($(CONFIG_COMBINE_SPEC),)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_COMBINE_SPEC
+endif
+
+ifeq ($(strip $(CONFIG_NAND_MULTI_BOARD)), y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_NAND_MULTI_BOARD
+endif
+#####################################  upgrade function define  #####################################
+# add by luliying, new Flash chip for EAP115
+ifeq ($(strip ${CONFIG_EAP115_NEW_FLASH}),1)
+SMB_PRIV_COMMON_CFLAGS += -DEAP115_NEW_FLASH=1
+endif
+
+ifeq ($(strip ${CONFIG_SUPPORT_3RD_FW}),1)
+SMB_PRIV_COMMON_CFLAGS += -DSUPPORT_3RD_FW
+endif
+
+ifeq ($(strip ${CONFIG_JAPAN_SPEC}),y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_JAPAN_SPEC
+endif
+
+ifeq ($(strip ${CONFIG_DOUBLE_UBOOT}),1)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_DOUBLE_UBOOT
+endif
+
+ifeq ($(strip ${CONFIG_UPGRADE_FAIL_SAFE_CHECK}),1)
+SMB_PRIV_COMMON_CFLAGS += -DUPGRADE_FAIL_SAFE_CHECK
+endif
+
+#FLASH SIZE, default is 8M
+ifneq ($(CONFIG_FLASH_SIZE), )
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_FLASH_SIZE=$(CONFIG_FLASH_SIZE)
+else
+$(warning "**CONFIG_FLASH_SIZE not define, using default value=8")
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_FLASH_SIZE=8
+endif
+#####################################  gpio function define  #####################################
+ifeq ($(strip ${CONFIG_LED_RULE_245v3}),1)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_LED_RULE_245v3
+endif
+
+ifeq ($(strip ${CONFIG_EAP225OUTDOORV1_SUPPORT}),1)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_SUPPORT_EAP225OUTDOORV1    #fangchunshan  dibaosheng
+endif
+#####################################  ethernet function define  #####################################
+ifdef INCLUDE_ETH_QCA_956X
+SMB_PRIV_COMMON_CFLAGS += -DINCLUDE_ETH_QCA_956X
+endif
+
+ifdef INCLUDE_ETH_QCA_953X
+SMB_PRIV_COMMON_CFLAGS += -DINCLUDE_ETH_QCA_953X
+endif
+
+ifdef INCLUDE_ETH_IPQ_807X
+SMB_PRIV_COMMON_CFLAGS += -DINCLUDE_ETH_IPQ_807X
+endif
+
+ifdef INCLUDE_ETH_IPQ_957X
+SMB_PRIV_COMMON_CFLAGS += -DINCLUDE_ETH_IPQ_957X
+endif
+
+ifdef INCLUDE_ETH_IPQ_53XX
+SMB_PRIV_COMMON_CFLAGS += -DINCLUDE_ETH_IPQ_53XX
+endif
+
+ifdef INCLUDE_ETH_IPQ_60XX
+SMB_PRIV_COMMON_CFLAGS += -DINCLUDE_ETH_IPQ_60XX
+endif
+
+ifdef INCLUDE_ETH_BCM_675X
+SMB_PRIV_COMMON_CFLAGS += -DINCLUDE_ETH_BCM_675X
+endif
+
+ifeq ($(CONFIG_EXTERNAL_PHY_AR8033),1)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_EXTERNAL_PHY_AR8033
+endif
+
+ifdef INCLUDE_ETH_QCA_8385
+SMB_PRIV_COMMON_CFLAGS += -DINCLUDE_ETH_QCA_8385
+endif
+#####################################  vlan function define  #####################################
+ifeq ($(strip ${CONFIG_MANAGE_VLAN_SUPPORT}),y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_MANAGE_VLAN
+endif
+
+#####################################  ble function define  #####################################
+ifeq ($(strip ${CONFIG_BLE_SUPPORT}),y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_BLE_SUPPORT
+export CONFIG_BLE_SUPPORT = y
+endif
+
+
+ifeq ($(strip ${CONFIG_2G_WKK_SUPPORT}),y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_2G_WKK_SUPPORT
+export CONFIG_2G_WKK_SUPPORT = y
+endif
+
+#####################################  usb function define  #####################################
+ifeq ($(strip ${CONFIG_USB_SUPPORT}),y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_USB_SUPPORT
+export CONFIG_BUSB_SUPPORT = y
+endif
+
+#####################################  linux define  #############################################
+ifeq ($(KERNELVER), 2.6.31)
+SMB_PRIV_COMMON_CFLAGS += -DKERNEL_VER="\"2.6.31\""
+else ifeq ($(KERNELVER), 2.6.36)
+SMB_PRIV_COMMON_CFLAGS += -DKERNEL_VER="\"2.6.36\""
+else ifeq ($(KERNELVER), 3.3.8)
+SMB_PRIV_COMMON_CFLAGS += -DKERNEL_VER="\"3.3.8\""
+else ifeq ($(KERNELVER), 3.10.108)
+SMB_PRIV_COMMON_CFLAGS += -DKERNEL_VER="\"3.10.108\""
+else ifeq ($(KERNELVER), 4.4.60)
+SMB_PRIV_COMMON_CFLAGS += -DKERNEL_VER="\"4.4.60\""
+else ifeq ($(KERNELVER), 4.4.198)
+SMB_PRIV_COMMON_CFLAGS += -DKERNEL_VER="\"4.4.198\""
+else ifeq ($(KERNELVER), 5.4.164)
+SMB_PRIV_COMMON_CFLAGS += -DKERNEL_VER="\"5.4.164\""
+else ifeq ($(KERNELVER), 5.4.213)
+SMB_PRIV_COMMON_CFLAGS += -DKERNEL_VER="\"5.4.213\""
+endif
+
+ifeq ($(PLT), arm)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_TARGET_ARCH_ARM
+else 
+ifeq ($(PLT), mips)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_TARGET_ARCH_MIPS
+endif
+endif
+
+#####################################  tddp define  #############################################
+#TDDP V2
+ifeq ($(strip ${CONFIG_TDDP_VERSION_TWO}),y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_TDDP_VERSION_TWO
+endif
+
+#####################################  toolchain used glibc  #####################################
+#toolchain used glibc
+ifeq ($(strip ${CONFIG_TOOLCHAIN_USED_GLIBC}),y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_TOOLCHAIN_USED_GLIBC
+endif
+
+#####################################  debug define  #############################################
+ifeq ($(strip ${CONFIG_MTD_OOPS_LOG}),y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_MTD_OOPS_LOG
+export CONFIG_MTD_OOPS_LOG=y
+endif
+
+ifeq ($(strip ${CONFIG_MTD_MUTIL_LOG}),y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_MTD_MUTIL_LOG
+export CONFIG_MTD_MUTIL_LOG=y
+endif
+
+ifeq ($(strip ${CONFIG_REBOOT_IF_INT_STOP}),y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_REBOOT_IF_INT_STOP
+endif
+#####################################  webserver define  #############################################
+ifdef HTTP_THREAD_STACK_SIZE
+SMB_PRIV_COMMON_CFLAGS += -DHTTP_THREAD_STACK_SIZE=$(HTTP_THREAD_STACK_SIZE)
+endif
+
+ifeq ($(strip ${CONFIG_DONT_DEL_SSID_IN_WIZARD}),y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_DONT_DEL_SSID_IN_WIZARD
+export CONFIG_DONT_DEL_SSID_IN_WIZARD=y
+endif
+
+#####################################  tender define  #############################################
+ifeq ($(CONFIG_RU_RAILWAY),1)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_RU_RAILWAY
+endif
+
+#####################################  roaming define  #############################################
+ifeq ($(strip ${CONFIG_ROAMING_SUPPORT}),y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_ROAMING_SUPPORT -DATH_SUPPORT_TP_ROAMING
+ifeq ($(strip ${CONFIG_ROAMING_KICKOUT_SUPPORT}),y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_ROAMING_KICKOUT_SUPPORT -DATH_SUPPORT_TP_ROAMING_KICKOUT
+endif
+ifeq ($(strip ${CONFIG_AI_ROAMING_SUPPORT}),y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_AI_ROAMING_SUPPORT
+endif
+endif
+
+#####################################  mesh define  #################################################
+ifeq ($(strip ${CONFIG_MESH_SUPPORT}), y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_MESH_SUPPORT -DATH_SUPPORT_TP_MESH
+endif
+
+ifdef CONFIG_MAX_BACKHAUL_NUM
+SMB_PRIV_COMMON_CFLAGS += -DMAX_BACKHAUL_NUM=$(CONFIG_MAX_BACKHAUL_NUM)
+else
+SMB_PRIV_COMMON_CFLAGS += -DMAX_BACKHAUL_NUM=1
+endif
+
+#####################################  WPA3 define  #################################################
+ifeq ($(strip ${CONFIG_WPA3_SUPPORT}), y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_WPA3_SUPPORT
+endif
+
+#################################### eap-monitor define #############################################
+ifeq ($(strip ${CONFIG_EAP_MONITOR_SUPPORT}), y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_EAP_MONITOR_SUPPORT
+endif
+
+#################################### channel-deploy define #############################################
+ifeq ($(strip ${CONFIG_CHANNEL_DEPLOY_SUPPORT}), y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_CHANNEL_DEPLOY_SUPPORT
+endif
+
+#################################### dataCollect define #############################################
+ifeq ($(strip ${CONFIG_DATA_COLLECT_SUPPORT}), y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_DATA_COLLECT_SUPPORT
+endif
+
+#################################### Japan disaster mode define #############################################
+ifeq ($(strip ${CONFIG_JAPAN_DISASTER_MODE_SUPPORT}), y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_JAPAN_DISASTER_MODE_SUPPORT
+endif
+
+###################################### pivot define ################################################
+ifdef CONFIG_LOAD_OBJECTS_CMD
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_LOAD_OBJECTS_CMD=\"$(CONFIG_LOAD_OBJECTS_CMD)\"
+FILTER-CFLAGS += -DCONFIG_LOAD_OBJECTS_CMD=\"$(CONFIG_LOAD_OBJECTS_CMD)\"
+endif
+
+#################################### rfscan define #############################################
+ifeq ($(strip ${CONFIG_RF_SCAN_SUPPORT}), y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_RF_SCAN_SUPPORT
+endif
+
+ifeq ($(strip ${CONFIG_BTN_SYSRQ_DEBUG}), y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_BTN_SYSRQ_DEBUG
+endif
+
+ifeq ($(strip ${CONFIG_POWER_CONTROL_SUPPORT}), y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_POWER_CONTROL_SUPPORT
+endif
+
+#####################################  nvram lib define  #############################################
+
+ifeq ($(strip ${CONFIG_NM_NAND_TYPE}), y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_NM_NAND_TYPE
+endif
+
+ifeq ($(strip ${CONFIG_NM_SPI_TYPE}), y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_NM_SPI_TYPE
+endif
+
+ifdef NM_PTN_TABLE_BASE
+SMB_PRIV_COMMON_CFLAGS += -DNM_PTN_TABLE_BASE=$(NM_PTN_TABLE_BASE)
+endif
+
+#####################################  compatible define  #############################################
+ifeq ($(strip ${CONFIG_COMPATIBLE_GBK_SSID}), y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_COMPATIBLE_GBK_SSID
+endif
+
+##################################### disable txbf define #############################################
+ifeq ($(strip ${CONFIG_TDDP_DISABLE_TXBF_DELAY}), y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_TDDP_DISABLE_TXBF_DELAY
+endif
+
+################################## software watchdog for MTK define ###################################
+ifeq ($(strip ${CONFIG_SOFTWARE_WATCHDOG}), y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_SOFTWARE_WATCHDOG
+endif
+
+##################################### portal define #############################################
+ifdef CONFIG_PORTAL_AUTHED_MAX_CNT
+SMB_PRIV_COMMON_CFLAGS += -DPORTAL_AUTHED_MAX_CNT=$(CONFIG_PORTAL_AUTHED_MAX_CNT)
+endif
+
+################################## qca nss-ecm define ###################################
+ifeq ($(strip ${CONFIG_ECM_SUPPORT}), y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_ECM_SUPPORT
+endif
+
+ifeq ($(strip ${CONFIG_PPE_SUPPORT}), y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_PPE_SUPPORT
+endif
+
+ifeq ($(strip ${CONFIG_NSS_SUPPORT}), y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_NSS_SUPPORT
+endif
+
+################################## fdb change kickout station define ###################################
+ifeq ($(strip ${CONFIG_FDB_CHANGE_KICKOUT_SUPPORT}), y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_FDB_CHANGE_KICKOUT_SUPPORT
+endif 
+
+ifeq ($(strip ${CONFIG_BOOT_VERSION_SUPPORT}), y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_BOOT_VERSION_SUPPORT
+endif
+
+##################################### 11n_256qam define #############################################
+ifdef CONFIG_11N_256QAM_SUPPORT
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_11N_256QAM_SUPPORT
+endif
+
+##################################### smart_antenna define #############################################
+ifeq ($(strip ${CONFIG_SMART_ANTENNA_SUPPORT}), y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_SMART_ANTENNA_SUPPORT
+endif
+
+SMB_EXTERNAL_CFLAGS = $(filter-out $(FILTER-CFLAGS), $(SMB_PRIV_COMMON_CFLAGS))
+
+##################################### ppsk define #############################################
+ifeq ($(strip ${CONFIG_PPSK_SUPPORT}), y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_PPSK_SUPPORT
+endif
+
+################################## httpd_portal define ###################################
+ifeq ($(strip ${CONFIG_PORTAL_FACEBOOKV2_SUPPORT}), y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_PORTAL_FACEBOOKV2_SUPPORT
+endif
+
+################################## ipv6 support define ###################################
+ifeq ($(strip ${CONFIG_IPV6_SUPPORT}), y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_IPV6_SUPPORT
+export CONFIG_IPV6_SUPPORT=y
+endif
+
+##################################### powerDetect define #############################################
+ifeq ($(strip ${CONFIG_POWERDETECT_SUPPORT}), y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_POWERDETECT_SUPPORT
+endif
+
+##################################### energy_save define #############################################
+ifeq ($(strip ${CONFIG_ENERGY_SAVE_SUPPORT}), y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_ENERGY_SAVE_SUPPORT
+endif
+
+##################################### energy_save define #############################################
+ifeq ($(strip ${CONFIG_TRUNK_SUPPORT}), y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_TRUNK_SUPPORT
+endif
+
+##################################### powerDetectCfg define #############################################
+ifeq ($(strip ${CONFIG_POWER_DETECT_CFG_SUPPORT}), y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_POWER_DETECT_CFG_SUPPORT
+endif
+
+##################################### bandwidth power limit define #############################################
+ifeq ($(strip ${CONFIG_BW_PWR_LIMIT}), y)
+SMB_PRIV_COMMON_CFLAGS += -DBW_PWR_LIMIT
+endif
+
+##################################### caldata_cfg define #############################################
+ifeq ($(strip ${CONFIG_CALDATA_CFG_SUPPORT}), y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_CALDATA_CFG_SUPPORT
+endif
+
+################################## multiple radius severs define ###################################
+ifeq ($(strip ${CONFIG_MULTIPLE_RADIUS_SERVERS_SUPPORT}), y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_MULTIPLE_RADIUS_SERVERS_SUPPORT
+endif
+
+##################################### wids_wips define #############################################
+ifeq ($(strip ${CONFIG_WIDS_WIPS_SUPPORT}), y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_WIDS_WIPS_SUPPORT
+endif
+
+##################################### lock to AP define #############################################
+ifeq ($(strip ${CONFIG_LOCKTOAP_SUPPORT}), y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_LOCKTOAP_SUPPORT
+ifdef CONFIG_LOCKTOAP_LIST_MAX_SIZE
+SMB_PRIV_COMMON_CFLAGS += -DLOCKTOAP_LIST_MAX_SIZE=$(CONFIG_LOCKTOAP_LIST_MAX_SIZE)
+endif
+endif
+
+################################## multicast management define ###################################
+ifeq ($(strip ${CONFIG_MULTICAST_MNG_SUPPORT}), y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_MULTICAST_MNG_SUPPORT
+endif
+
+################################## multicast convert define ###################################
+ifeq ($(strip ${CONFIG_MULTICAST_CONV_SUPPORT}), y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_MULTICAST_CONV_SUPPORT
+endif
+
+################################## multiPort define && dot1x define###################################
+ifeq ($(strip ${CONFIG_MULTIPORT_SUPPORT}), y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_MULTIPORT_SUPPORT
+TP_SDK_CFLAGS += -DCONFIG_TP_MULTIPORT_SUPPORT
+ifeq ($(strip ${CONFIG_DOT1X_AUTH_SUPPORT}), y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_DOT1X_AUTH_SUPPORT
+endif
+endif
+
+####################################### gre define ########################################
+ifeq ($(strip ${CONFIG_GRE_SUPPORT}), y)
+SMB_PRIV_COMMON_CFLAGS += -DCONFIG_GRE_SUPPORT
+endif
+
+##################################### T40 SUT define #############################################
+ifeq ($(strip ${CONFIG_SUPPORT_T40_SUT}), y)
+SMB_PRIV_COMMON_CFLAGS += -DSUPPORT_T40_SUT
+endif
