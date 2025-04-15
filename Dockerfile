@@ -28,7 +28,7 @@ RUN wget https://www.openssl.org/source/openssl-1.0.2u.tar.gz && \
 
 ENV PATH="/usr/local/openssl-1.0.2/bin:${PATH}"
 ENV LD_LIBRARY_PATH="/usr/local/openssl-1.0.2/lib:${LD_LIBRARY_PATH}"
-
+RUN ln -sf /bin/bash /bin/sh
 # Set docker as default
 USER docker:docker
 
