@@ -1038,7 +1038,7 @@ image_clean:
 	@echo "make $@."
 	rm -rf $(IMAGE_INSTALL)/mkimage $(IMAGE_INSTALL)/*.bin;
 
-image_build: config_check nand_flash_maker rootfs_build
+image_build: nand_flash_maker rootfs_build
 ifdef CONFIG_NM_NAND_TYPE
 	@echo "make $@.";
 
@@ -1068,16 +1068,16 @@ ifeq ($(strip ${CONFIG_NAND_MULTI_BOARD}), y)
 		cp default-config.bin $(RUNTIME_DATA_DIR_NAME)/user-config && \
 		cp device-info.bin $(FACTORY_DATA_DIR_NAME)/device-info && \
 		cp device-info.bin $(FACTORY_BACKUP_DIR_NAME)/device-info && \
-		cp additional-hardversion.bin $(FACTORY_DATA_DIR_NAME)/add-hardver && \
-		cp additional-hardversion.bin $(FACTORY_BACKUP_DIR_NAME)/add-hardver && \
-		cp default-mac $(FACTORY_DATA_DIR_NAME)/default-mac && \
-		cp default-mac $(FACTORY_BACKUP_DIR_NAME)/default-mac && \
-		cp device-id $(FACTORY_DATA_DIR_NAME)/device-id && \
-		cp device-id $(FACTORY_BACKUP_DIR_NAME)/device-id && \
-		cp region $(FACTORY_DATA_DIR_NAME)/region && \
-		cp region $(FACTORY_BACKUP_DIR_NAME)/region && \
-		cp default-caldata.bin $(FACTORY_DATA_DIR_NAME)/radio && \
-		cp default-caldata.bin $(FACTORY_BACKUP_DIR_NAME)/radio && \
+		cp $(COMMON)additional-hardversion.bin $(FACTORY_DATA_DIR_NAME)/add-hardver && \
+		cp $(COMMON)additional-hardversion.bin $(FACTORY_BACKUP_DIR_NAME)/add-hardver && \
+		cp $(COMMON)default-mac $(FACTORY_DATA_DIR_NAME)/default-mac && \
+		cp $(COMMON)default-mac $(FACTORY_BACKUP_DIR_NAME)/default-mac && \
+		cp $(COMMON)device-id $(FACTORY_DATA_DIR_NAME)/device-id && \
+		cp $(COMMON)device-id $(FACTORY_BACKUP_DIR_NAME)/device-id && \
+		cp $(COMMON)region $(FACTORY_DATA_DIR_NAME)/region && \
+		cp $(COMMON)region $(FACTORY_BACKUP_DIR_NAME)/region && \
+		cp $(COMMON)default-caldata.bin $(FACTORY_DATA_DIR_NAME)/radio && \
+		cp $(COMMON)default-caldata.bin $(FACTORY_BACKUP_DIR_NAME)/radio && \
 		cp $(IMAGE_BUILD_DIR)/runtime_back.ubi ./ && \
 		$(UTIL_PATH)/mkfs.ubifs -F -m 2048 -e 124KiB -c 88 -r $(RUNTIME_DATA_DIR_NAME) -o runtime_data.ubifs && \
 		$(UTIL_PATH)/mkfs.ubifs -F -m 2048 -e 124KiB -c 60 -r $(FACTORY_DATA_DIR_NAME) -o factory_data.ubifs && \
