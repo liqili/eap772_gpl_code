@@ -2,7 +2,7 @@ FROM ubuntu:16.04
 
 RUN apt-get update \
     && DEBIAN_FRONTEND="noninteractive" apt-get -y install tzdata \
-    build-essential ccache ecj fastjar file g++ gawk \
+    build-essential flex bison bc ccache ecj fastjar file g++ gawk uuid-dev \
     gettext git java-propose-classpath libelf-dev libncurses5-dev \
     libncursesw5-dev libssl-dev python python2.7-dev python3 unzip wget \
     python3-setuptools python3-dev rsync subversion \
