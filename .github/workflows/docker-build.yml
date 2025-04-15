@@ -1,0 +1,39 @@
+name: Build OpenWrt for EAP
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-eap:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Step 2: Run build commands using docker-compose
+      - name: Run EAP build commands
+        run: |
+          echo "Running make commands with docker-compose run..."
+          docker compose run ubuntu /bin/bash -c "sudo ln -sf /bin/bash /bin/sh"
+          docker compose run ubuntu /bin/bash -c "cd /build/build && make BOARD_TYPE=ipq53xx_eap7xx_common PID=eap WEB_PAGES_ID=VI_2.0 eap_prep"
+          docker compose run ubuntu /bin/bash -c "cd /build/build && make BOARD_TYPE=ipq53xx_eap7xx_common PID=eap WEB_PAGES_ID=VI_2.0 eap_release"
+
+      # Step 3: Retrieve build artifacts
+      - name: Copy build artifacts
+        run: |
+          echo "Copying artifacts from container..."
+          docker cp $(docker compose ps -q ubuntu):/build/images/eap/ipq53xx_eap7xx_common/*.bin ./artifacts
+
+      # Step 4: Upload artifacts
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: eap-build
+          path: ./artifacts
