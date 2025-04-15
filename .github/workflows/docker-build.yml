@@ -21,7 +21,6 @@ jobs:
       - name: Run EAP build commands
         run: |
           echo "Running make commands with docker-compose run..."
-          docker compose run ubuntu /bin/bash -c "echo "(dash dash/sh boolean false" | sudo debconf-set-selections) && sudo dpkg-reconfigure dash"
           docker compose run ubuntu /bin/bash -c "cd /build/build && sudo make BOARD_TYPE=ipq53xx_eap7xx_common PID=eap WEB_PAGES_ID=VI_2.0 eap_prep"
           docker compose run ubuntu /bin/bash -c "cd /build/build && sudo make BOARD_TYPE=ipq53xx_eap7xx_common PID=eap WEB_PAGES_ID=VI_2.0 eap_release"
 
