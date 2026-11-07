@@ -14,6 +14,26 @@ make BOARD_TYPE=ipq53xx_eap7xx_common PID=eap WEB_PAGES_ID=VI_2.0 eap_develop
 make BOARD_TYPE=ipq53xx_eap7xx_common PID=eap WEB_PAGES_ID=VI_2.0 eap_release
 ```
 
+### Device identity
+
+A built image identifies as a **Festa F76** (`Festa F76(TP-Link|UN|BE11000-T):1.0`) but runs Omada (EAP) features,
+as the F65 tree's build does.
+- This firmware takes the board only from the image's `fw_data/product-info`: the model the web UI shows, the
+  hardware ID and the board configuration it runs (`/etc/<board>`). The build installs the `productinfo.bin` of the
+  board named by `GPL_PRODUCT_BOARD` (in `build/qca/Makefile`), `F76_1_0_0` by default, so the image runs
+  `/etc/Festa_F76_1.0`. The signature keys in it are the same for all three boards. For an image that identifies as an
+  EAP772 instead, build with `GPL_PRODUCT_BOARD=EAP772_2_0` (or `EAP723_1_0`). The multi-board default,
+  `mkimage/common/productinfo.bin.default`, stays EAP772, and the tree's prebuilt rootfs keeps that identity: only a
+  build applies `GPL_PRODUCT_BOARD`.
+- Behaviour stays Omada. The web UI would switch to the Festa menu and setup flow on a `supportFesta` flag, but this
+  firmware's `data/sysmod.json` never sends one, whatever the identity. `/etc/Festa_F76_1.0/dev_config.json` sets
+  `"festaFeatures": false` (stock F76 has `true`) as the F65 build does, although nothing in this firmware reads that
+  flag.
+
+The upgrade check only accepts an image whose support-list contains the device's current identity. This image's
+lists Festa F76, EAP772 and EAP723, so it installs over stock F76 or over an earlier build that identified as EAP772.
+Stock F76 firmware lists only Festa F76, so it can be installed back over a build that identifies as Festa F76.
+
 ## Simulating the firmware in Docker
 
 `sim/` runs a firmware rootfs's userland in an arm64 container under qemu-user, so you can try the web UI and
@@ -51,8 +71,9 @@ Docker needs to run arm64 containers. Docker Desktop can by default; colima can 
 Two variables choose what the simulated flash holds:
 - `SIM_BOARD`: `F76_1_0_0` (default), `EAP772_2_0` or `EAP723_1_0`. This sets the unit's factory `device-info` and the
   starting config. It does not choose the board configuration the firmware runs: as on a real unit, `nvrammanager`
-  takes that from the image's own `/fw_data/product-info`, which is EAP772's in this tree. So an F76 running this
-  image comes up as an EAP772 (`/etc/EAP772_2.0`), in the simulation and on hardware.
+  takes that from the image's own `/fw_data/product-info` (see [Device identity](#device-identity)). So an image
+  built from this tree comes up as a Festa F76 (`/etc/Festa_F76_1.0`) whatever `SIM_BOARD` is, and the tree's prebuilt
+  rootfs as an EAP772 (`/etc/EAP772_2.0`).
 - `SIM_CONFIG`: `factory` (default) starts from that board's `mkimage/<board>/default-config.bin`, as a new unit is
   flashed; `none` starts without a user config, as after a reset.
 

@@ -945,6 +945,11 @@ COMMON=common/
 else
 COMMON=
 endif
+# GPL build: the board whose identity (mkimage/<board>/productinfo.bin) the image carries. This
+# firmware runs as that board: its name, hardware ID and /etc/<board> configuration. Festa F76 by
+# default, so the image runs /etc/Festa_F76_1.0; e.g. `make ... GPL_PRODUCT_BOARD=EAP772_2_0` for an
+# EAP772. mkimage/common/productinfo.bin.default (EAP772) stays the non-GPL multi-board default.
+GPL_PRODUCT_BOARD ?= F76_1_0_0
 rootfs_ubi:
 ifndef GPL_BUILD
 	mkdir -p $(ROOTFS_BUILD_PATH)/$(FW_CONF_DIR)
@@ -1013,6 +1018,15 @@ else
 	@[ -x $(GENSOFTVER) ] || $(MAKE) nand_flash_maker
 	$(GENSOFTVER) -d -o $(IMAGE_INSTALL)/soft-version.bin -a $(IMAGE_INSTALL)/additional-hardversion.bin -c $(MKIMG_PATH)/$(COMMON)build.ini
 	cp -f $(IMAGE_INSTALL)/soft-version.bin $(ROOTFS_BUILD_PATH)/$(FW_CONF_DIR)/soft-version
+# Board identity: this firmware's nvrammanager takes the board (the model the web UI and the
+# controller show, the hardware ID, /etc/<board>) only from fw_data/product-info, so install the
+# GPL_PRODUCT_BOARD's. The support-list follows mkimage/ too: the upgrade check matches the device's
+# current product-info against it, so it must keep listing every board an image may replace.
+ifeq ($(strip ${CONFIG_NAND_MULTI_BOARD}), y)
+	@[ -f $(MKIMG_PATH)/$(GPL_PRODUCT_BOARD)/productinfo.bin ] || { echo "GPL_PRODUCT_BOARD=$(GPL_PRODUCT_BOARD): no $(MKIMG_PATH)/$(GPL_PRODUCT_BOARD)/productinfo.bin (boards: $(CONFIG_MULTI_BOARD_LIST))"; exit 1; }
+	cp -f $(MKIMG_PATH)/$(GPL_PRODUCT_BOARD)/productinfo.bin $(ROOTFS_BUILD_PATH)/$(FW_CONF_DIR)/product-info
+	cp -f $(MKIMG_PATH)/$(COMMON)supportlist.bin $(ROOTFS_BUILD_PATH)/$(FW_CONF_DIR)/support-list
+endif
 	for f in $(ROOTFS_BUILD_PATH)/$(FW_CONF_DIR)/*; do if test -f $$f; then chmod 774 $$f; fi; done;
 endif
 

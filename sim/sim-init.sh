@@ -8,8 +8,10 @@
 #   SIM_CONFIG  factory (default): start from that board's mkimage default-config.bin, as make_flash
 #               writes it for a new unit; none: start without a user-config, as after a reset
 # Which board configuration (/etc/<board>) the firmware then runs is not SIM_BOARD's choice: as on a
-# real unit, nvrammanager takes it from the image's own /fw_data/product-info. This tree's image is
-# EAP772_2.0 there, so an F76 unit running it comes up as an EAP772, exactly as on hardware.
+# real unit, nvrammanager takes it from the image's own /fw_data/product-info. An image built from
+# this tree says Festa F76 there (GPL_PRODUCT_BOARD in build/qca/Makefile), so it comes up as a Festa
+# F76 (/etc/Festa_F76_1.0) whichever SIM_BOARD the simulated flash holds, exactly as on hardware; the
+# tree's prebuilt rootfs still says EAP772.
 log() { echo "[sim] $*"; }
 sz() { ls -l "$1" 2>/dev/null | awk '{print $5}'; }	# this busybox has no wc or stat
 BOARD=${SIM_BOARD:-F76_1_0_0}

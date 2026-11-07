@@ -27,7 +27,7 @@
 	},
 	"cliSetCcSupp": true,
 	"wifiLedSupp": false,
-	"festaFeatures": true,
+	"festaFeatures": false,
 	"caldata":
 	{
 		"caldataFileList":
