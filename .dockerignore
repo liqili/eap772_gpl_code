@@ -1,0 +1,7 @@
+# The Dockerfile only installs packages and builds OpenSSL from source; it never COPYs or ADDs
+# anything from the repo. The source tree reaches the container through the compose bind mount
+# (./eap_gpl_code_eap772 -> /build), not the build context. So exclude everything from the build
+# context to keep it tiny and fast (otherwise docker sends the whole multi-GB repo to the daemon
+# on every build).
+*
+!Dockerfile

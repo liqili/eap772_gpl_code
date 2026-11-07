@@ -1,8 +1,27 @@
-version: '3.5'
-
 services:
   ubuntu:
     build: .
+    image: eap772_gpl_code-ubuntu
     # restart: always
     volumes:
       - ./eap_gpl_code_eap772:/build
+
+  # A firmware rootfs's userland under qemu-user, to try the web UI without a device.
+  # Make the image with sim/make-image.sh first (see README "Simulating the firmware in Docker").
+  # SIM_BOARD: F76_1_0_0 (default), EAP772_2_0 or EAP723_1_0. SIM_CONFIG: factory (default) or
+  # none (start without a user-config, as after a reset). E.g. SIM_BOARD=EAP772_2_0 docker-compose up -d sim
+  sim:
+    image: eap772-fw-sim:latest
+    pull_policy: never
+    platform: linux/arm64
+    container_name: eap772-sim
+    command: ["/bin/sh", "/sim/sim-init.sh"]
+    environment:
+      - SIM_BOARD=${SIM_BOARD:-F76_1_0_0}
+      - SIM_CONFIG=${SIM_CONFIG:-factory}
+    ports:
+      - "9080:80"
+      - "9443:443"
+    volumes:
+      - ./sim:/sim:ro
+      - ./eap_gpl_code_eap772/build/product_configs/ipq53xx_eap7xx_common/mkimage:/mkimage:ro
