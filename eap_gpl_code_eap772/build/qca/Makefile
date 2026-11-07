@@ -996,6 +996,24 @@ endif
 	for f in $(ROOTFS_BUILD_PATH)/$(FW_CONF_DIR)/*; do if test -f $$f; then chmod 774 $$f; fi; done;
 else
 	cp -Rf $(MKIMAGE_PAH) $(IMAGE_INSTALL)/ ;
+# GPL build: the data-partition mount points are empty directories, which git does not keep, so a
+# fresh checkout (e.g. CI) has no /tp_data at all. The rootfs is a read-only squashfs, so at boot
+# mount_tpdata then cannot mount the factory data (default-mac, region, radio calibration) on
+# /tp_data/manu_data or the runtime config (user-config) on /tp_data/user_data. Create them like
+# the non-GPL branch above does.
+	mkdir -p $(ROOTFS_BUILD_PATH)/$(FW_CONF_DIR)/$(USER_CONF_DIR) $(ROOTFS_BUILD_PATH)/$(FW_CONF_DIR)/$(MANU_CONF_DIR)
+	mkdir -p $(ROOTFS_BUILD_PATH)/tp_data/$(MANU_CONF_DIR) $(ROOTFS_BUILD_PATH)/tp_data/$(MANU_BACKUP_DIR) $(ROOTFS_BUILD_PATH)/tp_data/$(USER_CONF_DIR)
+# soft-version is generated from mkimage/$(COMMON)build.ini here rather than taken from the
+# prebuilt blob in fw_data, so the versions set there take effect. The upgrade check refuses an
+# image whose soft version equals the installed one, so with the blob every GPL build carried the
+# same 1.0.0 and could not be installed over the previous one. Only the staging copy is written:
+# image_build packs soft-version from $(ROOTFS_BUILD_PATH)/$(FW_CONF_DIR).
+# gen_softver is one of the nand_flash_maker host tools, which image_build only builds later, so
+# on a clean tree it does not exist yet at this point in rootfs_install; build it on demand.
+	@[ -x $(GENSOFTVER) ] || $(MAKE) nand_flash_maker
+	$(GENSOFTVER) -d -o $(IMAGE_INSTALL)/soft-version.bin -a $(IMAGE_INSTALL)/additional-hardversion.bin -c $(MKIMG_PATH)/$(COMMON)build.ini
+	cp -f $(IMAGE_INSTALL)/soft-version.bin $(ROOTFS_BUILD_PATH)/$(FW_CONF_DIR)/soft-version
+	for f in $(ROOTFS_BUILD_PATH)/$(FW_CONF_DIR)/*; do if test -f $$f; then chmod 774 $$f; fi; done;
 endif
 
 rootfs_sync_base:
