@@ -252,7 +252,7 @@
 				"keyMark":	1,
 				"MSsidGrid":	[{
 						"enable":	true,
-						"ssid":	"",
+						"ssidutf8":	"Festa_F76_2.4GHz",
 						"enableVlan":	false,
 						"vlan":	0,
 						"ssidBc":	true,
@@ -302,7 +302,7 @@
 				"keyMark":	1,
 				"MSsidGrid":	[{
 						"enable":	true,
-						"ssid":	"",
+						"ssidutf8":	"Festa_F76_5GHz",
 						"enableVlan":	false,
 						"vlan":	0,
 						"ssidBc":	true,
@@ -352,7 +352,7 @@
 				"keyMark":	1,
 				"MSsidGrid":	[{
 						"enable":	true,
-						"ssid":	"",
+						"ssidutf8":	"Festa_F76_6GHz",
 						"enableVlan":	false,
 						"vlan":	0,
 						"ssidBc":	true,

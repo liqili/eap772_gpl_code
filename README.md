@@ -54,6 +54,22 @@ Anyone who knows the admin password therefore has root on the device over SSH. F
 make BOARD_TYPE=ipq53xx_eap7xx_common PID=eap WEB_PAGES_ID=VI_2.0 CONFIG_SSH_ROOT_SHELL=n eap_release
 ```
 
+### Default SSID
+
+A defaulted device broadcasts `<product>_2.4GHz`, `_5GHz` and `_6GHz` (for example `Festa_F76_2.4GHz`), from
+`wlanMSsid` in `/etc/<board>/default_config`. Rename them there, or in the web UI once the device is up.
+
+They are **open networks**, because `secMode` is `0` on 2.4 and 5 GHz, which is what the production configuration
+(`mkimage/<board>/default-config.json`) also has; `pskPwd` is a placeholder that `secMode 0` ignores. For a build
+that defaults to WPA2, change `secMode` and `pskPwd` in the same three blocks.
+
+The SSID must be set under **`ssidutf8`**. That is the key `uclited` reads — it has no bare `ssid` string at all — and
+the configuration applied on a factory reset used to carry an empty `ssid` instead, so a reset, or any GPL build
+(which has no production provisioning step), produced no wireless at all. The production configuration uses
+`ssidutf8` with a per-unit `TP-Link_<band>_<MAC suffix>` name, which is why a shipped unit works and a reset loses it.
+The firmware does contain that name generator, in `libwlan_lib.so`, but nothing applies it to the reset default, and a
+file in the tree cannot hold a per-unit MAC.
+
 ### Cloud connection
 
 `cloud-brd` is the daemon that talks to TP-Link's Omada cloud (`/etc/cloud_config.cfg`). In this build it runs only
@@ -118,7 +134,10 @@ Two variables choose what the simulated flash holds:
   built from this tree comes up as a Festa F76 (`/etc/Festa_F76_1.0`) whatever `SIM_BOARD` is, and the tree's prebuilt
   rootfs as an EAP772 (`/etc/EAP772_2.0`).
 - `SIM_CONFIG`: `factory` (default) starts from that board's `mkimage/<board>/default-config.bin`, as a new unit is
-  flashed; `none` starts without a user config, as after a reset.
+  flashed; `none` starts without a user config, as after a reset. With `none` the web UI forces the account setup and
+  the quick-setup wizard, and the wizard cannot be completed here: its wireless step needs radios and `hostapd`, which
+  the simulation has no equivalent of, so it returns to the account step in a loop. Use the default `factory` to look
+  at the UI.
 
 For example `SIM_BOARD=EAP772_2_0 SIM_CONFIG=none docker-compose up -d --force-recreate sim`.
 

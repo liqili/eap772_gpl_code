@@ -252,7 +252,7 @@
 				"keyMark":	1,
 				"MSsidGrid":	[{
 						"enable":	true,
-						"ssid":	"",
+						"ssidutf8":	"EAP772_2.4GHz",
 						"enableVlan":	false,
 						"vlan":	0,
 						"ssidBc":	true,
@@ -302,7 +302,7 @@
 				"keyMark":	1,
 				"MSsidGrid":	[{
 						"enable":	true,
-						"ssid":	"",
+						"ssidutf8":	"EAP772_5GHz",
 						"enableVlan":	false,
 						"vlan":	0,
 						"ssidBc":	true,
@@ -352,7 +352,7 @@
 				"keyMark":	1,
 				"MSsidGrid":	[{
 						"enable":	true,
-						"ssid":	"",
+						"ssidutf8":	"EAP772_6GHz",
 						"enableVlan":	false,
 						"vlan":	0,
 						"ssidBc":	true,
