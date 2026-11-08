@@ -34,6 +34,49 @@ The upgrade check only accepts an image whose support-list contains the device's
 lists Festa F76, EAP772 and EAP723, so it installs over stock F76 or over an earlier build that identified as EAP772.
 Stock F76 firmware lists only Festa F76, so it can be installed back over a build that identifies as Festa F76.
 
+### Shell access
+
+With SSH enabled in the web UI, `ssh admin@<device-ip>` opens a **root shell** in this build. The password is the
+web UI's admin password; the `HostKeyAlgorithms` option may be needed
+(`ssh -o HostKeyAlgorithms=+ssh-rsa admin@<device-ip>`).
+
+The account offered over SSH is the web UI's, not a Unix account: `uclited` writes it to `/tmp/dropbear_info`, and
+dropbear's `svr_auth_password()` checks the password against that file. The session then runs as the Unix user that
+`checkusername()` in `apps/dropbear-2018.76/svr-auth.c` names, since `admin` is not in `/etc/passwd`. That is `root`
+when the build defines `USER_ROOT_PERMISSION` and otherwise the unprivileged `guest` the stock firmware uses. The
+GPL source shipped without that mapping, so a build from it refused the login outright as a nonexistent user; this
+tree restores it, as the F65 tree does, and `build/Makefile.apps` defines the flag through `CONFIG_SSH_ROOT_SHELL`
+(default `y`).
+
+Anyone who knows the admin password therefore has root on the device over SSH. For the stock behaviour, build with:
+
+```bash
+make BOARD_TYPE=ipq53xx_eap7xx_common PID=eap WEB_PAGES_ID=VI_2.0 CONFIG_SSH_ROOT_SHELL=n eap_release
+```
+
+### Cloud connection
+
+`cloud-brd` is the daemon that talks to TP-Link's Omada cloud (`/etc/cloud_config.cfg`). In this build it runs only
+if cloud access is switched on in the web UI; a factory-default device never starts it. A local Omada controller does
+not need it.
+
+The firmware already had the mechanism, but not the default. `uclited` writes `/tmp/cloudDisable` at startup when the
+stored cloud settings are off, and `etc/rc.d/rc.eapcs` skips `cloud-brd` when that file exists. The factory config
+(`mkimage/F76_1_0_0/default-config.json`) has cloud off, but the configuration applied on a factory **reset** had
+`CLOUDMANAGE` enabled, so a reset turned the cloud connection back on. This tree sets both of its flags off, in all
+three board configurations (`/etc/Festa_F76_1.0`, `/etc/EAP772_2.0` and `/etc/EAP723_1.0`, which are otherwise the
+same file here) so that the identity the image is built with cannot bring the cloud connection back:
+
+```json
+"CLOUDMANAGE":	{
+	"enable":	false,
+	"status":	false
+},
+```
+
+Both matter: `uclited` only writes the marker when both are zero. Switching cloud access on in the web UI starts
+`cloud-brd` straight away, without a reboot, and later boots start it too.
+
 ## Simulating the firmware in Docker
 
 `sim/` runs a firmware rootfs's userland in an arm64 container under qemu-user, so you can try the web UI and

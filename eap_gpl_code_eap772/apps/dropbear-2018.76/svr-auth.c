@@ -405,6 +405,19 @@ static int checkusername(const char *username, unsigned int userlen) {
 	char* usershell = NULL;
 	uid_t uid;
 
+	/* The account offered over SSH is the web UI's (admin), which uclited writes to
+	 * /tmp/dropbear_info and svr_auth_password() checks. It is not a Unix account and is not in
+	 * /etc/passwd, so the session runs as the Unix user named here rather than as <username>.
+	 * Without this mapping getpwnam(<username>) fails and the login is refused as a nonexistent
+	 * user. permission.h, written by the build, selects which: USER_ROOT_PERMISSION gives a root
+	 * shell, otherwise the unprivileged "guest" that the stock firmware uses. Same mapping as the
+	 * F65 tree's svr-auth.c. */
+#ifdef USER_ROOT_PERMISSION
+	char* rootName = "root";
+#else
+	char* rootName = "guest";
+#endif
+
 	TRACE(("enter checkusername"))
 	if (userlen > MAX_USERNAME_LEN) {
 		return DROPBEAR_FAILURE;
@@ -415,16 +428,15 @@ static int checkusername(const char *username, unsigned int userlen) {
 			svr_ses.addrstring);
 	}
 
-	if (ses.authstate.username == NULL) {
-		/* first request */
-		fill_passwd(username);
-		ses.authstate.username = m_strdup(username);
-	} else {
-		/* check username hasn't changed */
-		if (strcmp(username, ses.authstate.username) != 0) {
-			dropbear_exit("Client trying multiple usernames from %s",
-				svr_ses.addrstring);
-		}
+	/* new user or username has changed. The stored name is the mapped one, so a client name
+	 * that differs is expected here and is mapped again rather than ending the session. */
+	if (ses.authstate.username == NULL ||
+		strcmp(username, ses.authstate.username) != 0) {
+			if (ses.authstate.username != NULL) {
+				m_free(ses.authstate.username);
+			}
+			fill_passwd(rootName);
+			ses.authstate.username = m_strdup(rootName);
 	}
 
 

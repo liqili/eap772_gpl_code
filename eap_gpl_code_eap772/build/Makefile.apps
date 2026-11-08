@@ -553,8 +553,14 @@ dropbear_config:
 dropbear_clean:
 	@$(call indir, $(dropbear_path), if test -e Makefile; then make clean; fi);
 
+# Give the SSH account (the web UI's admin) a root shell instead of the unprivileged "guest" the
+# stock firmware uses: permission.h below, read by apps/dropbear-2018.76/svr-auth.c. Anyone who
+# knows the admin password then has root on the device over SSH, so build with
+# CONFIG_SSH_ROOT_SHELL=n for the stock behaviour.
+CONFIG_SSH_ROOT_SHELL ?= y
+
 dropbear_build:
-ifneq ($(findstring y,$(DEBUG_MODE) $(CONFIG_SUPPORT_T40_SUT)),)
+ifneq ($(findstring y,$(DEBUG_MODE) $(CONFIG_SUPPORT_T40_SUT) $(CONFIG_SSH_ROOT_SHELL)),)
 	@$(call indir, $(dropbear_path), \
 		chmod +x ./ifndef_wrapper.sh && \
 		(echo "#define USER_ROOT_PERMISSION" > permission.h) && \

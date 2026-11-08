@@ -26,6 +26,13 @@ log "board $BOARD: $(head -n 1 $MK/device-info.bin)"
 export PATH=$PATH:/etc/ath
 mkdir -p /var/run/srv /var/run/client /var/lock /var/run/lldpd /tmp/log/error /tmp/log/rec /tmp/log/coredump /tmp/logdump
 chmod 777 /var/run/srv /var/run/client /var/lock /var/run/lldpd /tmp/logdump
+# The build's rootfs_emptys creates these empty directories, which git does not keep, so they are
+# missing when the image is imported from the tree's rootfs rather than from a built squashfs.
+# /root is root's home: without it an SSH session as root fails with "Error changing directory".
+mkdir -p /root /mnt /proc /tmp /var
+# Likewise the build's CHMOD_FILES step makes these root-only (stock ships them 0600); in the tree
+# git keeps them world-readable, which would let an unprivileged session read the password file.
+chmod 600 /etc/shadow /etc/passwd 2>/dev/null
 
 # Fake flash, in place of mount_tpdata. On a unit, manu_data and backup_data are the factory volumes
 # and user_data is the runtime config. device-info is the board's GPL device-info.bin; the region

@@ -618,8 +618,8 @@
 		"ipPortGroup":	[]
 	},
 	"CLOUDMANAGE":	{
-		"enable":	true,
-		"status":	true
+		"enable":	false,
+		"status":	false
 	},
 	"Mesh":	{
 		"meshEnable":	1,
