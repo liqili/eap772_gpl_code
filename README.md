@@ -103,6 +103,38 @@ same file here) so that the identity the image is built with cannot bring the cl
 Both matter: `uclited` only writes the marker when both are zero. Switching cloud access on in the web UI starts
 `cloud-brd` straight away, without a reboot, and later boots start it too.
 
+### Client list
+
+An Omada controller shows a device built from this drop with no clients, however many stations are associated. The
+AP is the one reporting nothing: its inform payload carries `"clients": []` while the driver lists the station
+(`wlanconfig ath10 list sta`).
+
+The cause is in `usr/bin/client-state`, one of the prebuilt, closed-source daemons here — `eap-cs` asks it for the
+station list and forwards that. It polls the driver with a single `ioctl(fd, 0x89F6, &iwreq)`
+(`IEEE80211_IOCTL_STA_INFO`, the same call `wlanconfig <if> list sta` makes) and walks the records that come back.
+The copy this drop shipped reads a byte at offset 583 of each record and skips the station when it is zero, logging
+`skip %s because this client is not authed` at DEBUG level, which never reaches
+`/tmp/log/error/client-state.log`. On this hardware that byte is always zero, so every station is dropped silently.
+
+`usr/bin/client-state` here is therefore the binary from a shipped Festa F76 (its `/usr/bin/client-state`, taken from
+the rootfs volume of a flash dump) rather than the one the GPL drop shipped. It has no such test: it uses every
+record the driver returns. The two are the same size and, compared instruction by instruction, differ only in that
+test and in a phymode `switch` moved into a function of its own, which is behaviour-preserving — so this is the
+drop's own code with the test removed, not a different implementation. It is a drop-in: the same eight `NEEDED`
+libraries, the same 65 imported symbols, and every one of those libraries is byte-identical between the two trees,
+`libwlan_lib.so` and `libutility_lib.so` included. Because the two builds import the same symbols, its interface to
+`eap-cs` is unchanged too. The binary the GPL drop shipped is in this repository's history.
+
+That binary carries no per-unit data — no MAC, no serial, no identifiers of any kind — because it comes from the
+read-only rootfs, which is the same on every F76; the per-unit data lives in the factory config volumes, which are
+not in this repository.
+
+The same comparison shows this drop's `uclited`, `eap-cs`, `httpd_portal`, `eap-mesh` and `tddpd` are older builds
+than a shipped unit's (`uclited` 2024-07-05 against 2024-07-29) and that none of them imports `devcfg_isFesta` from
+`libutility_lib.so`, which a shipped unit's do: the Festa code path is absent here, which is why `festaFeatures` in
+`/etc/Festa_F76_1.0/dev_config.json` is inert (see **Device identity**). Nothing else is known to depend on it, so
+those are left as delivered.
+
 ## Simulating the firmware in Docker
 
 `sim/` runs a firmware rootfs's userland in an arm64 container under qemu-user, so you can try the web UI and
