@@ -8,8 +8,12 @@
 #
 #     EAP772_2.4GHz  ->  EAP772_2.4GHz_D5A720
 #
-# The suffix is the last three bytes of the device MAC, plus 0 for 2.4 GHz, 1 for 5 GHz and 3 for
-# 6 GHz, matching the names in mkimage/<board>/default-config.json.
+# The suffix is the last three bytes of the device MAC, plus 0 for 2.4 GHz, 1 for 5 GHz and 2 for
+# 6 GHz. Those are the offsets the firmware itself uses: on a device with base MAC ...D5:A7:20,
+# uclited looks up "TP-Link_2.4GHz_D5A720", "TP-Link_5GHz_D5A721" and "TP-Link_6GHz_D5A722"
+# (uc_mssid_getItemByName in /tmp/log/error/uclite.log). The sample names committed in
+# mkimage/<board>/default-config.json end CC/CD/CF, which would suggest 0/1/3, but that is a
+# three-radio unit whose 5 GHz-2 VAP takes the intervening slot; the firmware's own lookup wins.
 #
 # rcS runs this just before uclited, once the flash and the network interfaces are up. Every step
 # is optional: if the MAC cannot be read, or the file cannot be replaced, the shipped names are
@@ -51,7 +55,7 @@ SUFFIXES=$(echo "$MAC" | awk -F: '
 	{
 		n = hex2num($4 $5 $6)
 		if (n < 0) exit 1
-		printf "%06X %06X %06X", n % 16777216, (n + 1) % 16777216, (n + 3) % 16777216
+		printf "%06X %06X %06X", n % 16777216, (n + 1) % 16777216, (n + 2) % 16777216
 	}' 2>/dev/null)
 set -- $SUFFIXES
 [ $# -eq 3 ] || { log "could not derive a suffix from $MAC, leaving defaults"; exit 0; }

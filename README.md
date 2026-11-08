@@ -61,8 +61,9 @@ on the same network do not collide. The names come from `wlanMSsid` in `/etc/<bo
 there, or in the web UI once the device is up.
 
 The suffix is added at boot by `sbin/ssid-defaults.sh`, which `rcS` runs just before `uclited`. It takes the last
-three bytes of the device MAC, adds 0 for 2.4 GHz, 1 for 5 GHz and 3 for 6 GHz (as the per-unit production
-configuration does) and rewrites the names, bind-mounting the result over the read-only rootfs. A file in the
+three bytes of the device MAC, adds 0 for 2.4 GHz, 1 for 5 GHz and 2 for 6 GHz — the offsets the firmware itself
+uses, as its own `uc_mssid_getItemByName` lookups in `/tmp/log/error/uclite.log` show — and rewrites the names,
+bind-mounting the result over the read-only rootfs. A file in the
 firmware cannot carry a per-unit MAC, which is why this is done at run time rather than in the config. Every step is
 optional: if the MAC cannot be read or the file cannot be replaced, the plain `<product>_<band>` names in the config
 are used, so the device always has a working SSID. It never touches a stored configuration, so a device that is
