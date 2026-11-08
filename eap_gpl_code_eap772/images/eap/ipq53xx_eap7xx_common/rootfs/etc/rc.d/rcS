@@ -149,6 +149,11 @@ else
 echo "wids_wips is not supported"
 fi
 
+# Give the default SSIDs this unit's MAC suffix before uclited reads the default config
+if [ -f "/sbin/ssid-defaults.sh" ];then
+/sbin/ssid-defaults.sh
+fi
+
 /usr/bin/uclited &
 
 if [ -f "/sbin/wlanmonitor" ];then

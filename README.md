@@ -56,8 +56,17 @@ make BOARD_TYPE=ipq53xx_eap7xx_common PID=eap WEB_PAGES_ID=VI_2.0 CONFIG_SSH_ROO
 
 ### Default SSID
 
-A defaulted device broadcasts `<product>_2.4GHz`, `_5GHz` and `_6GHz` (for example `Festa_F76_2.4GHz`), from
-`wlanMSsid` in `/etc/<board>/default_config`. Rename them there, or in the web UI once the device is up.
+A defaulted device broadcasts `<product>_<band>_<MAC suffix>`, for example `Festa_F76_2.4GHz_D5A720`, so two units
+on the same network do not collide. The names come from `wlanMSsid` in `/etc/<board>/default_config`; rename them
+there, or in the web UI once the device is up.
+
+The suffix is added at boot by `sbin/ssid-defaults.sh`, which `rcS` runs just before `uclited`. It takes the last
+three bytes of the device MAC, adds 0 for 2.4 GHz, 1 for 5 GHz and 3 for 6 GHz (as the per-unit production
+configuration does) and rewrites the names, bind-mounting the result over the read-only rootfs. A file in the
+firmware cannot carry a per-unit MAC, which is why this is done at run time rather than in the config. Every step is
+optional: if the MAC cannot be read or the file cannot be replaced, the plain `<product>_<band>` names in the config
+are used, so the device always has a working SSID. It never touches a stored configuration, so a device that is
+already set up is unaffected.
 
 They are **open networks**, because `secMode` is `0` on 2.4 and 5 GHz, which is what the production configuration
 (`mkimage/<board>/default-config.json`) also has; `pskPwd` is a placeholder that `secMode 0` ignores. For a build

@@ -75,6 +75,15 @@ fi
 for d in msg-center tpsyslogd; do log "start $d"; /usr/bin/$d & done
 # uclited waits for the "<name>_ok" marker of these daemons once it has loaded the config
 sh /sim/start-deps.sh
+# rcS runs this just before uclited: it gives the default SSIDs this unit's MAC suffix. Here the
+# MAC is the container's, and /etc is writable, so it copies rather than bind-mounts (see the
+# script). On a device it bind-mounts over the read-only rootfs.
+if [ -x /sbin/ssid-defaults.sh ]; then
+	log "ssid-defaults.sh"
+	/sbin/ssid-defaults.sh 2>&1 | sed 's/^/[sim] /'
+	log "default SSIDs now: $(grep '"ssidutf8"' "$(cat /tmp/cfgFilePath)/default_config" | tr -d ' \t' | tr '\n' ' ')"
+fi
+
 log "start uclited (auto-restart loop, log in /tmp/uclited-loop.log)"
 sh /sim/uclited-loop.sh >> /tmp/uclited-loop.log 2>&1 &
 # Under emulation uclited took about 12 minutes to get ready in testing
